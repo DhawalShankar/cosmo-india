@@ -63,9 +63,9 @@ const CosmoPublicationSite = () => {
     : featuredBooks.filter(book => book.category === activeCategory);
 
   const authors = [
-    { name: 'Rajkumar Ratnapriya', books: 1, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop' },
-    { name: 'Keval Anand Joshi', books: 2, image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop' },
-    { name: "Shyamlal 'Saketi'", books: 3, image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop' },
+    { name: 'Rajkumar Ratnapriya', books: 1, image: 'nana.jpg' },
+    { name: 'Keval Anand Joshi', books: 2, image: 'book.jpg' },
+    { name: "Shyamlal 'Saketi'", books: 3, image: 'keval.jpg' },
   ];
 
   return (
@@ -101,7 +101,7 @@ const CosmoPublicationSite = () => {
               className="md:hidden"
             >
               {mobileMenuOpen ? (
-                <X className={`w-6 h-6 ${scrolled ? 'text-gray-300' : 'text-white'}`} />
+                <tw className={`w-6 h-6 ${scrolled ? 'text-gray-300' : 'text-white'}`} />
               ) : (
                 <Menu className={`w-6 h-6 ${scrolled ? 'text-gray-300' : 'text-white'}`} />
               )}
@@ -404,17 +404,45 @@ const CosmoPublicationSite = () => {
             </div>
             <div>
               <h4 className="font-bold mb-4 text-red-500">Follow Us</h4>
-              <div className="flex space-x-4">
-                {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-10 h-10 bg-red-950/30 border border-red-900/30 rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300 hover:scale-110"
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
+    <div className="flex space-x-4">
+      <>
+        <a
+          href="https://www.facebook.com/profile.php?id=61562467420068"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 bg-red-950/30 border border-red-900/30 rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300 hover:scale-110"
+        >
+          <Facebook className="w-5 h-5" />
+        </a>
+
+        <a
+          href="https://x.com/IndiaCosmo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 bg-red-950/30 border border-red-900/30 rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300 hover:scale-110"
+        >
+          <Twitter className="w-5 h-5" />
+        </a>
+
+        <a
+          href="https://www.instagram.com/cosmoindiaprakashan/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 bg-red-950/30 border border-red-900/30 rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300 hover:scale-110"
+        >
+          <Instagram className="w-5 h-5" />
+        </a>
+
+        <a
+          href="https://www.linkedin.com/company/cosmo-india-prakashan/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 bg-red-950/30 border border-red-900/30 rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300 hover:scale-110"
+        >
+          <Linkedin className="w-5 h-5" />
+        </a>
+      </>
+    </div>
             </div>
           </div>
           <div className="border-t border-red-900/30 pt-8 text-center text-gray-500">
