@@ -16,12 +16,12 @@ export default function Posts({ darkMode }) {
         const matches = [...text.matchAll(regex)];
 
         const parsedPosts = matches
-          .map((m) => ({
-            author: m[1].trim(),
-            content: m[2].replace(/\s+/g, " ").trim(), // normalize spaces
-          }))
-          .filter((post) => post.author && post.content) // remove empty entries
-          .slice(0, 3); // take only first 3 posts
+  .map((m) => ({
+    author: m[1].trim(),
+    content: m[2].replace(/\s+/g, " ").trim(),
+  }))
+  .filter((post) => post.author && post.content); // all posts now
+
 
         setPosts(parsedPosts);
       } catch (err) {
