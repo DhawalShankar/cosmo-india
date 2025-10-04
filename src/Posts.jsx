@@ -18,7 +18,7 @@ export default function Posts({ darkMode }) {
         const parsedPosts = matches
   .map((m) => ({
     author: m[1].trim(),
-    content: m[2].replace(/\s+/g, " ").trim(),
+    content: m[2].trim(),
   }))
   .filter((post) => post.author && post.content); // all posts now
 
