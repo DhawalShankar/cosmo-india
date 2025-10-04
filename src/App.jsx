@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Facebook, Twitter, Instagram, Linkedin, Star, ArrowRight, TrendingUp, Flame } from 'lucide-react';
-// Note: Facebook, Twitter, Instagram, Linkedin are deprecated in lucide-react. Consider replacing with icons from simple-icons if you want to avoid deprecation warnings.
+import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp } from 'lucide-react';
 import Posts from "./Posts";
 const CosmoPublicationSite = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -76,7 +75,38 @@ const CosmoPublicationSite = () => {
     { name: 'Shyamlal Saketi', books: 'Apradh Jyotish', image: 'book.jpeg' },
     { name: 'Keval Anand Joshi', books: 'Saurmandal Aur Aap', image: 'keval.jpg' },
   ];
+   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState({});
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" }); // clear error on change
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let tempErrors = {};
+    if (!form.name) tempErrors.name = "Name is required";
+    if (!form.email) tempErrors.email = "Email is required";
+    if (!form.message) tempErrors.message = "Message is required";
+
+    if (Object.keys(tempErrors).length > 0) {
+      setErrors(tempErrors);
+      return;
+    }
+
+    const text = `Name: ${form.name}\nEmail: ${form.email}\nMessage: ${form.message}`;
+    const encodedText = encodeURIComponent(text);
+    window.open(`https://wa.me/7985036049?text=${encodedText}`, "_blank");
+
+    setForm({ name: "", email: "", message: "" });
+    setErrors({});
+  };
+
+  const inputClass = `w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all`;
+
+ 
   return (
 <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
   {/* Navigation */}
@@ -639,60 +669,82 @@ const CosmoPublicationSite = () => {
                   : "bg-gradient-to-br from-red-50 to-white border border-red-200"
               }`}
             >
-              <form
-                className="space-y-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const name = e.target.name.value.trim();
-                  const email = e.target.email.value.trim();
-                  const message = e.target.message.value.trim();
-
-                  if (!name || !email || !message) {
-                    alert("Please fill in all fields!");
-                    return;
-                  }
-
-                  const text = `Name: ${name}\nEmail: ${email}\nMessage: ${message}`;
-                  const encodedText = encodeURIComponent(text);
-                  window.open(`https://wa.me/7985046049?text=${encodedText}`, "_blank");
-                }}
-              >
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {/* Name Field */}
                 <div>
                   <input
                     type="text"
                     name="name"
                     placeholder="Your Name"
-                    className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all ${
+                    value={form.name}
+                    onChange={handleChange}
+                    className={`${inputClass} ${
                       darkMode
                         ? "bg-black/50 border-red-900/30 text-white placeholder-gray-500"
                         : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
                     }`}
                   />
+                  {errors.name && (
+                    <p
+                      className={`mt-1 text-sm ${
+                        darkMode ? "text-red-400" : "text-red-600"
+                      }`}
+                    >
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
+
+                {/* Email Field */}
                 <div>
                   <input
                     type="email"
                     name="email"
                     placeholder="Your Email"
-                    className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all ${
+                    value={form.email}
+                    onChange={handleChange}
+                    className={`${inputClass} ${
                       darkMode
                         ? "bg-black/50 border-red-900/30 text-white placeholder-gray-500"
                         : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
                     }`}
                   />
+                  {errors.email && (
+                    <p
+                      className={`mt-1 text-sm ${
+                        darkMode ? "text-red-400" : "text-red-600"
+                      }`}
+                    >
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
+
+                {/* Message Field */}
                 <div>
                   <textarea
                     rows="5"
                     name="message"
                     placeholder="Your Message"
-                    className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all resize-none ${
+                    value={form.message}
+                    onChange={handleChange}
+                    className={`${inputClass} resize-none ${
                       darkMode
                         ? "bg-black/50 border-red-900/30 text-white placeholder-gray-500"
                         : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
                     }`}
                   ></textarea>
+                  {errors.message && (
+                    <p
+                      className={`mt-1 text-sm ${
+                        darkMode ? "text-red-400" : "text-red-600"
+                      }`}
+                    >
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
+
                 <button
                   type="submit"
                   className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30"
@@ -704,9 +756,9 @@ const CosmoPublicationSite = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className={`py-12 ${darkMode ? 'bg-gradient-to-b from-black to-red-950' : 'bg-gradient-to-b from-white to-red-100'} border-t ${darkMode ? 'border-red-900/30' : 'border-red-200'}`}>
+    
+          {/* Footer */}
+          <footer className={`py-12 ${darkMode ? 'bg-gradient-to-b from-black to-red-950' : 'bg-gradient-to-b from-white to-red-100'} border-t ${darkMode ? 'border-red-900/30' : 'border-red-200'}`}>
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
       <div>
@@ -748,23 +800,56 @@ const CosmoPublicationSite = () => {
         <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>Follow Us</h4>
         <div className="flex space-x-4">
           {[
-            { Icon: Facebook, link: 'https://www.facebook.com/profile.php?id=61562467420068' },
-            { Icon: Twitter, link: 'https://x.com/IndiaCosmo' },
-            { Icon: Instagram, link: 'https://www.instagram.com/cosmoindiaprakashan/' },
-            { Icon: Linkedin, link: 'https://www.linkedin.com/company/cosmo-india-prakashan/' }
-          ].map(({ Icon, link }, index) => (
+            { 
+              name: 'Facebook',
+              link: 'https://www.facebook.com/profile.php?id=61562467420068',
+              icon: (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              )
+            },
+            { 
+              name: 'Twitter',
+              link: 'https://x.com/IndiaCosmo',
+              icon: (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                </svg>
+              )
+            },
+            { 
+              name: 'Instagram',
+              link: 'https://www.instagram.com/cosmoindiaprakashan/',
+              icon: (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.448 16.988c-1.297 0-2.448-.645-3.129-1.629-.496-.717-.496-1.629 0-2.346.681-.984 1.832-1.629 3.129-1.629s2.448.645 3.129 1.629c.496.717.496 1.629 0 2.346-.681.984-1.832 1.629-3.129 1.629zm7.138 0c-1.297 0-2.448-.645-3.129-1.629-.496-.717-.496-1.629 0-2.346.681-.984 1.832-1.629 3.129-1.629s2.448.645 3.129 1.629c.496.717.496 1.629 0 2.346-.681.984-1.832 1.629-3.129 1.629z"/>
+                </svg>
+              )
+            },
+            { 
+              name: 'LinkedIn',
+              link: 'https://www.linkedin.com/company/cosmo-india-prakashan/',
+              icon: (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              )
+            }
+          ].map(({ name, link, icon }, index) => (
             <a
               key={index}
               href={link}
-              target={link.startsWith('http') ? '_blank' : '_self'}
-              rel={link.startsWith('http') ? 'noopener noreferrer' : ''}
+              target="_blank"
+              rel="noopener noreferrer"
               className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
                 darkMode
                   ? 'bg-red-950/30 text-red-500 hover:bg-red-600 hover:text-white'
                   : 'bg-red-100 text-red-600 hover:bg-red-600 hover:text-white'
               }`}
+              aria-label={name}
             >
-              <Icon className="w-5 h-5" />
+              {icon}
             </a>
           ))}
         </div>
