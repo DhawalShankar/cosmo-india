@@ -44,7 +44,7 @@ export default function Posts({ darkMode }) {
           }`}
         >
           <h3 className="text-lg font-semibold mb-2">{post.author}</h3>
-          <p className="text-sm leading-relaxed">{post.content}</p>
+          <p className="text-sm leading-relaxed whitespace-pre-line">{post.content}</p>
         </div>
       ))}
     </div>
