@@ -821,7 +821,7 @@ const CosmoPublicationSite = () => {
             { 
               name: 'Instagram',
               link: 'https://www.instagram.com/cosmoindiaprakashan/',
-              icon: Instagram
+              icon: <Instagram className="w-5 h-5" />
             },
             { 
               name: 'LinkedIn',
