@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp } from 'lucide-react';
+import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp, Instagram } from 'lucide-react';
 import Posts from "./Posts";
 const CosmoPublicationSite = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -821,11 +821,7 @@ const CosmoPublicationSite = () => {
             { 
               name: 'Instagram',
               link: 'https://www.instagram.com/cosmoindiaprakashan/',
-              icon: (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.448 16.988c-1.297 0-2.448-.645-3.129-1.629-.496-.717-.496-1.629 0-2.346.681-.984 1.832-1.629 3.129-1.629s2.448.645 3.129 1.629c.496.717.496 1.629 0 2.346-.681.984-1.832 1.629-3.129 1.629zm7.138 0c-1.297 0-2.448-.645-3.129-1.629-.496-.717-.496-1.629 0-2.346.681-.984 1.832-1.629 3.129-1.629s2.448.645 3.129 1.629c.496.717.496 1.629 0 2.346-.681.984-1.832 1.629-3.129 1.629z"/>
-                </svg>
-              )
+              icon: Instagram
             },
             { 
               name: 'LinkedIn',
