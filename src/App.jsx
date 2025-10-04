@@ -98,7 +98,7 @@ const CosmoPublicationSite = () => {
 
     const text = `Name: ${form.name}\nEmail: ${form.email}\nMessage: ${form.message}`;
     const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/7985036049?text=${encodedText}`, "_blank");
+    window.open(`https://wa.me/9451517591?text=${encodedText}`, "_blank");
 
     setForm({ name: "", email: "", message: "" });
     setErrors({});
