@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Facebook, Twitter, Instagram, Linkedin, Star, ArrowRight, TrendingUp, Flame } from 'lucide-react';
 // Note: Facebook, Twitter, Instagram, Linkedin are deprecated in lucide-react. Consider replacing with icons from simple-icons if you want to avoid deprecation warnings.
-
+import Posts from "./Posts";
 const CosmoPublicationSite = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -525,9 +525,9 @@ const CosmoPublicationSite = () => {
               Insights, stories, and updates from the world of publishing
             </p>
           </div>
-          <div className="text-center">
-            <p className={`text-lg ${darkMode ? 'text-gray-500' : 'text-gray-600'}`}>Coming soon...</p>
-          </div>
+          
+           <Posts darkMode={darkMode} />
+          
         </div>
       </section>
 
@@ -689,9 +689,17 @@ const CosmoPublicationSite = () => {
     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
       <div>
         <div className="flex items-center space-x-2 mb-4">
-          <Flame className="w-8 h-8 text-red-600" />
+          <div
+  className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-5 w-24 h-24 flex items-center justify-center rounded-2xl transition-colors duration-300`}
+>
+  <img
+    src="/cosmo-logo.png"
+    alt="Logo"
+    className="w-20 h-20 transition-all duration-300"
+  />
+</div>
           <span className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            Cosmo India
+            Cosmo India 
           </span>
         </div>
         <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
