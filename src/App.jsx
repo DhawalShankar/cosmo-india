@@ -78,21 +78,21 @@ const CosmoPublicationSite = () => {
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? (darkMode ? 'bg-black/95 backdrop-blur-lg shadow-lg shadow-red-900/20' : 'bg-white/95 backdrop-blur-lg shadow-lg') : 'bg-transparent'}`}>
-        <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-25">
-            <div className="flex items-center space-x-2">
-<div
-  className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-5 w-24 h-24 flex items-center justify-center rounded-2xl transition-colors duration-300`}
->
-  <img
-    src="/cosmo-logo.png"
-    alt="Logo"
-    className="w-20 h-20 transition-all duration-300"
-  />
-</div>
+<div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
+  {/* Navigation */}
+  <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? (darkMode ? 'bg-black/95 backdrop-blur-lg shadow-lg shadow-red-900/20' : 'bg-white/95 backdrop-blur-lg shadow-lg') : 'bg-transparent'}`}>
+    <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-between items-center h-25">
+        <div className="flex items-center space-x-2">
+          <div
+            className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-5 w-24 h-24 flex items-center justify-center rounded-2xl transition-colors duration-300`}
+          >
+            <img
+              src="/cosmo-logo.png"
+              alt="Logo"
+              className="w-20 h-20 transition-all duration-300"
+            />
+          </div>
 
 
 
@@ -632,50 +632,72 @@ const CosmoPublicationSite = () => {
             </div>
 
             {/* Contact Form */}
-            <div className={`p-8 rounded-2xl ${
-              darkMode 
-                ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
-            }`}>
-              <form className="space-y-6">
+            <div
+              className={`p-8 rounded-2xl ${
+                darkMode
+                  ? "bg-gradient-to-br from-red-950/20 to-black border border-red-900/20"
+                  : "bg-gradient-to-br from-red-50 to-white border border-red-200"
+              }`}
+            >
+              <form
+                className="space-y-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const name = e.target.name.value.trim();
+                  const email = e.target.email.value.trim();
+                  const message = e.target.message.value.trim();
+
+                  if (!name || !email || !message) {
+                    alert("Please fill in all fields!");
+                    return;
+                  }
+
+                  const text = `Name: ${name}\nEmail: ${email}\nMessage: ${message}`;
+                  const encodedText = encodeURIComponent(text);
+                  window.open(`https://wa.me/7985046049?text=${encodedText}`, "_blank");
+                }}
+              >
                 <div>
                   <input
                     type="text"
+                    name="name"
                     placeholder="Your Name"
                     className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all ${
-                      darkMode 
-                        ? 'bg-black/50 border-red-900/30 text-white placeholder-gray-500'
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      darkMode
+                        ? "bg-black/50 border-red-900/30 text-white placeholder-gray-500"
+                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
                     }`}
                   />
                 </div>
                 <div>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Your Email"
                     className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all ${
-                      darkMode 
-                        ? 'bg-black/50 border-red-900/30 text-white placeholder-gray-500'
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      darkMode
+                        ? "bg-black/50 border-red-900/30 text-white placeholder-gray-500"
+                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
                     }`}
                   />
                 </div>
                 <div>
                   <textarea
                     rows="5"
+                    name="message"
                     placeholder="Your Message"
                     className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all resize-none ${
-                      darkMode 
-                        ? 'bg-black/50 border-red-900/30 text-white placeholder-gray-500'
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      darkMode
+                        ? "bg-black/50 border-red-900/30 text-white placeholder-gray-500"
+                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
                     }`}
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30"
+                  className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30"
                 >
-                  Send Message
+                  Send via WhatsApp
                 </button>
               </form>
             </div>
