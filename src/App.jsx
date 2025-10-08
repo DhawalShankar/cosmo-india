@@ -40,7 +40,7 @@ const CosmoPublicationSite = () => {
       author: 'Rajkumar Ratnapriya',
       category: 'Astrology',
       price: '₹199',
-      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop',
+      image: 'Ratn Rahasy.jpg',
       badge: '',
       rating: 4.8
     },
@@ -60,7 +60,7 @@ const CosmoPublicationSite = () => {
       author: 'Rajkumar Ratnapriya',
       category: 'Astrology',
       price: '₹199',
-      image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop',
+      image: 'Ratn Rahasy.jpg',
       badge: '',
       rating: 4.9
     },
@@ -71,7 +71,7 @@ const CosmoPublicationSite = () => {
     : featuredBooks.filter(book => book.category === activeCategory);
 
   const authors = [
-    { name: 'Rajkumar Ratnapriya', books: 'Ratn Rahasy', image: 'nana.jpeg' },
+    { name: 'Rajkumar Ratnapriya', books: 'रत्न रहस्य', image: 'nana.jpeg' },
     { name: 'Shyamlal Saketi', books: 'Apradh Jyotish', image: 'book.jpeg' },
     { name: 'Keval Anand Joshi', books: 'Saurmandal Aur Aap', image: 'keval.jpg' },
   ];
