@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp, Instagram } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Posts from "./Posts";
 import Legacy from './Legacy';
+import PublishingServices from './Publishing'; 
 const CosmoPublicationSite = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [hoveredBook, setHoveredBook] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -283,12 +285,13 @@ const CosmoPublicationSite = () => {
               India's premier publishing house bringing you the finest literature, academic excellence, and inspiring narratives
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button 
-                onClick={() => scrollToSection('books')}
-                className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2">
-                <span>Explore Catalog</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <button
+  onClick={() => navigate("/publish")}
+  className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
+>
+  <span>Publish your First Book!</span>
+  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+</button>
               <button 
                 onClick={() => scrollToSection('authors')}
                 className={`px-8 py-4 border-2 border-red-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 ${darkMode ? 'text-white hover:bg-red-600' : 'text-red-600 hover:bg-red-600 hover:text-white'}`}>
