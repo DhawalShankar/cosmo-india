@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Posts from "./Posts";
 import Legacy from './Legacy';
 import PublishingServices from './Publishing'; 
+
 const CosmoPublicationSite = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -286,10 +287,10 @@ const CosmoPublicationSite = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-  onClick={() => navigate("/publish")}
+  onClick={() => navigate("/discuss")}
   className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
 >
-  <span>Publish your First Book!</span>
+  <span>Let's Discuss your Book!</span>
   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
 </button>
               <button 

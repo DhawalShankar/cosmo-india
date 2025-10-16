@@ -148,7 +148,7 @@ const PublishingServices = () => {
         'Deluxe Interior Design',
         'Premium Cover Design (3 concepts)',
         'ISBN & Copyright',
-        'Full Distribution ( Print (500 copies) + Digital )',
+        'Full Distribution [Print (500 copies) + Digital]',
         'Advanced Marketing Campaign',
         'Professional Author Website',
         'Social Media Setup',
