@@ -44,7 +44,7 @@ const CosmoPublicationSite = () => {
       title: 'रत्न रहस्य - 1',
       author: 'Shri Rajkumar Ratnapriya',
       category: 'Astrology',
-      price: '₹199',
+      price: '₹249',
       image: 'Ratn Rahasy.jpg',
       badge: '',
       rating: 4.8
@@ -64,7 +64,7 @@ const CosmoPublicationSite = () => {
       title: 'रत्न रहस्य - 2',
       author: 'Shri Rajkumar Ratnapriya',
       category: 'Astrology',
-      price: '₹199',
+      price: '₹249',
       image: 'Ratn Rahasy.jpg',
       badge: '',
       rating: 4.9

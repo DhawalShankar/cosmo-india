@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ShoppingCart, Trash2, Plus, Minus, CreditCard, Truck, Shield, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, ShoppingCart, Trash2, CreditCard, Package, Shield, Check, Sparkles, TrendingUp, Crown } from 'lucide-react';
 
 const CheckoutPage = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -7,47 +7,48 @@ const CheckoutPage = () => {
   // ============================================================
   // MOCK DATA - REPLACE WITH REAL DATA FROM NAVIGATION STATE
   // ============================================================
-  // In your main app, pass book data via navigation:
-  // navigate('/checkout', { state: { book: selectedBook } })
+  // In your main app, pass package data via navigation:
+  // navigate('/checkout', { state: { package: selectedPackage } })
   // Then use: const location = useLocation(); 
-  // const book = location.state?.book;
+  // const package = location.state?.package;
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      title: 'रत्न रहस्य - 1',
-      author: 'Shri Rajkumar Ratnapriya',
-      category: 'Astrology',
-      price: '₹199',
-      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop',
+      title: 'Professional',
+      subtitle: 'Our most popular choice',
+      category: 'Publishing Package',
+      price: '₹59,999',
+      icon: TrendingUp,
+      badge: 'Most Popular',
+      features: [
+        'Comprehensive Editing',
+        'Proofreading (4 rounds)',
+        'Premium Interior Design',
+        'Custom Cover Design',
+        'ISBN & Barcode',
+        'Print(200 copies) & Digital Distribution',
+        'Basic Marketing Package',
+        'Author Digital Cards'
+      ],
       quantity: 1
     }
   ]);
   
-  const [step, setStep] = useState(1); // 1: Cart, 2: Shipping, 3: Payment
+  const [step, setStep] = useState(1); // 1: Cart, 2: Details, 3: Payment
   const [orderComplete, setOrderComplete] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);
 
-  const [shippingInfo, setShippingInfo] = useState({
+  const [publishingInfo, setPublishingInfo] = useState({
     fullName: '',
     email: '',
     phone: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: ''
+    manuscriptTitle: '',
+    genre: '',
+    wordCount: '',
+    additionalNotes: ''
   });
 
   const [errors, setErrors] = useState({});
-
-  const updateQuantity = (id, change) => {
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + change) }
-          : item
-      )
-    );
-  };
 
   const removeItem = (id) => {
     setCartItems(items => items.filter(item => item.id !== id));
@@ -55,32 +56,31 @@ const CheckoutPage = () => {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) => {
-      const price = parseInt(item.price.replace('₹', ''));
+      const price = parseInt(item.price.replace(/[₹,]/g, ''));
       return sum + (price * item.quantity);
     }, 0);
   };
 
-  const shippingCost = 50;
+  const processingFee = 500;
   const tax = Math.round(calculateSubtotal() * 0.18); // 18% GST
-  const total = calculateSubtotal() + shippingCost + tax;
+  const total = calculateSubtotal() + processingFee + tax;
 
-  const validateShipping = () => {
+  const validatePublishingInfo = () => {
     const newErrors = {};
-    if (!shippingInfo.fullName) newErrors.fullName = 'Name is required';
-    if (!shippingInfo.email) newErrors.email = 'Email is required';
-    if (!shippingInfo.phone || shippingInfo.phone.length !== 10) newErrors.phone = 'Valid phone number required';
-    if (!shippingInfo.address) newErrors.address = 'Address is required';
-    if (!shippingInfo.city) newErrors.city = 'City is required';
-    if (!shippingInfo.state) newErrors.state = 'State is required';
-    if (!shippingInfo.pincode || shippingInfo.pincode.length !== 6) newErrors.pincode = 'Valid pincode required';
+    if (!publishingInfo.fullName) newErrors.fullName = 'Name is required';
+    if (!publishingInfo.email) newErrors.email = 'Email is required';
+    if (!publishingInfo.phone || publishingInfo.phone.length !== 10) newErrors.phone = 'Valid phone number required';
+    if (!publishingInfo.manuscriptTitle) newErrors.manuscriptTitle = 'Manuscript title is required';
+    if (!publishingInfo.genre) newErrors.genre = 'Genre is required';
+    if (!publishingInfo.wordCount) newErrors.wordCount = 'Word count is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleShippingSubmit = (e) => {
+  const handleDetailsSubmit = (e) => {
     e.preventDefault();
-    if (validateShipping()) {
+    if (validatePublishingInfo()) {
       setStep(3);
     }
   };
@@ -107,7 +107,7 @@ const CheckoutPage = () => {
           amount: total,
           currency: 'INR',
           cartItems: cartItems,
-          shippingInfo: shippingInfo
+          publishingInfo: publishingInfo
         })
       });
       
@@ -136,7 +136,7 @@ const CheckoutPage = () => {
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'Cosmo India Prakashan',
-        description: 'Book Purchase',
+        description: 'Publishing Package Purchase',
         image: '/cosmo-logo.png', // Your logo
         order_id: orderData.id,
         handler: async function (response) {
@@ -154,7 +154,7 @@ const CheckoutPage = () => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              shippingInfo: shippingInfo,
+              publishingInfo: publishingInfo,
               cartItems: cartItems
             })
           });
@@ -177,12 +177,13 @@ const CheckoutPage = () => {
           setProcessingPayment(false);
         },
         prefill: {
-          name: shippingInfo.fullName,
-          email: shippingInfo.email,
-          contact: shippingInfo.phone
+          name: publishingInfo.fullName,
+          email: publishingInfo.email,
+          contact: publishingInfo.phone
         },
         notes: {
-          address: shippingInfo.address
+          manuscriptTitle: publishingInfo.manuscriptTitle,
+          genre: publishingInfo.genre
         },
         theme: {
           color: '#DC2626' // Red color matching your theme
@@ -218,6 +219,13 @@ const CheckoutPage = () => {
       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
   }`;
 
+  const getBadgeColor = (title) => {
+    if (title === 'Essential') return 'from-blue-600 to-blue-700';
+    if (title === 'Professional') return 'from-amber-600 to-amber-700';
+    if (title === 'Premium') return 'from-purple-600 to-purple-700';
+    return 'from-red-600 to-red-700';
+  };
+
   if (orderComplete) {
     return (
       <div className={`min-h-screen ${darkMode ? 'bg-black' : 'bg-gray-50'} flex items-center justify-center p-4`}>
@@ -230,10 +238,10 @@ const CheckoutPage = () => {
             <Check className="w-12 h-12 text-white" />
           </div>
           <h2 className={`text-3xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            Order Confirmed!
+            Package Purchased!
           </h2>
           <p className={`text-lg mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Thank you for your purchase. We'll send a confirmation email shortly.
+            Thank you! Our publishing team will contact you within 24 hours to begin your journey.
           </p>
           <button
             onClick={() => window.location.href = '/'}
@@ -256,7 +264,7 @@ const CheckoutPage = () => {
             className={`flex items-center space-x-2 ${darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-600'} transition-colors`}
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Shop</span>
+            <span>Back to Packages</span>
           </button>
           
           <button
@@ -273,7 +281,7 @@ const CheckoutPage = () => {
         <div className="flex items-center justify-center mb-12">
           {[
             { num: 1, label: 'Cart', icon: ShoppingCart },
-            { num: 2, label: 'Shipping', icon: Truck },
+            { num: 2, label: 'Details', icon: Package },
             { num: 3, label: 'Payment', icon: CreditCard }
           ].map((s, idx) => (
             <React.Fragment key={s.num}>
@@ -314,69 +322,75 @@ const CheckoutPage = () => {
                   : 'bg-white border border-red-200 shadow-xl'
               }`}>
                 <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Shopping Cart
+                  Selected Package
                 </h2>
                 
                 {cartItems.length === 0 ? (
                   <div className="text-center py-12">
                     <ShoppingCart className={`w-16 h-16 mx-auto mb-4 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
-                    <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Your cart is empty</p>
+                    <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>No packages selected</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {cartItems.map(item => (
-                      <div key={item.id} className={`flex gap-4 p-4 rounded-xl ${
-                        darkMode ? 'bg-black/30' : 'bg-gray-50'
-                      }`}>
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-24 h-32 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <h3 className={`font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {item.title}
-                          </h3>
-                          <p className={`text-sm mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            by {item.author}
-                          </p>
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => updateQuantity(item.id, -1)}
-                              className={`p-1 rounded ${darkMode ? 'bg-red-950/30 text-red-500' : 'bg-red-100 text-red-600'}`}
-                            >
-                              <Minus className="w-4 h-4" />
-                            </button>
-                            <span className={darkMode ? 'text-white' : 'text-gray-900'}>{item.quantity}</span>
-                            <button
-                              onClick={() => updateQuantity(item.id, 1)}
-                              className={`p-1 rounded ${darkMode ? 'bg-red-950/30 text-red-500' : 'bg-red-100 text-red-600'}`}
-                            >
-                              <Plus className="w-4 h-4" />
-                            </button>
+                    {cartItems.map(item => {
+                      const IconComponent = item.icon || Package;
+                      return (
+                        <div key={item.id} className={`p-6 rounded-2xl border-2 ${
+                          darkMode ? 'bg-black/30 border-red-900/30' : 'bg-gray-50 border-gray-200'
+                        }`}>
+                          <div className="flex justify-between items-start mb-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className={`p-2 rounded-lg bg-gradient-to-r ${getBadgeColor(item.title)}`}>
+                                  <IconComponent className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                  <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                                    {item.title}
+                                  </h3>
+                                  {item.badge && (
+                                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r ${getBadgeColor(item.title)} text-white`}>
+                                      {item.badge}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                {item.subtitle}
+                              </p>
+                              <div className="grid md:grid-cols-2 gap-2">
+                                {item.features.map((feature, idx) => (
+                                  <div key={idx} className={`flex items-start text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    <Check className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                                    <span>{feature}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="text-right ml-6">
+                              <p className="text-3xl font-bold text-red-500 mb-2">{item.price}</p>
+                              <p className={`text-xs mb-4 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>One-time payment</p>
+                              <button
+                                onClick={() => removeItem(item.id)}
+                                className={`p-2 rounded-lg transition-colors ${
+                                  darkMode
+                                    ? 'hover:bg-red-950/30 text-red-500'
+                                    : 'hover:bg-red-100 text-red-600'
+                                }`}
+                              >
+                                <Trash2 className="w-5 h-5" />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-xl font-bold text-red-500 mb-2">{item.price}</p>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className={`p-2 rounded-lg transition-colors ${
-                              darkMode
-                                ? 'hover:bg-red-950/30 text-red-500'
-                                : 'hover:bg-red-100 text-red-600'
-                            }`}
-                          >
-                            <Trash2 className="w-5 h-5" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     
                     <button
                       onClick={() => setStep(2)}
                       className="w-full mt-6 px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300"
                     >
-                      Proceed to Shipping
+                      Continue to Details
                     </button>
                   </div>
                 )}
@@ -390,7 +404,7 @@ const CheckoutPage = () => {
                   : 'bg-white border border-red-200 shadow-xl'
               }`}>
                 <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Shipping Information
+                  Author & Manuscript Details
                 </h2>
                 
                 <div className="space-y-4">
@@ -398,8 +412,8 @@ const CheckoutPage = () => {
                     <input
                       type="text"
                       placeholder="Full Name"
-                      value={shippingInfo.fullName}
-                      onChange={(e) => setShippingInfo({...shippingInfo, fullName: e.target.value})}
+                      value={publishingInfo.fullName}
+                      onChange={(e) => setPublishingInfo({...publishingInfo, fullName: e.target.value})}
                       className={inputClass}
                     />
                     {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
@@ -410,8 +424,8 @@ const CheckoutPage = () => {
                       <input
                         type="email"
                         placeholder="Email"
-                        value={shippingInfo.email}
-                        onChange={(e) => setShippingInfo({...shippingInfo, email: e.target.value})}
+                        value={publishingInfo.email}
+                        onChange={(e) => setPublishingInfo({...publishingInfo, email: e.target.value})}
                         className={inputClass}
                       />
                       {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -420,8 +434,8 @@ const CheckoutPage = () => {
                       <input
                         type="tel"
                         placeholder="Phone (10 digits)"
-                        value={shippingInfo.phone}
-                        onChange={(e) => setShippingInfo({...shippingInfo, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
+                        value={publishingInfo.phone}
+                        onChange={(e) => setPublishingInfo({...publishingInfo, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
                         className={inputClass}
                       />
                       {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
@@ -429,47 +443,55 @@ const CheckoutPage = () => {
                   </div>
 
                   <div>
-                    <textarea
-                      placeholder="Complete Address"
-                      value={shippingInfo.address}
-                      onChange={(e) => setShippingInfo({...shippingInfo, address: e.target.value})}
-                      className={`${inputClass} resize-none`}
-                      rows={3}
+                    <input
+                      type="text"
+                      placeholder="Manuscript Title"
+                      value={publishingInfo.manuscriptTitle}
+                      onChange={(e) => setPublishingInfo({...publishingInfo, manuscriptTitle: e.target.value})}
+                      className={inputClass}
                     />
-                    {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                    {errors.manuscriptTitle && <p className="text-red-500 text-sm mt-1">{errors.manuscriptTitle}</p>}
                   </div>
 
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <input
-                        type="text"
-                        placeholder="City"
-                        value={shippingInfo.city}
-                        onChange={(e) => setShippingInfo({...shippingInfo, city: e.target.value})}
+                      <select
+                        value={publishingInfo.genre}
+                        onChange={(e) => setPublishingInfo({...publishingInfo, genre: e.target.value})}
                         className={inputClass}
-                      />
-                      {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
+                      >
+                        <option value="">Select Genre</option>
+                        <option value="fiction">Fiction</option>
+                        <option value="non-fiction">Non-Fiction</option>
+                        <option value="poetry">Poetry</option>
+                        <option value="biography">Biography</option>
+                        <option value="self-help">Self-Help</option>
+                        <option value="astrology">Astrology</option>
+                        <option value="spirituality">Spirituality</option>
+                        <option value="other">Other</option>
+                      </select>
+                      {errors.genre && <p className="text-red-500 text-sm mt-1">{errors.genre}</p>}
                     </div>
                     <div>
                       <input
-                        type="text"
-                        placeholder="State"
-                        value={shippingInfo.state}
-                        onChange={(e) => setShippingInfo({...shippingInfo, state: e.target.value})}
+                        type="number"
+                        placeholder="Approximate Word Count"
+                        value={publishingInfo.wordCount}
+                        onChange={(e) => setPublishingInfo({...publishingInfo, wordCount: e.target.value})}
                         className={inputClass}
                       />
-                      {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state}</p>}
+                      {errors.wordCount && <p className="text-red-500 text-sm mt-1">{errors.wordCount}</p>}
                     </div>
-                    <div>
-                      <input
-                        type="text"
-                        placeholder="Pincode"
-                        value={shippingInfo.pincode}
-                        onChange={(e) => setShippingInfo({...shippingInfo, pincode: e.target.value.replace(/\D/g, '').slice(0, 6)})}
-                        className={inputClass}
-                      />
-                      {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
-                    </div>
+                  </div>
+
+                  <div>
+                    <textarea
+                      placeholder="Additional Notes (Optional - Tell us about your manuscript)"
+                      value={publishingInfo.additionalNotes}
+                      onChange={(e) => setPublishingInfo({...publishingInfo, additionalNotes: e.target.value})}
+                      className={`${inputClass} resize-none`}
+                      rows={4}
+                    />
                   </div>
 
                   <div className="flex gap-4 mt-6">
@@ -486,7 +508,7 @@ const CheckoutPage = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={handleShippingSubmit}
+                      onClick={handleDetailsSubmit}
                       className="flex-1 px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300"
                     >
                       Continue to Payment
@@ -508,16 +530,46 @@ const CheckoutPage = () => {
                 
                 <div className="space-y-6">
                   <div className={`p-6 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
-                    <h3 className={`font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      Order Summary
+                    <h3 className={`font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Package Summary
                     </h3>
-                    <div className="space-y-2">
-                      {cartItems.map(item => (
-                        <div key={item.id} className={`flex justify-between text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          <span>{item.title} x{item.quantity}</span>
-                          <span>₹{parseInt(item.price.replace('₹', '')) * item.quantity}</span>
-                        </div>
-                      ))}
+                    <div className="space-y-3">
+                      {cartItems.map(item => {
+                        const IconComponent = item.icon || Package;
+                        return (
+                          <div key={item.id}>
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className={`p-2 rounded-lg bg-gradient-to-r ${getBadgeColor(item.title)}`}>
+                                <IconComponent className="w-5 h-5 text-white" />
+                              </div>
+                              <div className="flex-1">
+                                <div className={`flex justify-between font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                                  <span>{item.title} Package</span>
+                                  <span>{item.price}</span>
+                                </div>
+                                <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{item.subtitle}</p>
+                              </div>
+                            </div>
+                            <div className={`text-sm mt-2 pl-14 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                              {item.features.slice(0, 4).map((f, i) => (
+                                <div key={i}>• {f}</div>
+                              ))}
+                              {item.features.length > 4 && <div>+ {item.features.length - 4} more features</div>}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className={`p-6 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
+                    <h3 className={`font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Manuscript Details
+                    </h3>
+                    <div className={`space-y-1 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <p><span className="font-medium">Title:</span> {publishingInfo.manuscriptTitle}</p>
+                      <p><span className="font-medium">Genre:</span> {publishingInfo.genre}</p>
+                      <p><span className="font-medium">Word Count:</span> {publishingInfo.wordCount}</p>
                     </div>
                   </div>
 
@@ -549,7 +601,7 @@ const CheckoutPage = () => {
                       disabled={processingPayment}
                       className="flex-1 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {processingPayment ? 'Processing...' : 'Pay ₹' + total}
+                      {processingPayment ? 'Processing...' : `Pay ₹${total.toLocaleString('en-IN')}`}
                     </button>
                   </div>
                 </div>
@@ -569,34 +621,53 @@ const CheckoutPage = () => {
             
             <div className="space-y-3 mb-4">
               <div className={`flex justify-between ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                <span>Subtotal</span>
-                <span>₹{calculateSubtotal()}</span>
+                <span>Package Total</span>
+                <span>₹{calculateSubtotal().toLocaleString('en-IN')}</span>
               </div>
               <div className={`flex justify-between ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                <span>Shipping</span>
-                <span>₹{shippingCost}</span>
+                <span>Processing Fee</span>
+                <span>₹{processingFee}</span>
               </div>
               <div className={`flex justify-between ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 <span>GST (18%)</span>
-                <span>₹{tax}</span>
+                <span>₹{tax.toLocaleString('en-IN')}</span>
               </div>
               <div className={`pt-3 border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
                 <div className="flex justify-between text-xl font-bold">
                   <span className={darkMode ? 'text-white' : 'text-gray-900'}>Total</span>
-                  <span className="text-red-500">₹{total}</span>
+                  <span className="text-red-500">₹{total.toLocaleString('en-IN')}</span>
                 </div>
               </div>
             </div>
 
+            {cartItems.map(item => (
+              <div key={item.id} className={`p-4 rounded-xl mb-4 ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
+                <div className="flex items-center space-x-2 mb-2">
+                  <Package className="w-5 h-5 text-red-500" />
+                  <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    What's Included
+                  </span>
+                </div>
+                <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {item.features.slice(0, 5).map((feature, idx) => (
+                    <li key={idx}>• {feature}</li>
+                  ))}
+                  {item.features.length > 5 && (
+                    <li className="font-semibold">+ {item.features.length - 5} more features</li>
+                  )}
+                </ul>
+              </div>
+            ))}
+
             <div className={`p-4 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
               <div className="flex items-center space-x-2 mb-2">
-                <Truck className="w-5 h-5 text-red-500" />
+                <Shield className="w-5 h-5 text-red-500" />
                 <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Free Returns
+                  100% Secure Payment
                 </span>
               </div>
               <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                30-day return policy on all books
+                Your payment information is encrypted and secure
               </p>
             </div>
           </div>
