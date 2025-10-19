@@ -746,7 +746,7 @@ const CosmoPublicationSite = () => {
                 <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Phone</h3>
                 <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
                   +91 7388270331<br />
-                  +91 7985046049
+                  
                 </p>
               </div>
 
