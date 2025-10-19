@@ -564,7 +564,7 @@ const CosmoPublicationSite = () => {
             darkMode ? 'text-gray-400' : 'text-gray-600'
           }`}
         >
-          A Founding Engineer and the current front face of Cosmo India
+          A Founding Engineer and the current face of Cosmo India
           Prakashan, Dhawal represents the brand’s new era — blending youthful energy with
           the publishing house’s rich heritage. Passionate about technology, design, and
           storytelling, he is driving the revival of the company with a forward-looking
@@ -576,7 +576,7 @@ const CosmoPublicationSite = () => {
           }`}
         >
           <Award className="w-5 h-5 text-red-600" />
-          <span className="text-sm">Innovator & Front Face of the Brand</span>
+          <span className="text-sm">Innovator & Face of the Brand</span>
         </div>
       </div>
     </div>
@@ -637,7 +637,7 @@ const CosmoPublicationSite = () => {
           }`}
         >
           <Award className="w-5 h-5 text-red-600" />
-          <span className="text-sm">Visionary Astrologer</span>
+          <span className="text-sm">Visionary Astrologer (40+ Years Experience) </span>
         </div>
       </div>
     </div>
