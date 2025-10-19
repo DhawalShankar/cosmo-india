@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp, Instagram } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Posts from "./Posts";
-import Legacy from './Legacy';
-import PublishingServices from './Publishing'; 
 
 const CosmoPublicationSite = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -41,31 +39,31 @@ const CosmoPublicationSite = () => {
   const featuredBooks = [
     {
       id: 1,
-      title: 'रत्न रहस्य - 1',
-      author: 'Shri Rajkumar Ratnapriya',
-      category: 'Astrology',
-      price: '₹249',
-      image: 'Ratn Rahasy.jpg',
+      title: '',
+      author: '',
+      category: '',
+      price: '',
+      image: '',
       badge: '',
       rating: 4.8
     },
     {
       id: 2,
-      title: 'सौरमंडल और आप',
-      author: 'Shri Kewal Anand Joshi',
-      category: 'Astrology',
-      price: '₹199',
-      image: 'https://images.unsplash.com/photo-1589998059171-988d887df646?w=400&h=600&fit=crop',
+      title: '',
+      author: '',
+      category: '',
+      price: '₹',
+      image: '',
       badge: '',
       rating: 4.6
     },
     {
       id: 3,
-      title: 'रत्न रहस्य - 2',
-      author: 'Shri Rajkumar Ratnapriya',
-      category: 'Astrology',
-      price: '₹249',
-      image: 'Ratn Rahasy.jpg',
+      title: '',
+      author: '',
+      category: '',
+      price: '₹',
+      image: '',
       badge: '',
       rating: 4.9
     },
@@ -76,9 +74,9 @@ const CosmoPublicationSite = () => {
     : featuredBooks.filter(book => book.category === activeCategory);
 
   const authors = [
-    { name: 'Rajkumar Ratnapriya', books: 'रत्न रहस्य', image: 'nana.jpeg' },
-    { name: 'Shyamlal Saketi', books: 'अपराध ज्योतिष', image: 'book.jpeg' },
-    { name: 'Kewal Anand Joshi', books: 'सौरमंडल और आप', image: 'keval.jpg' },
+    { name: '', books: '', image: '' },
+    { name: '', books: '', image: '' },
+    { name: '', books: '', image: '' },
   ];
    const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState({});
@@ -519,65 +517,150 @@ const CosmoPublicationSite = () => {
         
     </div> 
 
-    {/* Founder Section */}
-    <div className="max-w-4xl mx-auto">
-      <div className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
-        darkMode 
-          ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
-          : 'bg-gradient-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
-      }`}>
-        <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
-          <div className="flex items-center justify-center">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-              <img
-                src="nana.jpeg"
-                alt="Founder"
-                className="relative w-64 h-64 object-cover rounded-2xl border-4 border-red-900/50 group-hover:border-red-600 shadow-2xl transition-all duration-300"
-              />
-            </div>
+    {/* Founders Section */}
+<div className="max-w-4xl mx-auto space-y-16">
+  
+  {/* Co-Founder 2 */}
+  <div
+    className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
+      darkMode
+        ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
+        : 'bg-gradient-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
+    }`}
+  >
+    <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+      <div className="flex items-center justify-center md:order-2">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+          <img
+            src="dhawal.jpg"
+            alt="Co-Founder"
+            className="relative w-64 h-64 object-cover rounded-2xl border-4 border-red-900/50 group-hover:border-red-600 shadow-2xl transition-all duration-300"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center md:order-1">
+        <div className="mb-4">
+          <div
+            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${
+              darkMode
+                ? 'bg-red-950/50 text-red-400 border border-red-900/50'
+                : 'bg-red-100 text-red-600 border border-red-200'
+            }`}
+          >
+            Co-Founder & CEO
           </div>
-          
-          <div className="flex flex-col justify-center">
-            <div className="mb-4">
-              <div className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${
-                darkMode 
-                  ? 'bg-red-950/50 text-red-400 border border-red-900/50'
-                  : 'bg-red-100 text-red-600 border border-red-200'
-              }`}>
-                Founder & CEO
-              </div>
-            </div>
-            <h3 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Shri Rajkumar Ratnapriya
-            </h3>
-            <p className={`text-lg leading-relaxed mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              With over four decades of dedication to literary excellence, Mr. Ratnapriya founded Cosmo India Prakashan in 1982 with a vision to bridge the gap between traditional Indian literature and contemporary readers. His passion for storytelling and commitment to nurturing new voices has made our publishing house a beacon of quality and innovation.
-            </p>
-            <div className={`flex items-center space-x-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-              <Award className="w-5 h-5 text-red-600" />
-              <span className="text-sm">Visionary Astrologer</span>
-            </div>
-          </div>
+        </div>
+        <h3
+          className={`text-3xl md:text-4xl font-bold mb-4 ${
+            darkMode ? 'text-white' : 'text-gray-900'
+          }`}
+        >
+          Dhawal Shukla
+        </h3>
+        <p
+          className={`text-lg leading-relaxed mb-6 ${
+            darkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}
+        >
+          A Founding Engineer and the current front face of Cosmo India
+          Prakashan, Dhawal represents the brand’s new era — blending youthful energy with
+          the publishing house’s rich heritage. Passionate about technology, design, and
+          storytelling, he is driving the revival of the company with a forward-looking
+          vision that honors its enduring legacy.
+        </p>
+        <div
+          className={`flex items-center space-x-2 ${
+            darkMode ? 'text-gray-500' : 'text-gray-500'
+          }`}
+        >
+          <Award className="w-5 h-5 text-red-600" />
+          <span className="text-sm">Innovator & Front Face of the Brand</span>
         </div>
       </div>
     </div>
   </div>
+  {/* Founder 1 */}
+  <div
+    className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
+      darkMode
+        ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
+        : 'bg-gradient-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
+    }`}
+  >
+    <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+      <div className="flex items-center justify-center">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+          <img
+            src="nana.jpeg"
+            alt="Co-Founder"
+            className="relative w-64 h-64 object-cover rounded-2xl border-4 border-red-900/50 group-hover:border-red-600 shadow-2xl transition-all duration-300"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center">
+        <div className="mb-4">
+          <div
+            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${
+              darkMode
+                ? 'bg-red-950/50 text-red-400 border border-red-900/50'
+                : 'bg-red-100 text-red-600 border border-red-200'
+            }`}
+          >
+            Co-Founder
+          </div>
+        </div>
+        <h3
+          className={`text-3xl md:text-4xl font-bold mb-4 ${
+            darkMode ? 'text-white' : 'text-gray-900'
+          }`}
+        >
+          Shri Rajkumar Ratnapriya
+        </h3>
+        <p
+          className={`text-lg leading-relaxed mb-6 ${
+            darkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}
+        >
+          With over four decades of dedication to literary excellence, Mr. Ratnapriya
+          founded Cosmo India Prakashan in 1982 with a vision to bridge the gap between
+          traditional Indian literature and contemporary readers. His passion for
+          storytelling and commitment to nurturing new voices has made our publishing
+          house a beacon of quality and innovation.
+        </p>
+        <div
+          className={`flex items-center space-x-2 ${
+            darkMode ? 'text-gray-500' : 'text-gray-500'
+          }`}
+        >
+          <Award className="w-5 h-5 text-red-600" />
+          <span className="text-sm">Visionary Astrologer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  </div>
 </section>
+
       {/* Blog Section */}
       <section id="blog" className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-              Latest from Our Blog
-            </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Insights, stories, and updates from the world of publishing
-            </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+            Latest from Our Blog
+          </h2>
+          <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Insights, stories, and updates from the world of publishing
+          </p>
+
+          <div className="mt-8">
+            <Posts darkMode={darkMode} />
           </div>
-          
-           <Posts darkMode={darkMode} />
-          
         </div>
       </section>
 
@@ -857,7 +940,12 @@ const CosmoPublicationSite = () => {
             { 
               name: 'Instagram',
               link: 'https://www.instagram.com/cosmoindiaprakashan/',
-              icon: <Instagram className="w-5 h-5" />
+              icon: (
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.849.07 1.366.062 2.633.344 3.608 1.32.975.975 1.257 2.242 1.32 3.608.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.849c-.062 1.366-.344 2.633-1.32 3.608-.975.975-2.242 1.257-3.608 1.32-1.265.058-1.645.07-4.849.07s-3.584-.012-4.849-.07c-1.366-.062-2.633-.344-3.608-1.32-.975-.975-1.257-2.242-1.32-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.849c.062-1.366.344-2.633 1.32-3.608.975-.975 2.242-1.257 3.608-1.32C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.771.131 4.672.37 3.678 1.364 2.685 2.357 2.447 3.456 2.388 4.737 2.329 6.017 2.316 6.426 2.316 12s.013 5.983.072 7.263c.059 1.281.297 2.38 1.29 3.373.993.993 2.092 1.231 3.373 1.29 1.28.059 1.689.072 7.263.072s5.983-.013 7.263-.072c1.281-.059 2.38-.297 3.373-1.29.993-.993 1.231-2.092 1.29-3.373.059-1.28.072-1.689.072-7.263s-.013-5.983-.072-7.263c-.059-1.281-.297-2.38-1.29-3.373C20.68.37 19.581.131 18.3.072 17.02.013 16.611 0 12 0z"/>
+                  <path d="M12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zM18.406 4.594a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                </svg>
+              )
             },
             { 
               name: 'LinkedIn',
