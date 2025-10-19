@@ -496,7 +496,7 @@ const CosmoPublicationSite = () => {
         About Cosmo India Prakashan
       </h2>
       <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto`}>
-        Since 1982, we have been committed to publishing excellence, bringing Indian voices and stories to readers worldwide. Our diverse catalog spans fiction, non-fiction, academic works, and more.
+        Since 1970s, we have been committed to publishing excellence, bringing Indian voices and stories to readers worldwide. Our diverse catalog spans fiction, non-fiction, academic works, and more.
       </p>
     </div>
 
@@ -626,7 +626,7 @@ const CosmoPublicationSite = () => {
           }`}
         >
           With over four decades of dedication to literary excellence, Mr. Ratnapriya
-          founded Cosmo India Prakashan in 1982 with a vision to bridge the gap between
+          founded Cosmo India Prakashan in 1970s with a vision to bridge the gap between
           traditional Indian literature and contemporary readers. His passion for
           storytelling and commitment to nurturing new voices has made our publishing
           house a beacon of quality and innovation.
