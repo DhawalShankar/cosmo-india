@@ -732,8 +732,8 @@ const CosmoPublicationSite = () => {
                 <MapPin className="w-8 h-8 text-red-600 mb-4" />
                 <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Address</h3>
                 <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                  Gujaini Sector A<br />
-                  Kanpur, UP India 208022
+                <br />
+                UP India 
                 </p>
               </div>
 
