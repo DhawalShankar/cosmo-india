@@ -39,33 +39,33 @@ const CosmoPublicationSite = () => {
   const featuredBooks = [
     {
       id: 1,
-      title: '',
+      title: 'रत्न रहस्य',
       author: '',
-      category: '',
+      category: 'academic',
       price: '',
-      image: '',
-      badge: '',
-      rating: 4.8
+      image: 'Ratn Rahasy.png',
+     
+    
     },
     {
       id: 2,
-      title: '',
+      title: 'सौरमंडल और आप',
       author: '',
-      category: '',
-      price: '₹',
-      image: '',
-      badge: '',
-      rating: 4.6
+      category: 'academic',
+      price: '',
+      image: 'saur.png',
+      
+   
     },
     {
       id: 3,
-      title: '',
+      title: 'सिद्धिसूत्रम',
       author: '',
-      category: '',
-      price: '₹',
-      image: '',
+      category: 'non-fiction',
+      price: '',
+      image: 'siddhi.png',
       badge: '',
-      rating: 4.9
+  
     },
   ];
 
@@ -417,9 +417,7 @@ const CosmoPublicationSite = () => {
                   </div>
                   <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent transition-opacity duration-300 ${hoveredBook === book.id ? 'opacity-100' : 'opacity-0'}`}>
                     <div className="absolute bottom-4 left-4 right-4">
-                      <button className="w-full py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300">
-                        Quick View
-                      </button>
+                      
                     </div>
                   </div>
                 </div>
@@ -436,7 +434,7 @@ const CosmoPublicationSite = () => {
                   <h3 className={`text-xl font-bold mb-2 group-hover:text-red-500 transition-colors ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                     {book.title}
                   </h3>
-                  <p className={darkMode ? 'text-gray-400 mb-3' : 'text-gray-600 mb-3'}>by {book.author}</p>
+                  <p className={darkMode ? 'text-gray-400 mb-3' : 'text-gray-600 mb-3'}> {book.author}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-red-500">{book.price}</span>
                     <button className={`p-2 rounded-full transition-all duration-300 ${
@@ -455,7 +453,7 @@ const CosmoPublicationSite = () => {
       </section>
 
       {/* Authors Section */}
-      <section id="authors" className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
+      {/* <section id="authors" className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
@@ -486,7 +484,7 @@ const CosmoPublicationSite = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
      {/* About Section */}
 <section id="about" className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
