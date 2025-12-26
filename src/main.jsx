@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App.jsx";
 
 
-initGA(); // ✅ initialize ONCE
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
