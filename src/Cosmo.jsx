@@ -283,7 +283,7 @@ const CosmoPublicationSite = () => {
   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
 </button>
               <button 
-                onClick={() => navigate("/discuss")}
+                onClick={() => navigate("/marketplace")}
                 className={`px-8 py-4 border-2 border-red-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 ${darkMode ? 'text-white hover:bg-red-600' : 'text-red-600 hover:bg-red-600 hover:text-white'}`}>
                 What's New!
               </button>
@@ -322,13 +322,13 @@ const CosmoPublicationSite = () => {
         },
         { 
           icon: Award, 
-          title: 'Industry Recognition', 
-          description: 'Award-winning publications and authors'
+          title: 'Recognition', 
+          description: 'Highly recognized publications and authors'
         },
         { 
           icon: TrendingUp, 
           title: 'Wide Reach', 
-          description: 'Distribution across India and beyond'
+          description: 'Distribution across India'
         }
       ].map((value, index) => (
         <div 
@@ -504,7 +504,7 @@ const CosmoPublicationSite = () => {
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
           <img
-            src="dhawal.jpeg"
+            src="dhawal.png"
             alt="Co-Founder"
             className="relative w-64 h-64 object-cover rounded-2xl border-4 border-red-900/50 group-hover:border-red-600 shadow-2xl transition-all duration-300"
           />
@@ -670,7 +670,7 @@ const CosmoPublicationSite = () => {
               }`}
             />
             <a
-              href="https://www.linkedin.com/company/cosmo-india-prakashan/"
+              href="https://www.linkedin.com/company/cosmoindiaprakashan/"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30 whitespace-nowrap inline-block text-center"
@@ -946,7 +946,7 @@ const CosmoPublicationSite = () => {
       </div>
     </div>
     <div className={`pt-8 border-t ${darkMode ? 'border-red-900/30' : 'border-red-200'} text-center ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-      <p>&copy; 2025 Cosmo India Prakashan. All rights reserved.</p>
+      <p>&copy; 2026 Cosmo India Prakashan. All rights reserved.</p>
     </div>
   </div>
 </footer>

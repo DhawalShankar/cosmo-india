@@ -615,7 +615,7 @@ const DiscussYourBook = () => {
             </div>
           </div>
           <div className={`border-t ${darkMode ? 'border-red-900/20' : 'border-gray-700'} pt-8 text-center text-gray-400 text-sm`}>
-            <p>&copy; 2025 Cosmo India Prakashan. All rights reserved.</p>
+            <p>&copy; 2026 Cosmo India Prakashan. All rights reserved.</p>
           </div>
         </div>
       </footer>
