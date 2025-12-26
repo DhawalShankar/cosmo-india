@@ -33,7 +33,7 @@ const LegacyAuthors = () => {
       id: 2,
       name: 'Shri Shyamlal Saketi',
       yearsActive: '',
-      image: 'saketi.jpg',
+      image: 'saketi.jpeg',
       bio: 'Legendary astrologer and author whose works shaped modern Vedic astrology.',
       notableWorks: [
         { title: 'अपराध ज्योतिष', year: '' },

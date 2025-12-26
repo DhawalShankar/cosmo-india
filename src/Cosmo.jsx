@@ -531,7 +531,7 @@ const CosmoPublicationSite = () => {
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
           <img
-            src="dhawal.jpg"
+            src="dhawal.jpeg"
             alt="Co-Founder"
             className="relative w-64 h-64 object-cover rounded-2xl border-4 border-red-900/50 group-hover:border-red-600 shadow-2xl transition-all duration-300"
           />
