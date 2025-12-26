@@ -5,6 +5,16 @@ import PublishingServices from './Publishing'; // Publish authors page
 import DiscussYourBook from './Discuss'; 
 import Marketplace from './Marketplace';
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag("config", "G-4DM5B019TE", {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+ // ✅ HERE
   return (
     <BrowserRouter>
       <Routes>
