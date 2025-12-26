@@ -4,19 +4,11 @@ import LegacyAuthors from './Legacy'; // Legacy authors page
 import PublishingServices from './Publishing'; // Publish authors page
 import DiscussYourBook from './Discuss'; 
 import Marketplace from './Marketplace';
+import AnalyticsTracker from "./AnalyticsTracker";
 function App() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (window.gtag) {
-      window.gtag("config", "G-4DM5B019TE", {
-        page_path: location.pathname + location.search,
-      });
-    }
-  }, [location]);
- // ✅ HERE
+ 
   return (
-    <BrowserRouter>
+   
       <Routes>
         <Route path="/" element={<CosmoPublicationSite />} />
         <Route path="/legacy" element={<LegacyAuthors />} />
@@ -24,7 +16,7 @@ function App() {
         <Route path="/discuss" element={<DiscussYourBook />} />
         <Route path="/marketplace" element={<Marketplace />} />        
       </Routes>
-    </BrowserRouter>
+   
   );
 }
 
