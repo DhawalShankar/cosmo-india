@@ -27,14 +27,7 @@ const CosmoPublicationSite = () => {
     }
   };
 
-  const categories = [
-    { id: 'all', name: 'All Books' },
-    { id: 'fiction', name: 'Fiction' },
-    { id: 'non-fiction', name: 'Non-Fiction' },
-    { id: 'children', name: 'Children' },
-    { id: 'academic', name: 'Academic' },
-    { id: 'poetry', name: 'Poetry' }
-  ];
+  
 
   const featuredBooks = [
     {
@@ -370,25 +363,7 @@ const CosmoPublicationSite = () => {
             </p>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                  activeCategory === category.id
-                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/50 scale-105'
-                    : (darkMode 
-                        ? 'bg-red-950/30 text-gray-300 border border-red-900/30 hover:bg-red-950/50' 
-                        : 'bg-red-100 text-gray-700 border border-red-200 hover:bg-red-200') + ' hover:scale-105'
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-
+         
           {/* Books Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredBooks.map((book) => (
@@ -937,9 +912,8 @@ const CosmoPublicationSite = () => {
               name: 'Instagram',
               link: 'https://www.instagram.com/cosmoindiaprakashan/',
               icon: (
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.849.07 1.366.062 2.633.344 3.608 1.32.975.975 1.257 2.242 1.32 3.608.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.849c-.062 1.366-.344 2.633-1.32 3.608-.975.975-2.242 1.257-3.608 1.32-1.265.058-1.645.07-4.849.07s-3.584-.012-4.849-.07c-1.366-.062-2.633-.344-3.608-1.32-.975-.975-1.257-2.242-1.32-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.849c.062-1.366.344-2.633 1.32-3.608.975-.975 2.242-1.257 3.608-1.32C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.771.131 4.672.37 3.678 1.364 2.685 2.357 2.447 3.456 2.388 4.737 2.329 6.017 2.316 6.426 2.316 12s.013 5.983.072 7.263c.059 1.281.297 2.38 1.29 3.373.993.993 2.092 1.231 3.373 1.29 1.28.059 1.689.072 7.263.072s5.983-.013 7.263-.072c1.281-.059 2.38-.297 3.373-1.29.993-.993 1.231-2.092 1.29-3.373.059-1.28.072-1.689.072-7.263s-.013-5.983-.072-7.263c-.059-1.281-.297-2.38-1.29-3.373C20.68.37 19.581.131 18.3.072 17.02.013 16.611 0 12 0z"/>
-                  <path d="M12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zM18.406 4.594a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.25-2.25a1 1 0 110 2 1 1 0 010-2z"/>
                 </svg>
               )
             },
