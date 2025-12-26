@@ -369,84 +369,6 @@ const PublishingServices = () => {
         </div>
       </section>
 
-      {/* Packages Section */}
-      <section className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-              Publishing Packages
-            </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Choose the package that fits your needs
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packages.map((pkg, idx) => (
-              <div
-                key={idx}
-                className={`relative p-8 rounded-2xl transition-all duration-300 ${
-                  pkg.popular
-                    ? 'transform scale-105 shadow-2xl border-2 border-red-600'
-                    : darkMode
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                    : 'bg-white border border-gray-200'
-                } hover:scale-105`}
-              >
-                {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-bold rounded-full shadow-lg">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
-                <div className="text-center mb-6">
-                  <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {pkg.name}
-                  </h3>
-                  <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {pkg.description}
-                  </p>
-                  <div className="text-4xl font-bold text-red-600 mb-2">
-                    {pkg.price}
-                  </div>
-                  <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                    One-time payment
-                  </p>
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <a
-                  href={`https://wa.me/7388270331?text=I'm%20interested%20in%20the%20${pkg.name}%20package`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`block w-full py-3 rounded-xl font-semibold text-center transition-all duration-300 ${
-                    pkg.popular
-                      ? 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800'
-                      : darkMode
-                      ? 'bg-red-950/30 text-red-500 hover:bg-red-600 hover:text-white border border-red-900/30'
-                      : 'bg-red-100 text-red-600 hover:bg-red-600 hover:text-white'
-                  }`}
-                >
-                  Choose {pkg.name}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Process Section */}
       <section className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -571,10 +493,10 @@ const PublishingServices = () => {
               </span>
             </Link>
             <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-4`}>
-              Publishing excellence since 1982
+              Publishing excellence since decades
             </p>
             <p className={darkMode ? 'text-gray-500' : 'text-gray-500'}>
-              &copy; 2025 Cosmo India Prakashan. All rights reserved.
+              &copy; 2026 Cosmo India Prakashan. All rights reserved.
             </p>
           </div>
         </div>
