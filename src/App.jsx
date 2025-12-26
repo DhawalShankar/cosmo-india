@@ -4,7 +4,7 @@ import LegacyAuthors from './Legacy'; // Legacy authors page
 import PublishingServices from './Publishing'; // Publish authors page
 import DiscussYourBook from './Discuss'; 
 import Marketplace from './Marketplace';
-import AnalyticsTracker from "./AnalyticsTracker";
+
 function App() {
  
   return (
