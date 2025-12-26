@@ -135,7 +135,6 @@ const CosmoPublicationSite = () => {
       <div className="hidden md:flex items-center space-x-8">
         {[
           { name: 'Books', id: 'books' },
-          { name: 'Authors', id: 'authors' },
           { name: 'About', id: 'about' },
           { name: 'Blog', id: 'blog' },
           { name: 'Contact', id: 'contact' }
@@ -197,7 +196,6 @@ const CosmoPublicationSite = () => {
       <div className="px-4 pt-2 pb-4 space-y-3">
         {[
           { name: 'Books', id: 'books' },
-          { name: 'Authors', id: 'authors' },
           { name: 'About', id: 'about' },
           { name: 'Blog', id: 'blog' },
           { name: 'Contact', id: 'contact' }
@@ -292,9 +290,9 @@ const CosmoPublicationSite = () => {
   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
 </button>
               <button 
-                onClick={() => scrollToSection('authors')}
+                onClick={() => navigate("/discuss")}
                 className={`px-8 py-4 border-2 border-red-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 ${darkMode ? 'text-white hover:bg-red-600' : 'text-red-600 hover:bg-red-600 hover:text-white'}`}>
-                Meet Our Authors
+                What's New!
               </button>
             </div>
           </div>
@@ -886,7 +884,7 @@ const CosmoPublicationSite = () => {
       <div>
         <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>Quick Links</h4>
         <ul className="space-y-2">
-          {['Books', 'Authors', 'About', 'Blog', 'Contact'].map((link) => (
+          {['Books', 'About', 'Blog', 'Contact'].map((link) => (
             <li key={link}>
               <button 
                 onClick={() => scrollToSection(link.toLowerCase())}
