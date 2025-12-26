@@ -875,11 +875,11 @@ const CosmoPublicationSite = () => {
             />
           </div>
           <span className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            Cosmo India 
+            Cosmo India Prakashan
           </span>
         </div>
         <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-          Publishing excellence since 1982
+          Publishing excellence since decades
         </p>
       </div>
 
