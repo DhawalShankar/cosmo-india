@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Search, Menu, X, ShoppingCart, Star, Heart, ArrowRight, Filter } from 'lucide-react';
+import { Menu, X, ShoppingCart, Star, Heart } from 'lucide-react';
+import PolicyModal from "./components/PolicyModal";
+import PrivacyPolicy from "./policies/PrivacyPolicy";
+import Terms from "./policies/Terms";
+import Shipping from "./policies/Shipping";
+import Refund from "./policies/Refund";
+import Contact from "./policies/Contact";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Marketplace = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -9,100 +16,71 @@ const Marketplace = () => {
   const [sortBy, setSortBy] = useState('featured');
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+const location = useLocation();
+const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+const query = new URLSearchParams(location.search);
+const policy = query.get("policy");
+
+
+const closeModal = () => {
+  navigate("/marketplace"); // stable base page
+};
+
+const policyMap = {
+  "/privacy-policy": <PrivacyPolicy />,
+  "/terms": <Terms />,
+  "/shipping-policy": <Shipping />,
+  "/refund-policy": <Refund />,
+  "/contact": <Contact />,
+};
+
+const policyContent = policyMap[location.pathname] || null;
 
   const products = [
     {
       id: 1,
-      title: 'रत्न रहस्य',
+      title: 'रत्न रहस्य (Ratna Rahasya)',
       author: 'Rajkumar Ratnapriya',
       category: 'Astrology',
       price: 299,
       originalPrice: 399,
-      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop',
+      image: 'Ratn Rahasy.jpeg',
       rating: 4.8,
-      reviews: 156,
+      // reviews: 156,
       inStock: true,
       bestseller: true,
-      description: 'A comprehensive guide to gemstones and their mystical properties'
+      description: 'A comprehensive guide in hindi to gemstones and their mystical properties'
     },
     {
       id: 2,
-      title: 'सौरमंडल और आप',
-      author: 'Rajkumar Ratnapriya',
+      title: 'सौरमंडल और आप (Saurmandal aur Aap)',
+      author: 'Keval Anand Joshi',
       category: 'Astrology',
       price: 249,
       originalPrice: 349,
-      image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop',
+      image: 'saur.png',
       rating: 4.6,
-      reviews: 89,
+      // reviews: 89,
       inStock: true,
       bestseller: false,
-      description: 'Understanding the solar system through astrological lens'
+      description: 'Understanding the solar system through an astrological lens'
     },
     {
       id: 3,
-      title: 'सिद्धिसूत्रम',
+      title: 'हिन्दू दैनिक चर्या (Hindu Dainik Charya)',
       author: 'Rajkumar Ratnapriya',
       category: 'Spirituality',
-      price: 349,
-      originalPrice: 449,
-      image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=600&fit=crop',
+      price: 99,
+      originalPrice: 149,
+      image: 'hindu.jpeg',
       rating: 4.9,
       reviews: 234,
       inStock: true,
       bestseller: true,
       description: 'Ancient sutras for spiritual enlightenment'
     },
-    {
-      id: 4,
-      title: 'Vedic Wisdom',
-      author: 'Ancient Sages',
-      category: 'Philosophy',
-      price: 399,
-      originalPrice: 499,
-      image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop',
-      rating: 4.7,
-      reviews: 178,
-      inStock: true,
-      bestseller: false,
-      description: 'Timeless wisdom from ancient Vedic scriptures'
-    },
-    {
-      id: 5,
-      title: 'Jyotish Shastra',
-      author: 'Rajkumar Ratnapriya',
-      category: 'Astrology',
-      price: 449,
-      originalPrice: 599,
-      image: 'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=600&fit=crop',
-      rating: 4.8,
-      reviews: 203,
-      inStock: true,
-      bestseller: true,
-      description: 'The complete science of Vedic astrology'
-    },
-    {
-      id: 6,
-      title: 'Mantra Vidya',
-      author: 'Spiritual Masters',
-      category: 'Spirituality',
-      price: 299,
-      originalPrice: 399,
-      image: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=600&fit=crop',
-      rating: 4.5,
-      reviews: 142,
-      inStock: true,
-      bestseller: false,
-      description: 'The science and practice of sacred mantras'
-    }
+    
   ];
 
   const categories = [
@@ -401,14 +379,66 @@ const Marketplace = () => {
               </p>
             </div>
 
-            <div>
-              <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="/" className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>Home</a></li>
-                <li><a href="/marketplace" className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>Books</a></li>
-                <li><a href="/legacy" className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>Legacy</a></li>
-              </ul>
-            </div>
+         <div>
+  <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+    Quick Links
+  </h4>
+
+  <ul className="space-y-2">
+    <li>
+      <a href="/" className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>
+        Home
+      </a>
+    </li>
+
+    <li>
+      <a href="/marketplace" className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>
+        Books
+      </a>
+    </li>
+
+    <li>
+      <a href="/legacy" className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>
+        Legacy
+      </a>
+    </li>
+
+   <li>
+  <button
+    onClick={() => navigate("/marketplace?policy=privacy")}
+    className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
+  >
+    Privacy Policy
+  </button>
+</li>
+
+<li>
+  <button onClick={() => navigate("/marketplace?policy=terms")}>
+    Terms & Conditions
+  </button>
+</li>
+
+<li>
+  <button onClick={() => navigate("/marketplace?policy=shipping")}>
+    Shipping Policy
+  </button>
+</li>
+
+<li>
+  <button onClick={() => navigate("/marketplace?policy=refund")}>
+    Cancellation & Refunds
+  </button>
+</li>
+
+<li>
+  <button onClick={() => navigate("/marketplace?policy=contact")}>
+    Contact Us
+  </button>
+</li>
+
+  </ul>
+</div>
+
 
             <div>
               <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>Contact</h4>
@@ -452,6 +482,17 @@ const Marketplace = () => {
           </div>
         </div>
       </footer>
+      <PolicyModal
+  open={!!policy}
+  onClose={() => navigate("/marketplace")}
+>
+  {policy === "privacy" && <PrivacyPolicy />}
+  {policy === "terms" && <Terms />}
+  {policy === "shipping" && <Shipping />}
+  {policy === "refund" && <Refund />}
+  {policy === "contact" && <Contact />}
+</PolicyModal>
+
     </div>
   );
 };

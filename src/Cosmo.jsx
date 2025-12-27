@@ -32,33 +32,33 @@ const CosmoPublicationSite = () => {
   const featuredBooks = [
     {
       id: 1,
-      title: 'रत्न रहस्य',
-      author: '',
+      title: 'रत्न रहस्य (Ratna Rahasya)',
+      author: 'Hindi',
       category: 'academic',
-      price: '',
-      image: 'Ratn Rahasy.png',
-     
-    
+      price: '₹299',
+      image: 'Ratn Rahasy.jpeg',
+      badge: 'Bestseller',
+      rating: 5
     },
     {
       id: 2,
-      title: 'सौरमंडल और आप',
-      author: '',
+      title: 'सौरमंडल और आप (Saurmandal aur Aap)',
+      author: 'Hindi',
       category: 'academic',
-      price: '',
+      price: '₹249',
       image: 'saur.png',
-      
-   
+      badge: 'Most Loved',
+      rating: 5
     },
     {
       id: 3,
-      title: 'सिद्धिसूत्रम',
-      author: '',
-      category: 'non-fiction',
-      price: '',
-      image: 'siddhi.png',
-      badge: '',
-  
+      title: 'हिन्दू दैनिक चर्या (Hindu Dainik Charya)',
+      author: 'Hindi',
+      category: 'academic',
+      price: '₹99',
+      image: 'hindu.jpeg',
+      badge: 'Reader\'s choice',
+      rating: 5
     },
   ];
 
@@ -142,12 +142,19 @@ const CosmoPublicationSite = () => {
         ))}
         
         {/* // Replace the button with Link: */}
-<Link
-  to="/legacy"
-  className={`font-medium transition-all duration-300 hover:scale-105 ${scrolled ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')}`}
->
-  Legacy
-</Link>
+          <Link
+            to="/marketplace"
+            className={`font-medium transition-all duration-300 hover:scale-105 ${scrolled ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')}`}
+          >
+            Marketplace
+          </Link>
+          <Link
+            to="/legacy"
+            className={`font-medium transition-all duration-300 hover:scale-105 ${scrolled ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')}`}
+          >
+            Legacy
+          </Link>
+
        
         <button className={`p-2 rounded-full transition-all duration-300 ${scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'}`}>
           <Search className={`w-5 h-5 ${scrolled ? (darkMode ? 'text-gray-300' : 'text-gray-700') : (darkMode ? 'text-white' : 'text-gray-900')}`} />
@@ -209,7 +216,14 @@ const CosmoPublicationSite = () => {
         >
           Legacy
         </Link>
-
+        <Link
+          to="/marketplace"
+          className={`block w-full text-left py-2 ${darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'} transition-colors`}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          Marketplace
+        </Link>
+        
         <button 
           onClick={() => setDarkMode(!darkMode)}
           className={`flex items-center space-x-2 py-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
@@ -276,12 +290,12 @@ const CosmoPublicationSite = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-  onClick={() => navigate("/discuss")}
-  className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
->
-  <span>Let's Discuss your Book!</span>
-  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-</button>
+                onClick={() => navigate("/discuss")}
+                className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
+              >
+                <span>Let's Discuss your Book!</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
               <button 
                 onClick={() => navigate("/marketplace")}
                 className={`px-8 py-4 border-2 border-red-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 ${darkMode ? 'text-white hover:bg-red-600' : 'text-red-600 hover:bg-red-600 hover:text-white'}`}>
@@ -296,7 +310,7 @@ const CosmoPublicationSite = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
+   
       {/* Our Values Section */}
 <section className={`py-16 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-gray-50 to-red-50'}`}>
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -425,40 +439,7 @@ const CosmoPublicationSite = () => {
         </div>
       </section>
 
-      {/* Authors Section */}
-      {/* <section id="authors" className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-              Celebrated Authors and Their Books
-            </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Meet the brilliant minds behind our publications
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {authors.map((author, index) => (
-              <div
-                key={index}
-                className="group text-center hover:scale-105 transition-all duration-300"
-              >
-                <div className="relative mb-4 mx-auto w-48 h-48">
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-full blur-xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                  <img
-                    src={author.image}
-                    alt={author.name}
-                    className="relative w-full h-full object-cover rounded-full border-4 border-red-900/50 group-hover:border-red-600 shadow-xl transition-all duration-300"
-                  />
-                </div>
-                <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>{author.name}</h3>
-                <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>{author.books}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
+      
      {/* About Section */}
 <section id="about" className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -467,7 +448,7 @@ const CosmoPublicationSite = () => {
         About Cosmo India Prakashan
       </h2>
       <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto`}>
-        Since 1970s, we have been committed to publishing excellence, bringing Indian voices and stories to readers worldwide. Our diverse catalog spans fiction, non-fiction, academic works, and more.
+        Since 1980s, we have been committed to publishing excellence, bringing Indian voices and stories to readers worldwide. Our diverse catalog spans fiction, non-fiction, academic works, and more.
       </p>
     </div>
 
@@ -608,7 +589,7 @@ const CosmoPublicationSite = () => {
           }`}
         >
           <Award className="w-5 h-5 text-red-600" />
-          <span className="text-sm">Visionary Astrologer (40+ Years Experience) </span>
+          <span className="text-sm">Visionary Astrologer (50+ Years Experience) </span>
         </div>
       </div>
     </div>
