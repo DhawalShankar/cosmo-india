@@ -7,6 +7,8 @@ import Shipping from "./policies/Shipping";
 import Refund from "./policies/Refund";
 import Contact from "./policies/Contact";
 import { useNavigate, useLocation } from "react-router-dom";
+// import { useCart } from "./context/CartContext";
+// const { addToCart } = useCart();
 
 const Marketplace = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -413,25 +415,32 @@ const policyContent = policyMap[location.pathname] || null;
 </li>
 
 <li>
-  <button onClick={() => navigate("/marketplace?policy=terms")}>
+  <button onClick={() => navigate("/marketplace?policy=terms")}
+    className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>
     Terms & Conditions
   </button>
 </li>
 
 <li>
-  <button onClick={() => navigate("/marketplace?policy=shipping")}>
+  <button onClick={() => navigate("/marketplace?policy=shipping")}
+    className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
+    >
     Shipping Policy
   </button>
 </li>
 
 <li>
-  <button onClick={() => navigate("/marketplace?policy=refund")}>
+  <button onClick={() => navigate("/marketplace?policy=refund")}
+    className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
+    >
     Cancellation & Refunds
   </button>
 </li>
 
 <li>
-  <button onClick={() => navigate("/marketplace?policy=contact")}>
+  <button onClick={() => navigate("/marketplace?policy=contact")}
+    className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
+    >
     Contact Us
   </button>
 </li>
