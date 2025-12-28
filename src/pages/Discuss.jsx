@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Menu, X, BookOpen, Heart, Lightbulb, Target, Award, 
   Users, TrendingUp, ArrowRight, Check, Star, Sparkles,
   MessageCircle, Calendar, FileText, Edit, Rocket, Coffee
 } from 'lucide-react';
+import { DarkModeContext } from '../context/DarkModeContext';
 
 const DiscussYourBook = () => {
+  const { darkMode } = useContext(DarkModeContext);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedStage, setSelectedStage] = useState('');
   const navigate = useNavigate();
@@ -173,61 +174,6 @@ const DiscussYourBook = () => {
         <ArrowRight className=" m-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {/* Navigation */}
-      <nav className={`fixed w-full z-40 transition-all duration-500 ${scrolled ? (darkMode ? 'bg-black/95 backdrop-blur-lg shadow-lg shadow-red-900/20' : 'bg-white/95 backdrop-blur-lg shadow-lg') : 'bg-transparent'}`}>
-        <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-25">
-            <div className="flex items-center space-x-2 mt-10 mb-10">
-              
-              <div
-          className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-5 w-24 h-24 flex items-center justify-center rounded-2xl transition-colors duration-300`}
-        >
-          <img
-            src="/cosmo-logo.png"
-            alt="Logo"
-            className="w-20 h-20 transition-all duration-300"
-          />
-        </div>
-              <span className={`text-xl font-bold bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent`}>
-                Cosmo India Prakashan
-              </span>
-            </div>
-             
-            <div className="hidden md:flex items-center space-x-8">
-                 <Link to="/" className={`font-medium transition-all duration-300 hover:scale-105 ${scrolled ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')}`}>
-                                Home
-                              </Link>
-              <button 
-                onClick={() => setDarkMode(!darkMode)}
-                className={`p-2 rounded-full transition-all duration-300 ${scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'}`}
-                aria-label="Toggle theme"
-              >
-                {darkMode ? (
-                  <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                  </svg>
-                )}
-              </button>
-            </div>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? (
-                <X className={`w-6 h-6 ${scrolled ? (darkMode ? 'text-gray-300' : 'text-gray-700') : (darkMode ? 'text-white' : 'text-gray-900')}`} />
-              ) : (
-                <Menu className={`w-6 h-6 ${scrolled ? (darkMode ? 'text-gray-300' : 'text-gray-700') : (darkMode ? 'text-white' : 'text-gray-900')}`} />
-              )}
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
@@ -520,8 +466,8 @@ const DiscussYourBook = () => {
                   onChange={handleChange}
                   className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all ${
                     darkMode
-                      ? 'bg-black/50 border-red-900/30 text-white'
-                      : 'bg-white border-gray-300 text-gray-900'
+                      ? 'bg-black/80 border-red-900/30 text-white'
+                      : 'bg-white border-gray-600 text-gray-900'
                   }`}
                 >
                   <option value="">Select a genre</option>
@@ -543,7 +489,7 @@ const DiscussYourBook = () => {
                   onChange={handleChange}
                   className={`w-full px-6 py-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all ${
                     darkMode
-                      ? 'bg-black/50 border-red-900/30 text-white'
+                      ? 'bg-black/80 border-red-900/30 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
@@ -577,7 +523,13 @@ const DiscussYourBook = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30 flex items-center justify-center space-x-2"
+                className={`w-full px-8 py-4 rounded-xl font-semibold transition-all duration-300 
+                  hover:scale-105 flex items-center justify-center space-x-2
+                  ${
+                    darkMode
+                      ? 'bg-gradient-to-r from-green-800 to-green-900 text-white shadow-lg shadow-green-700/40 hover:from-green-800 hover:to-green-900'
+                      : 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-600/30 hover:from-green-600 hover:to-green-700'
+                  }`}
               >
                 <MessageCircle className="w-5 h-5" />
                 <span>Start the Conversation via WhatsApp</span>
@@ -587,39 +539,7 @@ const DiscussYourBook = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className={`${darkMode ? 'bg-black border-t border-red-900/20' : 'bg-gray-900 text-white'} py-12`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-white">About Us</h3>
-              <p className="text-gray-400 text-sm">
-                Cosmo India Prakashan is dedicated to helping authors bring their stories to life through professional publishing services.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-white">Services</h3>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li><button onClick={() => navigate("/publish")} className="hover:text-red-500 transition">Editing</button></li>
-                <li><button onClick={() => navigate("/publish")} className="hover:text-red-500 transition">Design</button></li>
-                <li><button onClick={() => navigate("/publish")} className="hover:text-red-500 transition">Publishing</button></li>
-                <li><button onClick={() => navigate("/publish")} className="hover:text-red-500 transition">Marketing</button></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-white">Contact</h3>
-              <p className="text-gray-400 text-sm">
-                Phone: +91 7388270331<br />
-                Email: cosmoindiaprakashan@gmail.com
-              </p>
-            </div>
           </div>
-          <div className={`border-t ${darkMode ? 'border-red-900/20' : 'border-gray-700'} pt-8 text-center text-gray-400 text-sm`}>
-            <p>&copy; 2026 Cosmo India Prakashan. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
   );
 };
 
