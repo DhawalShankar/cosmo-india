@@ -542,7 +542,8 @@ const CosmoPublicationSite = () => {
                 <MapPin className="w-8 h-8 text-red-600 mb-4" />
                 <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Address</h3>
                 <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                <br />
+                  Sector A 24 Gujaini Chanakyapuri
+                <br /> 
                 UP India 
                 </p>
               </div>
@@ -660,7 +661,12 @@ const CosmoPublicationSite = () => {
 
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30"
+                  className={`w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30
+                  ${
+                        darkMode ? "from-green-800 to-green-900 " : "from-green-700 to-green-800 "
+                      }
+                  `}
+                
                 >
                   Send via WhatsApp
                 </button>

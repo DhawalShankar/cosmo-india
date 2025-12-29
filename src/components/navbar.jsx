@@ -11,7 +11,8 @@ const Navbar = () => {
   
   const navigate = useNavigate();
   const location = useLocation();
-
+  // const { user, logout } = useContext(AuthContext);
+  // const { cart } = useContext(CartContext);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -174,7 +175,7 @@ const Navbar = () => {
                     : (darkMode ? 'text-white' : 'text-gray-900')
               }`} />
             </button>
-
+            
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className={`p-2 rounded-full transition-all duration-300 ${

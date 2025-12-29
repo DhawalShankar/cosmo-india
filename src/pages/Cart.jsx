@@ -1,18 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Menu, X, ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Package, Truck, ShieldCheck } from 'lucide-react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import PolicyModal from "../components/PolicyModal";
-import PrivacyPolicy from "../policies/PrivacyPolicy";
-import Terms from "../policies/Terms";
-import Shipping from "../policies/Shipping";
-import Refund from "../policies/Refund";
-import Contact from "../policies/Contact";
+import { DarkModeContext } from '../context/DarkModeContext';
 
 const Cart = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode } = useContext(DarkModeContext);
   
   // BACKEND CONNECTION: Using CartContext that manages cart state
   // CartContext should handle API calls to backend
