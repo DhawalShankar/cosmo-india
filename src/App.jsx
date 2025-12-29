@@ -3,6 +3,11 @@ import { Routes, Route, useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from './components/navbar';
 import CosmoPublicationSite from './pages/Cosmo';
 import LegacyAuthors from './pages/Legacy';
+import Login from './pages/Login'; 
+import Checkout from './pages/Checkout'; 
+import OrderSuccess from './pages/OrderSuccess'; 
+import Orders from './pages/Orders'; 
+import Profile from './pages/Profile'; 
 import PolicyModal from "./components/PolicyModal";
 import PublishingServices from './pages/Publishing';
 import DiscussYourBook from './pages/Discuss'; 
@@ -15,14 +20,14 @@ import Refund from "./policies/Refund";
 import Contact from "./policies/Contact";
 import { DarkModeContext } from './context/DarkModeContext';
 import Footer from './components/footer';
-
+import ScrollToTop from './components/ScrolltoTop';
 function App() {
   const { darkMode } = useContext(DarkModeContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const policy = searchParams.get('policy');
 
   const closeModal = () => {
-    setSearchParams({}); // Remove the policy query param
+    setSearchParams({}); 
   };
 
   return (
@@ -30,7 +35,7 @@ function App() {
       darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
     }`}>
       <Navbar />
-      
+       <ScrollToTop />
       <Routes>
         <Route path="/" element={<CosmoPublicationSite />} />
         <Route path="/legacy" element={<LegacyAuthors />} />
@@ -38,6 +43,13 @@ function App() {
         <Route path="/discuss" element={<DiscussYourBook />} />
         <Route path="/marketplace" element={<Marketplace />} /> 
         <Route path="/cart" element={<Cart />} />
+
+         {/* ✅ Auth & Order Routes - NOW WORKING */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/profile" element={<Profile />} />
         
         {/* Policy Routes (REQUIRED for gateway) */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

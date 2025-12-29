@@ -7,37 +7,37 @@ import Refund from "../policies/Refund";
 import Contact from "../policies/Contact";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DarkModeContext } from '../context/DarkModeContext';
-// import { useCart } from "./context/CartContext";
-// const { addToCart } = useCart();
- 
+import { useCart } from "../context/CartContext";
+
 const Marketplace = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { darkMode } = useContext(DarkModeContext);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
-  const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-const location = useLocation();
-const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-const query = new URLSearchParams(location.search);
-const policy = query.get("policy");
+  // Get addToCart from CartContext - THIS IS THE FIX!
+  const { addToCart } = useCart();
 
+  const query = new URLSearchParams(location.search);
+  const policy = query.get("policy");
 
-const closeModal = () => {
-  navigate("/marketplace"); // stable base page
-};
+  const closeModal = () => {
+    navigate("/marketplace");
+  };
 
-const policyMap = {
-  "/privacy-policy": <PrivacyPolicy />,
-  "/terms": <Terms />,
-  "/shipping-policy": <Shipping />,
-  "/refund-policy": <Refund />,
-  "/contact": <Contact />,
-};
+  const policyMap = {
+    "/privacy-policy": <PrivacyPolicy />,
+    "/terms": <Terms />,
+    "/shipping-policy": <Shipping />,
+    "/refund-policy": <Refund />,
+    "/contact": <Contact />,
+  };
 
-const policyContent = policyMap[location.pathname] || null;
+  const policyContent = policyMap[location.pathname] || null;
 
   const products = [
     {
@@ -49,7 +49,7 @@ const policyContent = policyMap[location.pathname] || null;
       originalPrice: 399,
       image: 'Ratn Rahasy.jpeg',
       rating: 4.8,
-      // reviews: 156,
+      reviews: 156,
       inStock: true,
       bestseller: true,
       description: 'A comprehensive guide in hindi to gemstones and their mystical properties'
@@ -63,7 +63,7 @@ const policyContent = policyMap[location.pathname] || null;
       originalPrice: 349,
       image: 'saur.png',
       rating: 4.6,
-      // reviews: 89,
+      reviews: 89,
       inStock: true,
       bestseller: false,
       description: 'Understanding the solar system through an astrological lens'
@@ -82,7 +82,6 @@ const policyContent = policyMap[location.pathname] || null;
       bestseller: true,
       description: 'Ancient sutras for spiritual enlightenment'
     },
-    
   ];
 
   const categories = [
@@ -109,11 +108,6 @@ const policyContent = policyMap[location.pathname] || null;
         ? prev.filter(id => id !== productId) 
         : [...prev, productId]
     );
-  };
-
-  const addToCart = (product) => {
-    setCart(prev => [...prev, product]);
-    alert(`${product.title} added to cart!`);
   };
 
   return (
@@ -263,8 +257,6 @@ const policyContent = policyMap[location.pathname] || null;
           </div>
         </div>
       </section>
-
-
     </div>
   );
 };

@@ -50,3 +50,5 @@ yarn-error.log*
 # IDE
 .vscode
 .idea
+.vercel
+.env*.local

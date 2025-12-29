@@ -1,7 +1,8 @@
+// api/user/register.js
 import connectDB from '../lib/mongodb.js';
 import { setCORSHeaders, handleOptions, User } from '../lib/middleware.js';
-import { generateToken, setAuthCookie } from '../lib/auth.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
   setCORSHeaders(req, res);
@@ -14,21 +15,21 @@ export default async function handler(req, res) {
   try {
     await connectDB();
 
-    const { name, email, password, phone } = req.body;
+    const { email, password, name } = req.body;
 
     // Validation
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Name is required' });
     }
 
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'Email already registered' });
+      return res.status(400).json({ error: 'User already exists' });
     }
 
     // Hash password
@@ -36,22 +37,25 @@ export default async function handler(req, res) {
 
     // Create user
     const user = await User.create({
-      name,
       email,
       password: hashedPassword,
-      phone
+      name: name.trim()
     });
 
-    // Generate token
-    const token = generateToken(user._id);
-    setAuthCookie(res, token);
+    // Create token
+    const token = jwt.sign(
+      { userId: user._id }, 
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
     res.status(201).json({
       success: true,
+      token,
       user: {
         id: user._id,
-        name: user.name,
-        email: user.email
+        email: user.email,
+        name: user.name
       }
     });
   } catch (error) {
@@ -59,3 +63,18 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Server error' });
   }
 }
+// ```
+
+// **Your final structure:**
+// ```
+// api/
+// ├── cart/
+// ├── lib/
+// │   ├── middleware.js  ← Updated
+// │   └── mongodb.js
+// ├── models/
+// │   └── user.js        ← NEW FILE
+// ├── payment/
+// └── user/
+//     ├── login.js
+//     └── register.js    ← Updated

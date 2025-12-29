@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define MONGODB_URI in .env.local');
+  throw new Error('Please add your MongoDB URI to .env.local');
 }
 
 let cached = global.mongoose;
@@ -19,8 +19,11 @@ async function connectDB() {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
-    }).then((mongoose) => mongoose);
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }).then((mongoose) => {
+      return mongoose;
+    });
   }
 
   cached.conn = await cached.promise;

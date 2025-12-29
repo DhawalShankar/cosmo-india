@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DarkModeContext } from '../context/DarkModeContext';
-
+import { useCart } from "../context/CartContext";
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,7 +12,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   // const { user, logout } = useContext(AuthContext);
-  // const { cart } = useContext(CartContext);
+  const { cart } = useCart();
+   const cartItemCount = cart.reduce((total, item) => total + item.qty, 0);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -87,7 +88,7 @@ const Navbar = () => {
       <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-25">
           <button 
-            onClick={() => handleNavigation('/')}
+           onClick={() => scrollToSection('home')}
             className="flex items-center space-x-2"
           >
             <div className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-5 w-20 flex items-center justify-center rounded-2xl transition-colors duration-300`}>
@@ -99,7 +100,7 @@ const Navbar = () => {
             </div>
 
             <span className={`text-2xl font-bold bg-gradient-to-r from-red-600 to-red-400 bg-clip-text ${
-              scrolled ? 'text-transparent' : (darkMode ? 'text-white' : 'text-gray-900')
+              scrolled ? 'text-transparent' : (darkMode ? 'text-white hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'text-gray-900')
             }`}>
               Cosmo India Prakashan
             </span>
@@ -162,19 +163,36 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
               )}
             </button>
-
-            <button onClick={()=>navigate('/cart')}
-             className={`p-2 rounded-full transition-all duration-300 ${
-              scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
-            } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}>
-              <ShoppingBag className={`w-5 h-5 ${
-                isActive(null, '/cart')
-                  ? 'text-red-500'
-                  : scrolled 
-                    ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
-                    : (darkMode ? 'text-white' : 'text-gray-900')
-              }`} />
+                        <button
+              onClick={() => handleNavigation('/login')}
+              className={`block w-full text-left font-semibold py-2 ${
+                isActive(null, '/legacy')
+                  ? 'text-red-500 font-semibold'
+                  : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
+              } transition-colors`}
+            >
+              Signup/Login
             </button>
+           <button 
+        onClick={() => handleNavigation('/cart')}
+        className={`relative p-2 rounded-full transition-all duration-300 ${
+          scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
+        } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}
+      >
+        <ShoppingBag className={`w-5 h-5 ${
+          isActive(null, '/cart')
+            ? 'text-red-500'
+            : scrolled 
+              ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
+              : (darkMode ? 'text-white' : 'text-gray-900')
+        }`} />
+        
+        {cartItemCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg shadow-red-600/50">
+            {cartItemCount}
+          </span>
+        )}
+      </button>
             
             <button 
               onClick={() => setDarkMode(!darkMode)}
@@ -224,10 +242,11 @@ const Navbar = () => {
         } border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
           <div className="px-4 pt-2 pb-4 space-y-3">
             {[
-              { name: 'Books', id: 'books' },
-              { name: 'About', id: 'about' },
-              { name: 'Blog', id: 'blog' },
-              { name: 'Contact', id: 'contact' }
+                { name: 'Home', id: 'home' },
+                { name: 'Books', id: 'books' },
+                { name: 'About', id: 'about' },
+                { name: 'Blog', id: 'blog' },
+                { name: 'Contact', id: 'contact' }
             ].map((item) => (
               <button
                 key={item.name}
@@ -263,7 +282,28 @@ const Navbar = () => {
             >
               Marketplace
             </button>
-            
+            <button
+              onClick={() => handleNavigation('/login')}
+              className={`block w-full text-left py-2 ${
+                isActive(null, '/legacy')
+                  ? 'text-red-500 font-semibold'
+                  : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
+              } transition-colors`}
+            >
+              Signup/Login
+            </button>
+             <button onClick={()=>handleNavigation('/cart')}
+             className={` flex p-2 pr-4 rounded-full transition-all duration-300 ${
+              scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
+            } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}>
+              <ShoppingBag className={`w-10   ${
+                isActive(null, '/cart')
+                  ? 'text-red-500'
+                  : scrolled 
+                    ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
+                    : (darkMode ? 'text-white' : 'text-gray-900')
+              }`} /> Cart
+            </button>
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className={`flex items-center space-x-2 py-2 ${
