@@ -117,7 +117,7 @@ const response = await fetch(endpoint, {
       setLoading(false);
 
    
-      setTimeout(() => navigate('/login'), 1200);
+      setTimeout(() => navigate('/marketplace'), 1200);
       
     } catch (error) {
       console.error('❌ Network error:', error);
