@@ -384,7 +384,7 @@ const Checkout = () => {
               className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
                 isProcessing
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-linear-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-green-600/30'
+                  : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-green-600/30'
               }`}
             >
               <Lock className="w-5 h-5" />
