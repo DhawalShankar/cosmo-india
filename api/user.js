@@ -3,115 +3,214 @@ import User from './models/user.js';
 import { hashPassword, comparePassword } from './lib/hash.js';
 import { signToken, verifyToken } from './lib/jwt.js';
 
+// Cookie parser utility
+function parseCookies(cookieHeader) {
+  const cookies = {};
+  if (cookieHeader) {
+    cookieHeader.split(';').forEach(cookie => {
+      const [name, ...rest] = cookie.split('=');
+      cookies[name.trim()] = rest.join('=').trim();
+    });
+  }
+  return cookies;
+}
+
 export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Connect to database
   try {
     await connectDB();
   } catch (e) {
-    return res.status(500).json({ message: 'DB connection failed' });
+    console.error('❌ DB Connection Error:', e.message);
+    return res.status(500).json({ 
+      success: false,
+      message: 'Database connection failed',
+      error: e.message 
+    });
   }
 
   const { method } = req;
-  const action = req.query?.action;
+  const { action } = req.query;
 
-  // ❗ action mandatory
+  // Validate action parameter
   if (!action) {
-    return res.status(400).json({ message: 'Action missing' });
+    return res.status(400).json({ 
+      success: false,
+      message: 'Action parameter is required' 
+    });
   }
 
   try {
-    /* ================= REGISTER ================= */
+    /* ==================== REGISTER ==================== */
     if (method === 'POST' && action === 'register') {
-      if (!req.body) {
-        return res.status(400).json({ message: 'No body received' });
-      }
-
-      const { name, email, password } = req.body;
-
+      const { name, email, password } = req.body || {};
+      
       if (!name || !email || !password) {
-        return res.status(400).json({ message: 'Missing fields' });
+        return res.status(400).json({ 
+          success: false,
+          message: 'Name, email, and password are required' 
+        });
       }
 
-      const exists = await User.findOne({ email });
+      // Validate password length
+      if (password.length < 6) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'Password must be at least 6 characters' 
+        });
+      }
+
+      // Check if user exists
+      const exists = await User.findOne({ email: email.toLowerCase() });
       if (exists) {
-        return res.status(409).json({ message: 'User already exists' });
+        return res.status(409).json({ 
+          success: false,
+          message: 'User already exists with this email' 
+        });
       }
 
-      await User.create({
+      // Create new user
+      const hashedPassword = await hashPassword(password);
+      const user = await User.create({
         name,
-        email,
-        password: await hashPassword(password),
+        email: email.toLowerCase(),
+        password: hashedPassword,
       });
 
-      return res.status(201).json({ message: 'Registered' });
+      console.log('✅ User registered:', email);
+      
+      return res.status(201).json({ 
+        success: true,
+        message: 'Registration successful',
+        user: user.toJSON() 
+      });
     }
 
-    /* ================= LOGIN ================= */
+    /* ==================== LOGIN ==================== */
     if (method === 'POST' && action === 'login') {
-      if (!req.body) {
-        return res.status(400).json({ message: 'No body received' });
-      }
+      const { email, password } = req.body || {};
 
-      const { email, password } = req.body;
       if (!email || !password) {
-        return res.status(400).json({ message: 'Missing credentials' });
+        return res.status(400).json({ 
+          success: false,
+          message: 'Email and password are required' 
+        });
       }
 
-      const user = await User.findOne({ email });
+      // Find user
+      const user = await User.findOne({ email: email.toLowerCase() });
       if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        return res.status(401).json({ 
+          success: false,
+          message: 'Invalid email or password' 
+        });
       }
 
-      const ok = await comparePassword(password, user.password);
-      if (!ok) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+      // Verify password
+      const isValidPassword = await comparePassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ 
+          success: false,
+          message: 'Invalid email or password' 
+        });
       }
 
-      const token = signToken({ userId: user._id });
-
+      // Generate JWT token
+      const token = signToken({ userId: user._id.toString() });
+      
+      // Set HTTP-only cookie
       res.setHeader(
         'Set-Cookie',
-        `token=${token}; HttpOnly; Path=/; SameSite=Lax; Secure`
+        `token=${token}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=604800`
       );
 
-      return res.json({ message: 'Logged in' });
+      console.log('✅ User logged in:', email);
+      
+      return res.status(200).json({ 
+        success: true,
+        message: 'Login successful',
+        user: user.toJSON() 
+      });
     }
 
-    /* ================= ME ================= */
+    /* ==================== GET CURRENT USER (ME) ==================== */
     if (method === 'GET' && action === 'me') {
-      const token = req.cookies?.token;
+      const cookies = parseCookies(req.headers.cookie);
+      const token = cookies.token;
+
       if (!token) {
-        return res.status(401).json({ user: null });
+        return res.status(401).json({ 
+          success: false,
+          user: null,
+          message: 'Not authenticated' 
+        });
       }
 
+      // Verify token
       let decoded;
       try {
         decoded = verifyToken(token);
-      } catch {
-        return res.status(401).json({ user: null });
+      } catch (err) {
+        console.error('❌ Token verification failed:', err.message);
+        return res.status(401).json({ 
+          success: false,
+          user: null,
+          message: 'Invalid or expired token' 
+        });
       }
 
-      const user = await User.findById(decoded.userId).select('-password');
+      // Find user
+      const user = await User.findById(decoded.userId);
       if (!user) {
-        return res.status(401).json({ user: null });
+        return res.status(404).json({ 
+          success: false,
+          user: null,
+          message: 'User not found' 
+        });
       }
 
-      return res.json({ user });
+      return res.status(200).json({ 
+        success: true,
+        user: user.toJSON() 
+      });
     }
 
-    /* ================= LOGOUT ================= */
+    /* ==================== LOGOUT ==================== */
     if (method === 'POST' && action === 'logout') {
+      // Clear cookie
       res.setHeader(
         'Set-Cookie',
-        'token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure'
+        'token=; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=0'
       );
-      return res.json({ message: 'Logged out' });
+      
+      return res.status(200).json({ 
+        success: true,
+        message: 'Logged out successfully' 
+      });
     }
 
-    /* ================= FALLBACK ================= */
-    return res.status(405).json({ message: 'Method not allowed' });
+    /* ==================== METHOD NOT ALLOWED ==================== */
+    return res.status(405).json({ 
+      success: false,
+      message: `Method ${method} not allowed for action: ${action}` 
+    });
 
   } catch (err) {
-    console.error('USER API ERROR:', err);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error('❌ Server Error:', err);
+    return res.status(500).json({ 
+      success: false,
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 }
