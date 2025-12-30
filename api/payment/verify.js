@@ -16,6 +16,19 @@ export default async function handler(req, res) {
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
     .update(body)
     .digest('hex');
+  
+  const isValid = crypto.timingSafeEqual(
+    Buffer.from(expectedSignature),
+    Buffer.from(razorpay_signature)
+  );
+
+  if (isValid) {
+    return res.status(200).json({ success: true });
+  }
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    return res.status(400).json({ error: 'Missing parameters' });
+  }
 
   if (expectedSignature === razorpay_signature) {
     return res.status(200).json({ success: true });

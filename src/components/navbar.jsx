@@ -176,60 +176,78 @@ const Navbar = () => {
               )}
             </button>
 
-            {/* User Menu - Desktop */}
             {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                  className={`flex items-center space-x-2 font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-lg ${
-                    scrolled 
-                      ? (darkMode ? 'text-gray-300 hover:text-red-500 hover:bg-red-900/20' : 'text-gray-700 hover:text-red-500 hover:bg-red-50') 
-                      : (darkMode ? 'text-white hover:text-red-400 hover:bg-white/10' : 'text-gray-900 hover:text-red-500 hover:bg-red-50')
+  <div className="relative">
+    <button
+      onClick={() => setShowUserMenu(!showUserMenu)}
+      className={`flex items-center space-x-2 font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-lg ${
+        scrolled 
+          ? (darkMode ? 'text-gray-300 hover:text-red-500 hover:bg-red-900/20' : 'text-gray-700 hover:text-red-500 hover:bg-red-50') 
+          : (darkMode ? 'text-white hover:text-red-400 hover:bg-white/10' : 'text-gray-900 hover:text-red-500 hover:bg-red-50')
+      }`}
+    > 
+    {/* User Menu */}
+                <UserIcon className="w-5 h-5" />
+                <span>{user.name}</span>
+              </button>
+
+              {showUserMenu && (
+                <div
+                  className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg overflow-hidden ${
+                    darkMode
+                      ? 'bg-black/95 border border-red-900/30'
+                      : 'bg-white border border-gray-200'
                   }`}
                 >
-                  <UserIcon className="w-5 h-5" />
-                  <span>{user.name}</span>
-                </button>
+                  {/* Profile */}
+                  <button
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      handleNavigation('/profile');
+                    }}
+                    className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
+                      darkMode
+                        ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400'
+                        : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
+                    }`}
+                  >
+                    <UserIcon className="w-4 h-4" />
+                    <span>Profile</span>
+                  </button>
 
-                {showUserMenu && (
-                  <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg overflow-hidden ${
-                    darkMode ? 'bg-black/95 border border-red-900/30' : 'bg-white border border-gray-200'
-                  }`}>
-                    <button
-                      onClick={handleNavigation('/profile')}
-                      className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
-                        darkMode ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400' : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
-                      }`}
-                    >
-                      <Profile className="w-4 h-4" />
-                      <span>Profile</span>
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
-                        darkMode ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400' : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
-                      }`}
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={() => handleNavigation('/login')}
-                className={`font-medium transition-all duration-300 hover:scale-105 ${
-                  isActive(null, '/login')
-                    ? 'text-red-500 font-semibold'
-                    : scrolled 
-                      ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') 
-                      : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')
-                }`}
-              >
-                Signup/Login
-              </button>
-            )}
+                  {/* Divider */}
+                  <div className={`h-px ${darkMode ? 'bg-red-900/30' : 'bg-gray-200'}`} />
+
+                  {/* Logout */}
+                  <button
+                    onClick={handleLogout}
+                    className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
+                      darkMode
+                        ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400'
+                        : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
+                    }`}
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => handleNavigation('/login')}
+              className={`font-medium transition-all duration-300 hover:scale-105 ${
+                isActive(null, '/login')
+                  ? 'text-red-500 font-semibold'
+                  : scrolled 
+                    ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') 
+                    : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')
+              }`}
+            >
+              Signup/Login
+            </button>
+          )}
+
             
             <button 
               onClick={() => setDarkMode(!darkMode)}
