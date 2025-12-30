@@ -67,28 +67,26 @@ const Login = () => {
     setDebugInfo(null);
     
     try {
+
       const endpoint = isLogin
   ? '/api/user?action=login'
   : '/api/user?action=register';
 
-      const payload = isLogin 
-        ? { email: formData.email, password: formData.password }
-        : formData;
-      
-      
-      console.log('📦 Payload:', payload);
-      
-      setDebugInfo({ status: 'sending', url: fullUrl, payload });
-      
-     const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify(payload)
-        });
+const payload = isLogin
+  ? { email: formData.email, password: formData.password }
+  : formData;
+
+setDebugInfo({ status: 'sending', payload });
+
+const response = await fetch(endpoint, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  credentials: 'include',
+  body: JSON.stringify(payload)
+});
 
       
       console.log('📡 Response status:', response.status);
