@@ -158,18 +158,18 @@ const Profile = () => {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className={`text-4xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            My <span className="bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent">Profile</span>
+            My <span className="bg-linear-to-r from-red-600 to-red-400 bg-clip-text text-transparent">Profile</span>
           </h1>
           <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Manage your account information</p>
         </div>
 
-        <div className={`rounded-2xl shadow-lg p-8 ${darkMode ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20' : 'bg-white border border-gray-200'}`}>
+        <div className={`rounded-2xl shadow-lg p-8 ${darkMode ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20' : 'bg-white border border-gray-200'}`}>
           <div className="flex justify-between items-center mb-8">
             <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Profile Information</h2>
             {!isEditing ? (
               <button 
                 onClick={() => setIsEditing(true)} 
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800"
+                className="flex items-center space-x-2 px-4 py-2 bg-linear-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800"
               >
                 <Edit2 className="w-4 h-4" />
                 <span>Edit</span>
@@ -274,7 +274,7 @@ const Profile = () => {
                 <button 
                   onClick={handleSave} 
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-linear-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 disabled:opacity-50"
                 >
                   <Save className="w-5 h-5" />
                   <span>{loading ? 'Saving...' : 'Save Changes'}</span>
@@ -302,7 +302,7 @@ const Profile = () => {
       {/* Password Change Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className={`max-w-md w-full rounded-2xl shadow-2xl ${darkMode ? 'bg-gradient-to-br from-red-950/30 to-black border border-red-900/30' : 'bg-white'}`}>
+          <div className={`max-w-md w-full rounded-2xl shadow-2xl ${darkMode ? 'bg-linear-to-br from-red-950/30 to-black border border-red-900/30' : 'bg-white'}`}>
             <div className="p-6 border-b border-red-900/30">
               <div className="flex justify-between items-center">
                 <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Change Password</h3>
@@ -348,7 +348,7 @@ const Profile = () => {
               <button 
                 onClick={handlePasswordChange}
                 disabled={loading}
-                className="w-full px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 disabled:opacity-50"
+                className="w-full px-6 py-3 bg-linear-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 disabled:opacity-50"
               >
                 {loading ? 'Changing...' : 'Change Password'}
               </button>

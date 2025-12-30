@@ -14,7 +14,7 @@ const OrderSuccess = () => {
         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           Thank you for your purchase.
         </p>
-        <a href="/marketplace" className="mt-6 inline-block px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl hover:from-red-700 hover:to-red-800 transition-all">
+        <a href="/marketplace" className="mt-6 inline-block px-6 py-3 bg-linear-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl hover:from-red-700 hover:to-red-800 transition-all">
           Continue Shopping
         </a>
       </div>

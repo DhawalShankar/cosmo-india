@@ -171,7 +171,7 @@ const Footer = () => {
                   onClick={() => navigate('/marketplace?policy=contact')}
                   className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
                 >
-                  Business Contact
+                  Contact Us
                 </button>
               </li>
             </ul>

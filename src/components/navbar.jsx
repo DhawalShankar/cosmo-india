@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useCart } from "../context/CartContext";
 import { AuthContext } from '../context/AuthContext';
+import Profile from '../pages/Profile';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -194,6 +195,15 @@ const Navbar = () => {
                   <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg overflow-hidden ${
                     darkMode ? 'bg-black/95 border border-red-900/30' : 'bg-white border border-gray-200'
                   }`}>
+                    <button
+                      onClick={handleNavigation('/profile')}
+                      className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
+                        darkMode ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400' : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
+                      }`}
+                    >
+                      <Profile className="w-4 h-4" />
+                      <span>Profile</span>
+                    </button>
                     <button
                       onClick={handleLogout}
                       className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
