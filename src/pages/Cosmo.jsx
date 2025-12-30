@@ -546,6 +546,17 @@ const CosmoPublicationSite = () => {
                 <br /> 
                 UP India 
                 </p>
+                <div className={`w-full h-32 rounded-xl overflow-hidden border-2 border-red-200/50 ${darkMode ? 'border-red-900/50' : ''}`}>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3572.4657149549403!2d80.28101877520723!3d26.440713076931743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c49d294914d83%3A0xa2640eaeceae550c!2sCosmo%20India%20Prakashan!5e0!3m2!1sen!2sin!4v1767088195065!5m2!1sen!2sin"
+        className="w-full h-full"
+        style={{ border: 0 }}
+        allowFullScreen=""
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        title="कॉस्मो इंडिया प्रकाशन - गुजैनी, कानपुर"
+      />
+    </div>
               </div>
 
               <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 ${
