@@ -80,6 +80,15 @@ const Checkout = () => {
   };
 
   const handlePayment = async () => {
+    // For logged-in users, check if phone and address are provided
+    if (!isGuest && user) {
+      if (!user.phone || !user.address) {
+        alert('Please update your phone number and address in Profile Settings before checkout.');
+        navigate('/profile');
+        return;
+      }
+    }
+
     // Validate form for guest users
     if (isGuest && !validateForm()) {
       return;
@@ -176,19 +185,79 @@ const Checkout = () => {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Guest Details Form */}
-          {isGuest && (
-            <div className={`rounded-2xl p-6 h-fit ${
-              darkMode ? 'bg-red-950/20 border border-red-900/30' : 'bg-white border border-gray-200'
+          {/* Left Column - User/Guest Details */}
+          <div className={`rounded-2xl p-6 h-fit ${
+            darkMode ? 'bg-red-950/20 border border-red-900/30' : 'bg-white border border-gray-200'
+          }`}>
+            <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${
+              darkMode ? 'text-white' : 'text-gray-900'
             }`}>
-              <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${
-                darkMode ? 'text-white' : 'text-gray-900'
-              }`}>
-                <User className="w-5 h-5 text-red-500" />
-                Your Details
-              </h2>
+              <User className="w-5 h-5 text-red-500" />
+              {isGuest ? 'Your Details' : 'Delivery Information'}
+            </h2>
 
+            {/* For Logged-in Users - Show Details */}
+            {!isGuest && user && (
+              <div className="space-y-4 mb-6">
+                <div className={`p-4 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <User className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Name</p>
+                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {user.name || 'Not provided'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <Mail className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Email</p>
+                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <Phone className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Phone</p>
+                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {user.phone || 'Not provided'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <MapPin className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                    <div>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Address</p>
+                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {user.address || 'Not provided'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {(!user.phone || !user.address) && (
+                  <div className={`p-4 rounded-xl border-2 border-dashed ${
+                    darkMode ? 'border-amber-900/50 bg-amber-950/20' : 'border-amber-300 bg-amber-50'
+                  }`}>
+                    <p className={`text-sm ${darkMode ? 'text-amber-400' : 'text-amber-700'}`}>
+                      ⚠️ Please update your phone and address in{' '}
+                      <a href="/profile" className="font-bold underline hover:text-red-500">
+                        Profile Settings
+                      </a>{' '}
+                      before checkout.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* For Guest Users - Show Form */}
+            {isGuest && (
               <div className="space-y-4">
+
                 {/* Name */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
@@ -313,8 +382,8 @@ const Checkout = () => {
                   )}
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Right Column - Order Summary */}
           <div className={`rounded-2xl p-6 h-fit ${
@@ -384,7 +453,7 @@ const Checkout = () => {
               className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
                 isProcessing
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-green-600/30'
+                  : 'bg-linear-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-green-600/30'
               }`}
             >
               <Lock className="w-5 h-5" />
