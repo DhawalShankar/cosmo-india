@@ -9,14 +9,14 @@ import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
+    <AuthProvider>
+    <BrowserRouter> 
       <DarkModeProvider>
         <CartProvider>
           <App />
         </CartProvider>
       </DarkModeProvider>
-      </AuthProvider>
     </BrowserRouter>
+     </AuthProvider>
   </StrictMode>
 );
