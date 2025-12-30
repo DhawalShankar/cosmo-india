@@ -107,7 +107,7 @@ const CosmoPublicationSite = () => {
 <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
      {/* Hero Section */}
       <section id='home' className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className={`absolute inset-0 ${darkMode ? 'bg-gradient-to-br from-black via-red-950 to-black' : 'bg-gradient-to-br from-gray-100 via-red-100 to-gray-100'}`}>
+        <div className={`absolute inset-0 ${darkMode ? 'bg-linear-to-br from-black via-red-950 to-black' : 'bg-linear-to-br from-gray-100 via-red-100 to-gray-100'}`}>
           <div className={`absolute inset-0 ${darkMode ? 'bg-black/50' : 'bg-white/30'}`}></div>
         </div>
         
@@ -130,16 +130,16 @@ const CosmoPublicationSite = () => {
 
         {/* Animated red lines */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute w-1 h-96 bg-gradient-to-b from-transparent via-red-600 to-transparent animate-float-vertical" style={{left: '20%', animationDelay: '0s'}}></div>
-          <div className="absolute w-1 h-64 bg-gradient-to-b from-transparent via-red-600 to-transparent animate-float-vertical" style={{left: '50%', animationDelay: '2s'}}></div>
-          <div className="absolute w-1 h-80 bg-gradient-to-b from-transparent via-red-600 to-transparent animate-float-vertical" style={{left: '80%', animationDelay: '4s'}}></div>
+          <div className="absolute w-1 h-96 bg-linear-to-b from-transparent via-red-600 to-transparent animate-float-vertical" style={{left: '20%', animationDelay: '0s'}}></div>
+          <div className="absolute w-1 h-64 bg-linear-to-b from-transparent via-red-600 to-transparent animate-float-vertical" style={{left: '50%', animationDelay: '2s'}}></div>
+          <div className="absolute w-1 h-80 bg-linear-to-b from-transparent via-red-600 to-transparent animate-float-vertical" style={{left: '80%', animationDelay: '4s'}}></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="space-y-8 animate-fade-in">
             <h1 className={`text-4xl md:text-7xl mt-27 font-bold ${darkMode ? 'text-white' : 'text-gray-900'} leading-tight`}>
               Discover Stories That
-              <span className="block bg-gradient-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
+              <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
                 Ignite Imagination
               </span>
             </h1>
@@ -149,7 +149,7 @@ const CosmoPublicationSite = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => navigate("/discuss")}
-                className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
+                className="group px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
               >
                 <span>Let's Discuss your Book!</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -170,7 +170,7 @@ const CosmoPublicationSite = () => {
 
    
       {/* Our Values Section */}
-<section className={`py-16 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-gray-50 to-red-50'}`}>
+<section className={`py-16 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-gray-50 to-red-50'}`}>
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-12">
       <h2 className={`text-3xl md:text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
@@ -207,7 +207,7 @@ const CosmoPublicationSite = () => {
           key={index} 
           className={`text-center group p-6 rounded-2xl transition-all duration-300 hover:scale-105 ${
             darkMode 
-              ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20 hover:border-red-600/50'
+              ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20 hover:border-red-600/50'
               : 'bg-white border border-red-200 hover:border-red-400 hover:shadow-lg'
           }`}
         >
@@ -245,7 +245,7 @@ const CosmoPublicationSite = () => {
                 onMouseLeave={() => setHoveredBook(null)}
                 className={`group relative rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black shadow-red-900/10 border border-red-900/20 hover:border-red-600/50 hover:shadow-2xl hover:shadow-red-600/20'
+                    ? 'bg-linear-to-br from-red-950/20 to-black shadow-red-900/10 border border-red-900/20 hover:border-red-600/50 hover:shadow-2xl hover:shadow-red-600/20'
                     : 'bg-white shadow-gray-200 border border-gray-200 hover:border-red-400 hover:shadow-2xl hover:shadow-red-300/30'
                 }`}
               >
@@ -256,11 +256,11 @@ const CosmoPublicationSite = () => {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute top-4 right-4">
-                    <span className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-bold rounded-full shadow-lg">
+                    <span className="px-4 py-2 bg-linear-to-r from-red-600 to-red-700 text-white text-sm font-bold rounded-full shadow-lg">
                       {book.badge}
                     </span>
                   </div>
-                  <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent transition-opacity duration-300 ${hoveredBook === book.id ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className={`absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent transition-opacity duration-300 ${hoveredBook === book.id ? 'opacity-100' : 'opacity-0'}`}>
                     <div className="absolute bottom-4 left-4 right-4">
                       
                     </div>
@@ -334,14 +334,14 @@ const CosmoPublicationSite = () => {
   <div
     className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
       darkMode
-        ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
-        : 'bg-gradient-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
+        ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
+        : 'bg-linear-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
     }`}
   >
     <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
       <div className="flex items-center justify-center md:order-2">
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
           <img
             src="dhawal.png"
             alt="Co-Founder"
@@ -395,14 +395,14 @@ const CosmoPublicationSite = () => {
   <div
     className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
       darkMode
-        ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
-        : 'bg-gradient-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
+        ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/30 hover:shadow-red-900/30'
+        : 'bg-linear-to-br from-red-50 to-white border border-red-200 hover:shadow-red-300/30'
     }`}
   >
     <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
       <div className="flex items-center justify-center">
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-red-600 to-red-900 rounded-2xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
           <img
             src="nana.jpeg"
             alt="Co-Founder"
@@ -459,7 +459,7 @@ const CosmoPublicationSite = () => {
 </section>
 
       {/* Blog Section */}
-      <section id="blog" className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
+      <section id="blog" className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
             Latest from Our Blog
@@ -475,7 +475,7 @@ const CosmoPublicationSite = () => {
       </section>
 
       {/* CTA Section */}
-      <section className={`py-20 relative overflow-hidden ${darkMode ? 'bg-gradient-to-br from-red-950 via-black to-red-950' : 'bg-gradient-to-br from-red-100 via-white to-red-100'}`}>
+      <section className={`py-20 relative overflow-hidden ${darkMode ? 'bg-linear-to-br from-red-950 via-black to-red-950' : 'bg-linear-to-br from-red-100 via-white to-red-100'}`}>
         <div className="absolute inset-0">
           {[...Array(10)].map((_, i) => (
             <div
@@ -512,7 +512,7 @@ const CosmoPublicationSite = () => {
               href="https://www.linkedin.com/company/cosmoindiaprakashan/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30 whitespace-nowrap inline-block text-center"
+              className="px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30 whitespace-nowrap inline-block text-center"
             >Subscribe
             </a>
           </div>
@@ -536,8 +536,8 @@ const CosmoPublicationSite = () => {
             <div className="space-y-8">
               <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                  : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
+                  ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
+                  : 'bg-linear-to-br from-red-50 to-white border border-red-200'
               }`}>
                 <MapPin className="w-8 h-8 text-red-600 mb-4" />
                 <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Address</h3>
@@ -550,8 +550,8 @@ const CosmoPublicationSite = () => {
 
               <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                  : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
+                  ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
+                  : 'bg-linear-to-br from-red-50 to-white border border-red-200'
               }`}>
                 <Phone className="w-8 h-8 text-red-600 mb-4" />
                 <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Phone</h3>
@@ -563,8 +563,8 @@ const CosmoPublicationSite = () => {
 
               <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                  : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
+                  ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
+                  : 'bg-linear-to-br from-red-50 to-white border border-red-200'
               }`}>
                 <Mail className="w-8 h-8 text-red-600 mb-4" />
                 <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Email</h3>
@@ -579,8 +579,8 @@ const CosmoPublicationSite = () => {
             <div
               className={`p-8 rounded-2xl ${
                 darkMode
-                  ? "bg-gradient-to-br from-red-950/20 to-black border border-red-900/20"
-                  : "bg-gradient-to-br from-red-50 to-white border border-red-200"
+                  ? "bg-linear-to-br from-red-950/20 to-black border border-red-900/20"
+                  : "bg-linear-to-br from-red-50 to-white border border-red-200"
               }`}
             >
               <form className="space-y-6" onSubmit={handleSubmit}>
@@ -661,7 +661,7 @@ const CosmoPublicationSite = () => {
 
                 <button
                   type="submit"
-                  className={`w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30
+                  className={`w-full px-8 py-4 bg-linear-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30
                   ${
                         darkMode ? "from-green-800 to-green-900 " : "from-green-700 to-green-800 "
                       }
