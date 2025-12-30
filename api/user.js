@@ -15,6 +15,25 @@ function parseCookies(cookieHeader) {
   return cookies;
 }
 
+// Middleware to verify user from token
+async function verifyUser(req) {
+  const cookies = parseCookies(req.headers.cookie);
+  const token = cookies.token;
+
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
+  const decoded = verifyToken(token);
+  const user = await User.findById(decoded.userId);
+  
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return user;
+}
+
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -185,6 +204,68 @@ export default async function handler(req, res) {
       });
     }
 
+    /* ==================== UPDATE PROFILE ==================== */
+    if (method === 'PUT' && action === 'update') {
+      const user = await verifyUser(req);
+      const { name, phone, address } = req.body || {};
+
+      // Update only provided fields
+      if (name !== undefined) user.name = name;
+      if (phone !== undefined) user.phone = phone;
+      if (address !== undefined) user.address = address;
+
+      await user.save();
+
+      console.log('✅ Profile updated:', user.email);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Profile updated successfully',
+        user: user.toJSON()
+      });
+    }
+
+    /* ==================== CHANGE PASSWORD ==================== */
+    if (method === 'PUT' && action === 'change-password') {
+      const user = await verifyUser(req);
+      const { currentPassword, newPassword } = req.body || {};
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+          success: false,
+          message: 'Current and new password are required'
+        });
+      }
+
+      // Verify current password
+      const isValid = await comparePassword(currentPassword, user.password);
+      if (!isValid) {
+        return res.status(401).json({
+          success: false,
+          message: 'Current password is incorrect'
+        });
+      }
+
+      // Validate new password
+      if (newPassword.length < 6) {
+        return res.status(400).json({
+          success: false,
+          message: 'New password must be at least 6 characters'
+        });
+      }
+
+      // Update password
+      user.password = await hashPassword(newPassword);
+      await user.save();
+
+      console.log('✅ Password changed:', user.email);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Password changed successfully'
+      });
+    }
+
     /* ==================== LOGOUT ==================== */
     if (method === 'POST' && action === 'logout') {
       // Clear cookie
@@ -207,6 +288,15 @@ export default async function handler(req, res) {
 
   } catch (err) {
     console.error('❌ Server Error:', err);
+    
+    // Handle auth errors
+    if (err.message === 'Not authenticated' || err.message === 'User not found') {
+      return res.status(401).json({
+        success: false,
+        message: err.message
+      });
+    }
+
     return res.status(500).json({ 
       success: false,
       message: 'Internal server error',
