@@ -4,19 +4,39 @@ import { hashPassword, comparePassword } from './lib/hash';
 import { signToken, verifyToken } from './lib/jwt';
 
 export default async function handler(req, res) {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch (e) {
+    return res.status(500).json({ message: 'DB connection failed' });
+  }
 
-  const { method, query } = req;
-  const action = query.action;
+  const { method } = req;
+  const action = req.query?.action;
+
+  // ❗ action mandatory
+  if (!action) {
+    return res.status(400).json({ message: 'Action missing' });
+  }
 
   try {
-    // REGISTER
+    /* ================= REGISTER ================= */
     if (method === 'POST' && action === 'register') {
-      const { name, email, password } = req.body;
-      const exists = await User.findOne({ email });
-      if (exists) return res.status(409).json({ message: 'User exists' });
+      if (!req.body) {
+        return res.status(400).json({ message: 'No body received' });
+      }
 
-      const user = await User.create({
+      const { name, email, password } = req.body;
+
+      if (!name || !email || !password) {
+        return res.status(400).json({ message: 'Missing fields' });
+      }
+
+      const exists = await User.findOne({ email });
+      if (exists) {
+        return res.status(409).json({ message: 'User already exists' });
+      }
+
+      await User.create({
         name,
         email,
         password: await hashPassword(password),
@@ -25,12 +45,26 @@ export default async function handler(req, res) {
       return res.status(201).json({ message: 'Registered' });
     }
 
-    // LOGIN
+    /* ================= LOGIN ================= */
     if (method === 'POST' && action === 'login') {
+      if (!req.body) {
+        return res.status(400).json({ message: 'No body received' });
+      }
+
       const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({ message: 'Missing credentials' });
+      }
+
       const user = await User.findOne({ email });
-      if (!user || !(await comparePassword(password, user.password)))
+      if (!user) {
         return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      const ok = await comparePassword(password, user.password);
+      if (!ok) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
 
       const token = signToken({ userId: user._id });
 
@@ -42,18 +76,29 @@ export default async function handler(req, res) {
       return res.json({ message: 'Logged in' });
     }
 
-    // ME
+    /* ================= ME ================= */
     if (method === 'GET' && action === 'me') {
       const token = req.cookies?.token;
-      if (!token) return res.status(401).json({ user: null });
+      if (!token) {
+        return res.status(401).json({ user: null });
+      }
 
-      const decoded = verifyToken(token);
+      let decoded;
+      try {
+        decoded = verifyToken(token);
+      } catch {
+        return res.status(401).json({ user: null });
+      }
+
       const user = await User.findById(decoded.userId).select('-password');
+      if (!user) {
+        return res.status(401).json({ user: null });
+      }
 
       return res.json({ user });
     }
 
-    // LOGOUT
+    /* ================= LOGOUT ================= */
     if (method === 'POST' && action === 'logout') {
       res.setHeader(
         'Set-Cookie',
@@ -62,8 +107,11 @@ export default async function handler(req, res) {
       return res.json({ message: 'Logged out' });
     }
 
-    return res.status(404).json({ message: 'Not found' });
-  } catch (e) {
-    return res.status(500).json({ message: 'Server error' });
+    /* ================= FALLBACK ================= */
+    return res.status(405).json({ message: 'Method not allowed' });
+
+  } catch (err) {
+    console.error('USER API ERROR:', err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
