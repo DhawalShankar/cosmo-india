@@ -50,14 +50,12 @@ const Footer = () => {
                 <img
                   src="/cosmo-logo.png"
                   alt="Logo"
-                  className="w-30 transition-all duration-300"
+                  className="w-40 transition-all duration-300"
                 />
               </div>
-              <span className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                Cosmo India Prakashan
-              </span>
+              
             </button>
-            <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+            <p className={  darkMode ? 'text-xl font-semibold text-gray-400' : 'text-xl font-semibold text-gray-600'}>
               Publishing excellence since decades
             </p>
           </div>

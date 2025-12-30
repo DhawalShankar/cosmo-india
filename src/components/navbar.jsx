@@ -91,11 +91,11 @@ const Navbar = () => {
            onClick={() => scrollToSection('home')}
             className="flex items-center space-x-2"
           >
-            <div className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-5 w-20 flex items-center justify-center rounded-2xl transition-colors duration-300`}>
+            <div className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-2 h-20 w-25 flex items-center justify-center rounded-2xl transition-colors duration-300`}>
               <img
                 src="/cosmo-logo.png"
                 alt="Logo"
-                className="w-30 transition-all duration-300"
+                className="w-35 transition-all duration-300"
               />
             </div>
 
@@ -105,7 +105,7 @@ const Navbar = () => {
               Cosmo India Prakashan
             </span>
           </button>
-
+           
           <div className="hidden md:flex items-center space-x-8">
             {[
                 { name: 'Home', id: 'home' },
@@ -173,26 +173,6 @@ const Navbar = () => {
             >
               Signup/Login
             </button>
-           <button 
-        onClick={() => handleNavigation('/cart')}
-        className={`relative p-2 rounded-full transition-all duration-300 ${
-          scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
-        } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}
-      >
-        <ShoppingBag className={`w-5 h-5 ${
-          isActive(null, '/cart')
-            ? 'text-red-500'
-            : scrolled 
-              ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
-              : (darkMode ? 'text-white' : 'text-gray-900')
-        }`} />
-        
-        {cartItemCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg shadow-red-600/50">
-            {cartItemCount}
-          </span>
-        )}
-      </button>
             
             <button 
               onClick={() => setDarkMode(!darkMode)}
@@ -212,7 +192,27 @@ const Navbar = () => {
               )}
             </button>
           </div>
-
+           <button 
+        onClick={() => handleNavigation('/cart')}
+        className={`relative m-2 p-2 rounded-full transition-all duration-300 ${
+          scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
+        } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}
+      >
+        <ShoppingBag className={`w-5 h-5 ${
+          isActive(null, '/cart')
+            ? 'text-red-500'
+            : scrolled 
+              ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
+              : (darkMode ? 'text-white' : 'text-gray-900')
+        }`} />
+        
+        {cartItemCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg shadow-red-600/50">
+            {cartItemCount}
+          </span>
+        )}
+      </button>
+         
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden"
@@ -292,18 +292,7 @@ const Navbar = () => {
             >
               Signup/Login
             </button>
-             <button onClick={()=>handleNavigation('/cart')}
-             className={` flex p-2 pr-4 rounded-full transition-all duration-300 ${
-              scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
-            } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}>
-              <ShoppingBag className={`w-10   ${
-                isActive(null, '/cart')
-                  ? 'text-red-500'
-                  : scrolled 
-                    ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
-                    : (darkMode ? 'text-white' : 'text-gray-900')
-              }`} /> Cart
-            </button>
+             
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className={`flex items-center space-x-2 py-2 ${

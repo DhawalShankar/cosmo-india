@@ -137,7 +137,7 @@ const CosmoPublicationSite = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="space-y-8 animate-fade-in">
-            <h1 className={`text-5xl md:text-7xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} leading-tight`}>
+            <h1 className={`text-4xl md:text-7xl mt-27 font-bold ${darkMode ? 'text-white' : 'text-gray-900'} leading-tight`}>
               Discover Stories That
               <span className="block bg-gradient-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
                 Ignite Imagination
