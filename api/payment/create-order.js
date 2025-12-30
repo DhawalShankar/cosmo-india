@@ -10,12 +10,41 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { amount } = req.body;
+  try {
+    const {
+      amount,
+      name,
+      email,
+      phone,
+      address,
+      product,
+      orderType, // "logged-in" | "guest"
+    } = req.body;
 
-  const order = await razorpay.orders.create({
-    amount: amount * 100,
-    currency: "INR",
-  });
+    if (!amount || !email) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
 
-  res.status(200).json(order);
+    const order = await razorpay.orders.create({
+      amount: amount * 100, // INR → paise
+      currency: "INR",
+      receipt: `rcpt_${Date.now()}`,
+      notes: {
+        name: name || "Guest User",
+        email,
+        phone: phone || "N/A",
+        address: address || "N/A",
+        product: product || "Cosmo India Order",
+        orderType: orderType || "guest",
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (err) {
+    console.error("❌ Razorpay Order Error:", err);
+    return res.status(500).json({ error: "Order creation failed" });
+  }
 }

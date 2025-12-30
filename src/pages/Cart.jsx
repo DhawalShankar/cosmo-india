@@ -3,23 +3,18 @@ import { Menu, X, ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Package, Truck, 
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { DarkModeContext } from '../context/DarkModeContext';
+import { AuthContext } from "../context/AuthContext";
 
 const Cart = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { darkMode } = useContext(DarkModeContext);
   
-  // BACKEND CONNECTION: Using CartContext that manages cart state
-  // CartContext should handle API calls to backend
-  // Example CartContext methods:
-  // - cart: array of cart items from backend (GET /api/cart)
-  // - increaseQty: PUT /api/cart/increase/:productId
-  // - decreaseQty: PUT /api/cart/decrease/:productId
-  // - removeItem: DELETE /api/cart/remove/:productId
+  
   const { cart, increaseQty, decreaseQty, removeItem } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { user, loading } = useContext(AuthContext);
   const query = new URLSearchParams(location.search);
   const policy = query.get("policy");
 
@@ -233,24 +228,25 @@ const Cart = () => {
                       </div>
                     )}
 
-                    {/* Checkout Button - Navigates to /checkout page */}
-                    {/* BACKEND CONNECTION: The /checkout page will handle:
-                        - User authentication check
-                        - Address selection/addition
-                        - Payment gateway integration
-                        - Order creation: POST /api/orders/create
-                        - Cart clearing after successful order */}
-                    <button 
-                      disabled={cart.length === 0}
-                      onClick={() => navigate("/checkout")}
-                      className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 mb-4 ${
-                        cart.length === 0
-                          ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-linear-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 hover:scale-105 shadow-lg shadow-red-600/30 hover:shadow-xl hover:shadow-red-600/40'
-                      }`}
-                    >
-                      Proceed to Checkout
-                    </button>
+                  
+                    <button
+                          disabled={cart.length === 0}
+                          onClick={() => {
+                            if (user) {
+                              navigate("/checkout");          // logged in
+                            } else {
+                              navigate("/checkout?guest=1");  // guest
+                            }
+                          }}
+                          className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 mb-4 ${
+                            cart.length === 0
+                              ? 'bg-gray-400 cursor-not-allowed'
+                              : 'bg-linear-to-r from-red-600 to-red-700 text-white'
+                          }`}
+                        >
+                          Proceed to Checkout
+                        </button>
+
 
                     {/* Trust Badges */}
                     <div className={`space-y-3 pt-6 border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
