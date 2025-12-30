@@ -36,10 +36,10 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (res.ok) {
+      setLoading(true);
       await checkAuth();
       return { success: true };
     }
-
     return { success: false };
   };
 
@@ -52,10 +52,10 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (res.ok) {
+      setLoading(true);
       await checkAuth();
       return { success: true };
     }
-
     return { success: false };
   };
 
@@ -68,7 +68,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, logout, checkAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,9 @@
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useState, useContext } from 'react';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const Login = () => {
@@ -16,7 +19,8 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [debugInfo, setDebugInfo] = useState(null);
   const { darkMode } = useContext(DarkModeContext);
-
+  const { checkAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
   const benefits = [
     'Exclusive access to premium books',
     'Personalized recommendations',
@@ -63,26 +67,29 @@ const Login = () => {
     setDebugInfo(null);
     
     try {
-      const endpoint = isLogin ? '/api/user/login' : '/api/user/register';
+      const endpoint = isLogin
+  ? '/api/user?action=login'
+  : '/api/user?action=register';
+
       const payload = isLogin 
         ? { email: formData.email, password: formData.password }
         : formData;
       
-      const fullUrl = window.location.origin + endpoint;
       
-      console.log('🔄 Sending request to:', fullUrl);
       console.log('📦 Payload:', payload);
       
       setDebugInfo({ status: 'sending', url: fullUrl, payload });
       
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+     const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify(payload)
+        });
+
       
       console.log('📡 Response status:', response.status);
       console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
@@ -101,19 +108,18 @@ const Login = () => {
       
       setDebugInfo({ status: 'received', data, responseStatus: response.status });
       
-      if (!response.ok) {
+    if (!response.ok) {
         setErrors({ submit: data.error || `Server error: ${response.status}` });
         setLoading(false);
         return;
       }
-      
-      console.log('🎉 Success! Token:', data.token);
+
+      await checkAuth();
       setSuccess(true);
-      
-      setTimeout(() => {
-        console.log('🚀 Would redirect to /marketplace');
-        // window.location.href = '/marketplace';
-      }, 1500);
+      setLoading(false);
+
+   
+      setTimeout(() => navigate('/marketplace'), 1200);
       
     } catch (error) {
       console.error('❌ Network error:', error);
