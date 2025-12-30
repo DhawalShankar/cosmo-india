@@ -158,7 +158,7 @@ const Login = () => {
       
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className={` ${darkMode ? 'bg-gradient-to-br from-black via-red-950 to-black' : 'bg-gradient-to-br from-gray-100 via-red-100 to-gray-100'}`}>
+        <div className={` ${darkMode ? 'bg-linear-to-br from-black via-red-950 to-black' : 'bg-linear-to-br from-gray-100 via-red-100 to-gray-100'}`}>
           <div className={` ${darkMode ? 'bg-black/50' : 'bg-white/30'}`}></div>
         </div>
         
@@ -183,7 +183,7 @@ const Login = () => {
             <div>
               <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Welcome to Your
-                <span className="block bg-gradient-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
+                <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
                   Literary Journey
                 </span>
               </h2>
@@ -200,11 +200,11 @@ const Login = () => {
                   key={index}
                   className={`flex items-center space-x-3 p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
                     darkMode 
-                      ? 'bg-gradient-to-r from-red-950/30 to-black/30 border border-red-900/30' 
+                      ? 'bg-linear-to-r from-red-950/30 to-black/30 border border-red-900/30' 
                       : 'bg-white/50 border border-red-200'
                   }`}
                 >
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <CheckCircle className="w-5 h-5 text-red-500" />
                   </div>
                   <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -227,7 +227,7 @@ const Login = () => {
 
             {/* Decorative Element */}
             <div className="relative">
-              <div className={`absolute -inset-1 bg-gradient-to-r from-red-600 to-red-400 rounded-2xl blur-xl opacity-20 animate-pulse`}></div>
+              <div className={`absolute -inset-1 bg-linear-to-r from-red-600 to-red-400 rounded-2xl blur-xl opacity-20 animate-pulse`}></div>
               <div className={`relative p-5 rounded-2xl ${darkMode ? 'bg-black/50 border border-red-900/30' : 'bg-white/50 border border-red-200'}`}>
                 <Sparkles className={`w-7 h-7 mb-2 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -241,7 +241,7 @@ const Login = () => {
           <div className="flex items-center justify-center">
             <div className={`w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 ${
               darkMode 
-                ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20' 
+                ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20' 
                 : 'bg-white border border-gray-200'
             }`}>
               
@@ -285,7 +285,7 @@ const Login = () => {
                         onClick={() => !isLogin && toggleMode()}
                         className={`flex-1 py-2.5 px-4 rounded-lg font-semibold transition-all duration-300 ${
                           isLogin
-                            ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
+                            ? 'bg-linear-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
                             : darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                         }`}
                       >
@@ -296,7 +296,7 @@ const Login = () => {
                         onClick={() => isLogin && toggleMode()}
                         className={`flex-1 py-2.5 px-4 rounded-lg font-semibold transition-all duration-300 ${
                           !isLogin
-                            ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
+                            ? 'bg-linear-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
                             : darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                         }`}
                       >
@@ -426,7 +426,7 @@ const Login = () => {
                         className={`w-full py-3 rounded-xl font-bold text-base transition-all duration-300 flex items-center justify-center space-x-2 ${
                           loading
                             ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 hover:scale-105 shadow-lg shadow-red-600/30 hover:shadow-xl hover:shadow-red-600/40'
+                            : 'bg-linear-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 hover:scale-105 shadow-lg shadow-red-600/30 hover:shadow-xl hover:shadow-red-600/40'
                         }`}
                       >
                         <span>{loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}</span>
