@@ -10,7 +10,6 @@ import { DarkModeContext } from '../context/DarkModeContext';
 import { useCart } from "../context/CartContext";
 
 const Marketplace = () => {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { darkMode } = useContext(DarkModeContext);
   const [selectedCategory, setSelectedCategory] = useState('all');
