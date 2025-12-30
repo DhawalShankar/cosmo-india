@@ -1,19 +1,23 @@
 import { useState, useEffect, useContext } from 'react';
-import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X, ShoppingBag, User as UserIcon, LogOut } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useCart } from "../context/CartContext";
+import { AuthContext } from '../context/AuthContext';
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const { darkMode, setDarkMode } = useContext(DarkModeContext);
+  const { user, logout } = useContext(AuthContext);
   
   const navigate = useNavigate();
   const location = useLocation();
-  // const { user, logout } = useContext(AuthContext);
   const { cart } = useCart();
-   const cartItemCount = cart.reduce((total, item) => total + item.qty, 0);
+  const cartItemCount = cart.reduce((total, item) => total + item.qty, 0);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -40,7 +44,7 @@ const Navbar = () => {
       };
 
       window.addEventListener('scroll', handleScrollSpy);
-      handleScrollSpy(); // Initial check
+      handleScrollSpy();
       return () => window.removeEventListener('scroll', handleScrollSpy);
     } else {
       setActiveSection('');
@@ -79,6 +83,13 @@ const Navbar = () => {
     navigate(path);
   };
 
+  const handleLogout = async () => {
+    setShowUserMenu(false);
+    setMobileMenuOpen(false);
+    await logout();
+    navigate('/');
+  };
+
   return (
     <nav className={`fixed w-full z-50 transition-all duration-500 ${
       scrolled 
@@ -88,7 +99,7 @@ const Navbar = () => {
       <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-25">
           <button 
-           onClick={() => scrollToSection('home')}
+            onClick={() => scrollToSection('home')}
             className="flex items-center space-x-2"
           >
             <div className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-2 h-20 w-25 flex items-center justify-center rounded-2xl transition-colors duration-300`}>
@@ -99,7 +110,7 @@ const Navbar = () => {
               />
             </div>
 
-            <span className={`text-2xl font-bold bg-gradient-to-r from-red-600 to-red-400 bg-clip-text ${
+            <span className={`text-2xl font-bold bg-linear-to-r from-red-600 to-red-400 bg-clip-text ${
               scrolled ? 'text-transparent' : (darkMode ? 'text-white hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'text-gray-900')
             }`}>
               Cosmo India Prakashan
@@ -163,16 +174,52 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
               )}
             </button>
-                        <button
-              onClick={() => handleNavigation('/login')}
-              className={`block w-full text-left font-semibold py-2 ${
-                isActive(null, '/legacy')
-                  ? 'text-red-500 font-semibold'
-                  : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
-              } transition-colors`}
-            >
-              Signup/Login
-            </button>
+
+            {/* User Menu - Desktop */}
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className={`flex items-center space-x-2 font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-lg ${
+                    scrolled 
+                      ? (darkMode ? 'text-gray-300 hover:text-red-500 hover:bg-red-900/20' : 'text-gray-700 hover:text-red-500 hover:bg-red-50') 
+                      : (darkMode ? 'text-white hover:text-red-400 hover:bg-white/10' : 'text-gray-900 hover:text-red-500 hover:bg-red-50')
+                  }`}
+                >
+                  <UserIcon className="w-5 h-5" />
+                  <span>{user.name}</span>
+                </button>
+
+                {showUserMenu && (
+                  <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg overflow-hidden ${
+                    darkMode ? 'bg-black/95 border border-red-900/30' : 'bg-white border border-gray-200'
+                  }`}>
+                    <button
+                      onClick={handleLogout}
+                      className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
+                        darkMode ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400' : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
+                      }`}
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => handleNavigation('/login')}
+                className={`font-medium transition-all duration-300 hover:scale-105 ${
+                  isActive(null, '/login')
+                    ? 'text-red-500 font-semibold'
+                    : scrolled 
+                      ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') 
+                      : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')
+                }`}
+              >
+                Signup/Login
+              </button>
+            )}
             
             <button 
               onClick={() => setDarkMode(!darkMode)}
@@ -192,26 +239,27 @@ const Navbar = () => {
               )}
             </button>
           </div>
-           <button 
-        onClick={() => handleNavigation('/cart')}
-        className={`relative m-2 p-2 rounded-full transition-all duration-300 ${
-          scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
-        } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}
-      >
-        <ShoppingBag className={`w-5 h-5 ${
-          isActive(null, '/cart')
-            ? 'text-red-500'
-            : scrolled 
-              ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
-              : (darkMode ? 'text-white' : 'text-gray-900')
-        }`} />
-        
-        {cartItemCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg shadow-red-600/50">
-            {cartItemCount}
-          </span>
-        )}
-      </button>
+
+          <button 
+            onClick={() => handleNavigation('/cart')}
+            className={`relative m-2 p-2 rounded-full transition-all duration-300 ${
+              scrolled ? 'hover:bg-red-900/20' : 'hover:bg-white/10'
+            } ${isActive(null, '/cart') ? 'bg-red-900/30' : ''}`}
+          >
+            <ShoppingBag className={`w-5 h-5 ${
+              isActive(null, '/cart')
+                ? 'text-red-500'
+                : scrolled 
+                  ? (darkMode ? 'text-gray-300' : 'text-gray-700') 
+                  : (darkMode ? 'text-white' : 'text-gray-900')
+            }`} />
+            
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-linear-to-r from-red-600 to-red-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg shadow-red-600/50">
+                {cartItemCount}
+              </span>
+            )}
+          </button>
          
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -282,16 +330,40 @@ const Navbar = () => {
             >
               Marketplace
             </button>
-            <button
-              onClick={() => handleNavigation('/login')}
-              className={`block w-full text-left py-2 ${
-                isActive(null, '/legacy')
-                  ? 'text-red-500 font-semibold'
-                  : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
-              } transition-colors`}
-            >
-              Signup/Login
-            </button>
+
+            {/* User Menu - Mobile */}
+            {user ? (
+              <>
+                <div className={`py-2 px-3 rounded-lg flex items-center space-x-2 ${
+                  darkMode ? 'bg-red-900/20 border border-red-900/30' : 'bg-red-50 border border-red-200'
+                }`}>
+                  <UserIcon className="w-5 h-5 text-red-500" />
+                  <span className={`font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {user.name}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className={`flex items-center space-x-2 w-full text-left py-2 ${
+                    darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
+                  } transition-colors`}
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => handleNavigation('/login')}
+                className={`block w-full text-left py-2 ${
+                  isActive(null, '/login')
+                    ? 'text-red-500 font-semibold'
+                    : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
+                } transition-colors`}
+              >
+                Signup/Login
+              </button>
+            )}
              
             <button 
               onClick={() => setDarkMode(!darkMode)}
