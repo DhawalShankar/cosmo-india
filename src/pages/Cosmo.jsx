@@ -282,7 +282,8 @@ const CosmoPublicationSite = () => {
                   <p className={darkMode ? 'text-gray-400 mb-3' : 'text-gray-600 mb-3'}> {book.author}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-red-500">{book.price}</span>
-                    <button className={`p-2 rounded-full transition-all duration-300 ${
+                    <button onClick={() => navigate("/marketplace")}
+                     className={`p-2 rounded-full transition-all duration-300 ${
                       darkMode 
                         ? 'bg-red-950/30 text-red-500 hover:bg-red-600 hover:text-white'
                         : 'bg-red-100 text-red-600 hover:bg-red-600 hover:text-white'
