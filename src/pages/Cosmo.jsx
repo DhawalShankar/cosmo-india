@@ -140,8 +140,8 @@ const CosmoPublicationSite = () => {
             <h1 className={`text-4xl md:text-7xl mt-27 font-bold ${darkMode ? 'text-white' : 'text-gray-900'} leading-tight`}>
               Writing the Skies
               <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
-                with Fire🔥
-              </span>
+                with Fire
+              </span>🔥
             </h1>
             <p className={`text-xl md:text-2xl ${darkMode ? 'text-gray-300' : 'text-gray-700'} max-w-3xl mx-auto`}>
               India's premier publishing house bringing you the finest literature, academic excellence, and inspiring narratives

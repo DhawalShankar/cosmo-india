@@ -167,7 +167,7 @@ const DiscussYourBook = () => {
       {/* Floating Publish Button */}
       <button
         onClick={() => navigate("/publish")}
-        className="fixed bottom-8 right-8 z-50 group px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold shadow-2xl hover:shadow-red-600/50 hover:scale-110 transition-all duration-300 flex items-center space-x-2"
+        className="fixed bottom-8 right-8 z-50 group px-6 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold shadow-2xl hover:shadow-red-600/50 hover:scale-110 transition-all duration-300 flex items-center space-x-2"
       >
         <Rocket className="w-5 h-5" />
         View Services
@@ -177,7 +177,7 @@ const DiscussYourBook = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div className={`absolute inset-0 ${darkMode ? 'bg-gradient-to-br from-black via-red-950 to-black' : 'bg-gradient-to-br from-gray-100 via-red-100 to-gray-100'}`}>
+        <div className={`absolute inset-0 ${darkMode ? 'bg-linear-to-br from-black via-red-950 to-black' : 'bg-linear-to-br from-gray-100 via-red-100 to-gray-100'}`}>
           <div className={`absolute inset-0 ${darkMode ? 'bg-black/50' : 'bg-white/30'}`}></div>
         </div>
 
@@ -205,7 +205,7 @@ const DiscussYourBook = () => {
             </div>
             <h1 className={`text-5xl md:text-7xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} leading-tight`}>
               Let's Discuss
-              <span className="block bg-gradient-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
+              <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
                 Your Book
               </span>
             </h1>
@@ -223,7 +223,7 @@ const DiscussYourBook = () => {
       </section>
 
       {/* Where Are You in Your Journey */}
-      <section className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
+      <section className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
@@ -247,11 +247,11 @@ const DiscussYourBook = () => {
                   selectedStage === stage.title
                     ? 'border-2 border-red-600 shadow-2xl shadow-red-600/30'
                     : darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20 hover:border-red-600/50'
+                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20 hover:border-red-600/50'
                     : 'bg-white border border-gray-200 hover:border-red-400 hover:shadow-xl'
                 }`}
               >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stage.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-14 h-14 rounded-xl bg-linear-to-br ${stage.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <stage.icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className={`text-xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -284,12 +284,12 @@ const DiscussYourBook = () => {
                 key={index}
                 className={`text-center p-8 rounded-2xl transition-all duration-300 hover:scale-105 ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                    : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
+                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
+                    : 'bg-linear-to-br from-red-50 to-white border border-red-200'
                 }`}
               >
                 <div className="flex justify-center mb-6">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center">
                     <item.icon className="w-8 h-8 text-white" />
                   </div>
                 </div>
@@ -306,7 +306,7 @@ const DiscussYourBook = () => {
       </section>
 
       {/* Your Publishing Journey */}
-      <section className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
+      <section className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
@@ -323,13 +323,13 @@ const DiscussYourBook = () => {
                 key={index}
                 className={`relative p-8 rounded-2xl transition-all duration-300 hover:scale-105 ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
+                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
                     : 'bg-white border border-gray-200 hover:shadow-xl'
                 }`}
               >
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center">
+                  <div className="shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center">
                       <step.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -369,7 +369,7 @@ const DiscussYourBook = () => {
 
           <div className={`p-8 md:p-12 rounded-3xl ${
             darkMode 
-              ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
+              ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
               : 'bg-white border border-red-200 shadow-xl'
           }`}>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -527,8 +527,8 @@ const DiscussYourBook = () => {
                   hover:scale-105 flex items-center justify-center space-x-2
                   ${
                     darkMode
-                      ? 'bg-gradient-to-r from-green-800 to-green-900 text-white shadow-lg shadow-green-700/40 hover:from-green-800 hover:to-green-900'
-                      : 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-600/30 hover:from-green-600 hover:to-green-700'
+                      ? 'bg-linear-to-r from-green-800 to-green-900 text-white shadow-lg shadow-green-700/40 hover:from-green-800 hover:to-green-900'
+                      : 'bg-linear-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-600/30 hover:from-green-600 hover:to-green-700'
                   }`}
               >
                 <MessageCircle className="w-5 h-5" />

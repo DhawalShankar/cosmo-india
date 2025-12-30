@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/user/me', {
+      const res = await fetch('/api/user?action=me', {
         credentials: 'include',
       });
 
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    const res = await fetch('/api/user/login', {
+    const res = await fetch('/api/user?action=login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password) => {
-    const res = await fetch('/api/user/register', {
+    const res = await fetch('/api/user?action=register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await fetch('/api/user/logout', {
+    await fetch('/api/user?action=logout', {
       method: 'POST',
       credentials: 'include',
     });
