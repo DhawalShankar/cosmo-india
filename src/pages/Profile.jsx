@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const { darkMode } = useContext(DarkModeContext);
-  const { user, checkAuth } = useContext(AuthContext);
+  const { user, loading: authLoading, checkAuth } = useContext(AuthContext);
   const navigate = useNavigate();
   
   const [isEditing, setIsEditing] = useState(false);
@@ -27,10 +27,18 @@ const Profile = () => {
     confirmPassword: ''
   });
 
+  // Only redirect after auth finishes loading and we confirm no user
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else {
+    console.log('Profile - authLoading:', authLoading, 'user:', user);
+    
+    if (!authLoading && !user) {
+      console.log('Redirecting to login - no user found');
+      navigate('/login', { replace: true });
+      return;
+    }
+    
+    if (user) {
+      console.log('User found, setting edit data');
       setEditData({
         name: user.name || '',
         email: user.email || '',
@@ -38,7 +46,7 @@ const Profile = () => {
         address: user.address || ''
       });
     }
-  }, [user, navigate]);
+  }, [authLoading, user, navigate]);
 
   const showMessage = (type, text) => {
     setMessage({ type, text });
@@ -114,8 +122,27 @@ const Profile = () => {
     }
   };
 
+  // Show loading while auth is checking
+  if (authLoading) {
+    return (
+      <div className={`min-h-screen pt-32 pb-16 flex items-center justify-center ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Loading your profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If still no user after loading, show redirect message
   if (!user) {
-    return null;
+    return (
+      <div className={`min-h-screen pt-32 pb-16 flex items-center justify-center ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
+        <div className="text-center">
+          <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Redirecting to login...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
