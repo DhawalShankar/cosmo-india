@@ -418,7 +418,7 @@ const response = await fetch(endpoint, {
                       {/* Submit Error */}
                       {errors.submit && (
                         <div className={`p-3 rounded-lg ${darkMode ? 'bg-red-950/30 border border-red-900/50' : 'bg-red-50 border border-red-200'}`}>
-                          <p className="text-red-500 text-xs text-center">{errors.submit}</p>
+                          <p className="text-red-500 text-xs text-center">{String(errors.submit)}</p>
                         </div>
                       )}
 

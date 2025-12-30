@@ -1,7 +1,7 @@
-import connectDB from './lib/db';
-import User from './models/user';
-import { hashPassword, comparePassword } from './lib/hash';
-import { signToken, verifyToken } from './lib/jwt';
+import connectDB from './lib/db.js';
+import User from './models/user.js';
+import { hashPassword, comparePassword } from './lib/hash.js';
+import { signToken, verifyToken } from './lib/jwt.js';
 
 export default async function handler(req, res) {
   try {

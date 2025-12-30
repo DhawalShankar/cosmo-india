@@ -1,6 +1,6 @@
-import connectDB from './lib/db';
-import User from './models/user';
-import { verifyToken } from './lib/jwt';
+import connectDB from './lib/db.js';
+import User from './models/user.js';
+import { verifyToken } from './lib/jwt.js';
 
 export default async function handler(req, res) {
   await connectDB();
