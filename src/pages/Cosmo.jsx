@@ -157,9 +157,9 @@ const CosmoPublicationSite = () => {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button 
-                onClick={() => navigate("/marketplace")}
+                onClick={() => navigate("/login")}
                 className={`px-8 py-4 border-2 border-red-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 ${darkMode ? 'text-white hover:bg-red-600' : 'text-red-600 hover:bg-red-600 hover:text-white'}`}>
-                What's New!
+                Create your CIP Account!
               </button>
             </div>
           </div>
