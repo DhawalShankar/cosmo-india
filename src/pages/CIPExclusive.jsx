@@ -91,7 +91,7 @@ const CIPExclusive = () => {
             }`}>
               <Lock className={`w-4 h-4 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
               <span className={`text-sm font-semibold ${darkMode ? 'text-red-400' : 'text-red-600'}`}>
-                Login required to access content
+                Login required to access content - Under Development
               </span>
             </div>
           )}

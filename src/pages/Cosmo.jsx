@@ -496,29 +496,19 @@ const CosmoPublicationSite = () => {
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
-            Subscribe to Our Newsletter
+           Become a CIP Member
           </h2>
           <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-8`}>
             Get exclusive updates on new releases, author interviews, and special offers
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className={`flex-1 px-6 py-4 rounded-full border focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent ${
-                darkMode 
-                  ? 'bg-black/50 border-red-900/30 text-white placeholder-gray-500'
-                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-              }`}
-            />
-            <a
-              href="https://www.linkedin.com/company/cosmoindiaprakashan/"
-              target="_blank"
-              rel="noopener noreferrer"
+          
+            
+            <button
+              onClick={() => navigate("/login")} 
               className="px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30 whitespace-nowrap inline-block text-center"
-            >Subscribe
-            </a>
-          </div>
+            >Join Us Today!
+            </button>
+        
         </div>
       </section>
 
