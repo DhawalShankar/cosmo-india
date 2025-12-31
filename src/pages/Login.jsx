@@ -188,7 +188,7 @@ const response = await fetch(endpoint, {
               <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Welcome to Your
                 <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
-                  Literary Journey
+                  Literary Journey 
                 </span>
               </h2>
               
@@ -271,7 +271,7 @@ const response = await fetch(endpoint, {
                   <div className="p-8 pb-6">
                     <div className="text-center mb-6">
                       <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {isLogin ? 'Welcome Back' : 'Create Account'}
+                        {isLogin ? 'Welcome Back' : 'Create CIP Account'}
                       </h2>
                       <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                         {isLogin 

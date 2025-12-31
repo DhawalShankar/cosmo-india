@@ -10,7 +10,8 @@ import Orders from './pages/Orders';
 import Profile from './pages/Profile'; 
 import PolicyModal from "./components/PolicyModal";
 import PublishingServices from './pages/Publishing';
-import DiscussYourBook from './pages/Discuss'; 
+import DiscussYourBook from './pages/Discuss';
+import CIPExclusive from './pages/CIPExclusive'; 
 import Marketplace from './pages/Marketplace';
 import Cart from './pages/Cart';
 import PrivacyPolicy from "./policies/PrivacyPolicy";
@@ -46,6 +47,7 @@ function App() {
 
          {/* ✅ Auth & Order Routes - NOW WORKING */}
         <Route path="/login" element={<Login />} />
+        <Route path="/exclusive" element={<CIPExclusive />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/orders" element={<Orders />} />

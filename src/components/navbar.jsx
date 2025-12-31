@@ -244,7 +244,7 @@ const Navbar = () => {
                     : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')
               }`}
             >
-              Signup/Login
+              Login
             </button>
           )}
 
