@@ -45,9 +45,9 @@ const CIPExclusive = () => {
       title: 'Premium E-Book Collection',
       description: 'Access our exclusive collection of digital books',
       items: [
-        { name: 'Advanced Physics Guide 2024', size: '12 MB', link: '#' },
-        { name: 'Complete Chemistry Handbook', size: '8 MB', link: '#' },
-        { name: 'Mathematics Mastery', size: '15 MB', link: '#' }
+        { name: 'Ratna Rahasya V1', size: '12 MB', link: '#' },
+        { name: 'Hindu Dainik Charya', size: '8 MB', link: '#' },
+        { name: 'Calendar 2026', size: '15 MB', link: '#' }
       ]
     },
     {
@@ -57,9 +57,9 @@ const CIPExclusive = () => {
       title: 'Digital Magazine Archive',
       description: 'Latest issues of educational magazines',
       items: [
-        { name: 'Science Today - January 2025', size: '25 MB', link: '#' },
-        { name: 'Tech Insights - December 2024', size: '18 MB', link: '#' },
-        { name: 'Education Monthly - Latest', size: '22 MB', link: '#' }
+        { name: 'CIP Jan Edition', size: '25 MB', link: '#' },
+        { name: 'Celestial 2025 Edition', size: '18 MB', link: '#' },
+        { name: 'Literacy and Life', size: '22 MB', link: '#' }
       ]
     },
     {
@@ -68,7 +68,7 @@ const CIPExclusive = () => {
       icon: Code,
       title: 'Vartalang Software',
       description: 'Our exclusive language learning platform',
-      link: 'https://vartalang.com',
+      link: 'https://vartalang.in',
       isExternal: true
     }
   ];

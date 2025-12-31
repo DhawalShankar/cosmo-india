@@ -47,7 +47,7 @@ const LegacyAuthors = () => {
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
       
       {/* Legacy Content Section */}
-      <section id="legacy" className={`pt-32 pb-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
+      <section id="legacy" className={`pt-32 pb-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-16">
@@ -75,13 +75,13 @@ const LegacyAuthors = () => {
                     : ''
                 } ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/30 to-black border border-red-900/30 hover:border-red-600/50'
-                    : 'bg-gradient-to-br from-white to-red-50 border border-red-200 hover:border-red-400'
+                    ? 'bg-linear-to-br from-red-950/30 to-black border border-red-900/30 hover:border-red-600/50'
+                    : 'bg-linear-to-br from-white to-red-50 border border-red-200 hover:border-red-400'
                 }`}
               >
                 {/* Author Image */}
                 <div className="relative h-80 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent z-10"></div>
                   <img
                     src={author.image}
                     alt={author.name}
@@ -132,8 +132,8 @@ const LegacyAuthors = () => {
           {selectedAuthor && (
             <div className={`rounded-3xl overflow-hidden transition-all duration-500 ${
               darkMode 
-                ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/30'
-                : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
+                ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/30'
+                : 'bg-linear-to-br from-red-50 to-white border border-red-200'
             }`}>
               <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                 <div>
@@ -152,7 +152,7 @@ const LegacyAuthors = () => {
                     darkMode ? 'bg-red-950/30 border border-red-900/30' : 'bg-red-100 border border-red-200'
                   }`}>
                     <div className="flex items-start space-x-3">
-                      <Star className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+                      <Star className="w-6 h-6 text-red-600 shrink-0 mt-1" />
                       <div>
                         <h4 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                           Literary Legacy
@@ -188,7 +188,7 @@ const LegacyAuthors = () => {
                               Published {work.year}
                             </p>
                           </div>
-                          <BookOpen className="w-5 h-5 text-red-600 flex-shrink-0 ml-4" />
+                          <BookOpen className="w-5 h-5 text-red-600 shrink-0 ml-4" />
                         </div>
                       </div>
                     ))}
@@ -201,8 +201,8 @@ const LegacyAuthors = () => {
           {/* Tribute Message */}
           <div className={`mt-16 text-center p-8 rounded-2xl ${
             darkMode 
-              ? 'bg-gradient-to-r from-red-950/20 via-black to-red-950/20 border border-red-900/30'
-              : 'bg-gradient-to-r from-red-50 via-white to-red-50 border border-red-200'
+              ? 'bg-linear-to-r from-red-950/20 via-black to-red-950/20 border border-red-900/30'
+              : 'bg-linear-to-r from-red-50 via-white to-red-50 border border-red-200'
           }`}>
             <Heart className="w-12 h-12 text-red-600 mx-auto mb-4" />
             <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>

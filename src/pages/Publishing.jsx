@@ -217,7 +217,7 @@ const PublishingServices = () => {
       
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
-        <div className={`absolute inset-0 ${darkMode ? 'bg-gradient-to-br from-black via-red-950 to-black' : 'bg-gradient-to-br from-gray-100 via-red-100 to-gray-100'}`}>
+        <div className={`absolute inset-0 ${darkMode ? 'bg-linear-to-br from-black via-red-950 to-black' : 'bg-linear-to-br from-gray-100 via-red-100 to-gray-100'}`}>
           <div className={`absolute inset-0 ${darkMode ? 'bg-black/50' : 'bg-white/30'}`}></div>
         </div>
 
@@ -242,7 +242,7 @@ const PublishingServices = () => {
           <div className="space-y-8">
             <h1 className={`text-5xl md:text-7xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} leading-tight`}>
               Complete Publishing
-              <span className="block bg-gradient-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
+              <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
                 Services
               </span>
             </h1>
@@ -254,7 +254,7 @@ const PublishingServices = () => {
                 href="https://wa.me/7388270331?text=I'm%20interested%20in%20your%20publishing%20services"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
+                className="group px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-600/50 flex items-center space-x-2"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -284,11 +284,11 @@ const PublishingServices = () => {
                 onMouseLeave={() => setHoveredService(null)}
                 className={`group relative p-8 rounded-2xl transition-all duration-500 hover:-translate-y-2 ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20 hover:border-red-600/50 hover:shadow-2xl hover:shadow-red-600/20'
+                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20 hover:border-red-600/50 hover:shadow-2xl hover:shadow-red-600/20'
                     : 'bg-white border border-gray-200 hover:border-red-400 hover:shadow-2xl hover:shadow-red-300/30'
                 }`}
               >
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-16 h-16 rounded-xl bg-linear-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <service.icon className="w-8 h-8 text-white" />
                 </div>
                 
@@ -303,7 +303,7 @@ const PublishingServices = () => {
                 <ul className="space-y-2">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-red-600 shrink-0" />
                       <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {feature}
                       </span>
@@ -334,8 +334,8 @@ const PublishingServices = () => {
                 key={idx}
                 className={`relative p-6 rounded-2xl transition-all duration-300 hover:scale-105 ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
-                    : 'bg-gradient-to-br from-red-50 to-white border border-red-200'
+                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
+                    : 'bg-linear-to-br from-red-50 to-white border border-red-200'
                 }`}
               >
                 <div className="text-6xl font-bold text-red-600/20 mb-4">
@@ -354,7 +354,7 @@ const PublishingServices = () => {
       </section>
 
       {/* Testimonials */}
-      <section className={`py-20 ${darkMode ? 'bg-gradient-to-b from-black to-red-950/20' : 'bg-gradient-to-b from-white to-red-50'}`}>
+      <section className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
@@ -371,7 +371,7 @@ const PublishingServices = () => {
                 key={idx}
                 className={`p-8 rounded-2xl transition-all duration-300 hover:scale-105 ${
                   darkMode 
-                    ? 'bg-gradient-to-br from-red-950/20 to-black border border-red-900/20'
+                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20'
                     : 'bg-white border border-gray-200'
                 }`}
               >
@@ -398,7 +398,7 @@ const PublishingServices = () => {
       </section>
 
       {/* CTA Section */}
-      <section className={`py-20 relative overflow-hidden ${darkMode ? 'bg-gradient-to-br from-red-950 via-black to-red-950' : 'bg-gradient-to-br from-red-100 via-white to-red-100'}`}>
+      <section className={`py-20 relative overflow-hidden ${darkMode ? 'bg-linear-to-br from-red-950 via-black to-red-950' : 'bg-linear-to-br from-red-100 via-white to-red-100'}`}>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
             Ready to Publish Your Book?
@@ -411,7 +411,7 @@ const PublishingServices = () => {
               href="https://wa.me/7388270331?text=I'd%20like%20to%20discuss%20publishing%20my%20book"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30"
+              className="px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30"
             >
               Contact Us Today
             </a>
