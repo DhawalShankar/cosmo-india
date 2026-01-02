@@ -1,4 +1,4 @@
-# 📚 Cosmo India Prakashan - Digital Publishing Platform
+# 📚 Cosmo India Prakashan - A Media Platform
 
 > A full-stack e-commerce platform for book publishing and digital content distribution. Built with React, Node.js serverless functions, and MongoDB.
 
