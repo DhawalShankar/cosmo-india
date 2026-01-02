@@ -12,7 +12,7 @@ Cosmo India Prakashan is a digital publishing platform designed to make Indian l
 
 **Vision:** Build scalable publishing infrastructure to revive and promote Indian literature and culture on a global scale.
 
-**Built by:** Dhawal Shukla 
+**Built by:** Dhawal Shukla <br>
 **Live:** [cosmoindiaprakashan.in](https://cosmoindiaprakashan.in)
 
 ---
