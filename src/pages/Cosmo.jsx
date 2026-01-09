@@ -357,10 +357,12 @@ const CosmoPublicationSite = () => {
   }`} />
 </div>
     {/* Founders Section */}
-<div className="max-w-4xl mx-auto space-y-16">
-  <h2 className={`flex justify-self-center py-15 text-2xl md:text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+<div className="max-w-4xl mx-auto space-y-16 ">
+  <div className='flex justify-center'><h2 className={`pt-15 text-2xl md:text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} `}>
         Meet Our Founders
       </h2>
+      </div>
+  
   {/* Co-Founder 2 */}
   <div
     className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
