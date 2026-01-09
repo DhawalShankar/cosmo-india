@@ -29,7 +29,7 @@ const Navbar = () => {
   useEffect(() => {
     if (location.pathname === '/') {
       const handleScrollSpy = () => {
-        const sections = ['home', 'books', 'about', 'blog', 'contact'];
+        const sections = ['home', 'books', 'about', 'contact'];
         const scrollPosition = window.scrollY + 150;
 
         for (const sectionId of sections) {
@@ -123,7 +123,6 @@ const Navbar = () => {
                 { name: 'Home', id: 'home' },
                 { name: 'Books', id: 'books' },
                 { name: 'About', id: 'about' },
-                { name: 'Blog', id: 'blog' },
                 { name: 'Contact', id: 'contact' }
             ].map((item) => (
               <button
@@ -143,7 +142,21 @@ const Navbar = () => {
                 )}
               </button>
             ))}
-            
+            <button
+              onClick={() => handleNavigation('/blog')}
+              className={`font-medium transition-all duration-300 hover:scale-105 relative ${
+                isActive(null, '/blog')
+                  ? 'text-red-500'
+                  : scrolled 
+                    ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') 
+                    : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')
+              }`}
+            >
+              Blog
+              {isActive(null, '/blog') && (
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
+              )}
+            </button>
             <button
               onClick={() => handleNavigation('/marketplace')}
               className={`font-medium transition-all duration-300 hover:scale-105 relative ${
@@ -336,7 +349,6 @@ const Navbar = () => {
                 { name: 'Home', id: 'home' },
                 { name: 'Books', id: 'books' },
                 { name: 'About', id: 'about' },
-                { name: 'Blog', id: 'blog' },
                 { name: 'Contact', id: 'contact' }
             ].map((item) => (
               <button
@@ -351,7 +363,16 @@ const Navbar = () => {
                 {item.name}
               </button>
             ))}
-            
+             <button
+              onClick={() => handleNavigation('/blog')}
+              className={`block w-full text-left py-2 ${
+                isActive(null, '/legacy')
+                  ? 'text-red-500 font-semibold'
+                  : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
+              } transition-colors`}
+            >
+              Blog
+            </button>
             <button
               onClick={() => handleNavigation('/legacy')}
               className={`block w-full text-left py-2 ${

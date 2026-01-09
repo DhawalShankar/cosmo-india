@@ -22,6 +22,7 @@ import Contact from "./policies/Contact";
 import { DarkModeContext } from './context/DarkModeContext';
 import Footer from './components/footer';
 import ScrollToTop from './components/ScrolltoTop';
+import BlogPage from './pages/BlogPage';
 function App() {
   const { darkMode } = useContext(DarkModeContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,6 +40,7 @@ function App() {
        <ScrollToTop />
       <Routes>
         <Route path="/" element={<CosmoPublicationSite />} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/legacy" element={<LegacyAuthors />} />
         <Route path="/publish" element={<PublishingServices />} />
         <Route path="/discuss" element={<DiscussYourBook />} />

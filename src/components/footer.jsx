@@ -69,7 +69,7 @@ const Footer = () => {
               {location.pathname === '/' ? (
                 // On home page - show section links
                 <>
-                  {['Books', 'About', 'Blog', 'Contact'].map((link) => (
+                  {['Books', 'About', 'Contact'].map((link) => (
                     <li key={link}>
                       <button 
                         onClick={() => scrollToSection(link.toLowerCase())}
@@ -115,6 +115,7 @@ const Footer = () => {
                       Contact
                     </button>
                   </li>
+                  
                 </>
               )}
             </ul>
@@ -126,6 +127,14 @@ const Footer = () => {
               More
             </h4>
             <ul className="space-y-2">
+              <li>
+                <button 
+                  onClick={() => navigate('/blog')}
+                  className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
+                >
+                  Blog
+                </button>
+              </li>
               <li>
                 <button 
                   onClick={() => navigate('/legacy')}

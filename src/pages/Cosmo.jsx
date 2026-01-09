@@ -229,9 +229,9 @@ const CosmoPublicationSite = () => {
       <section id="books" className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-              Featured Publications
-            </h2>
+            <h2 className={`text-3xl md:text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+        Featured Publications
+      </h2>
             <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-2xl mx-auto`}>
               Curated collection of our most celebrated works
             </p>
@@ -296,18 +296,38 @@ const CosmoPublicationSite = () => {
                 </div>
               </div>
             ))}
+           <div className="lg:col-start-2 lg:col-span-1 sm:col-span-2 col-span-1 flex justify-center">
+  <button
+    onClick={() => navigate("/marketplace")}
+    className="px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30"
+  >
+    Explore Our Marketplace
+  </button>
+</div>
+
           </div>
+         
         </div>
+         {/* Section End Marker */}
+<div className="mt-20 flex justify-center">
+  <div className={`h-1 w-24 rounded-full ${
+    darkMode 
+      ? 'bg-linear-to-r from-transparent via-red-600/60 to-transparent'
+      : 'bg-linear-to-r from-transparent via-red-400 to-transparent'
+  }`} />
+</div>
+
       </section>
 
       
      {/* About Section */}
-<section id="about" className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
+<section id="about" className={`pb-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-12">
-      <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-        About Cosmo India Prakashan
+      <h2 className={`text-3xl md:text-4xl font-bold ${darkMode ? 'text-red-400' : 'text-red-500'} mb-4`}>
+        About Us
       </h2>
+
       <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto`}>
         Since 1980s, we have been committed to publishing excellence, bringing Indian voices and stories to readers worldwide. Our diverse catalog spans fiction, non-fiction, academic works, and more.
       </p>
@@ -329,10 +349,18 @@ const CosmoPublicationSite = () => {
 
         
     </div> 
-
+<div className="mt-20 flex justify-center">
+  <div className={`h-1 w-24 rounded-full ${
+    darkMode 
+      ? 'bg-linear-to-r from-transparent via-red-600/60 to-transparent'
+      : 'bg-linear-to-r from-transparent via-red-400 to-transparent'
+  }`} />
+</div>
     {/* Founders Section */}
 <div className="max-w-4xl mx-auto space-y-16">
-  
+  <h2 className={`flex justify-self-center py-15 text-2xl md:text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+        Meet Our Founders
+      </h2>
   {/* Co-Founder 2 */}
   <div
     className={`rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl ${
@@ -461,22 +489,7 @@ const CosmoPublicationSite = () => {
   </div>
 </section>
 
-      {/* Blog Section */}
-      <section id="blog" className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-            Latest from Our Blog
-          </h2>
-          <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Insights, stories, and updates from the world of publishing
-          </p>
-
-          <div className="mt-8">
-            <Posts darkMode={darkMode} />
-          </div>
-        </div>
-      </section>
-
+    
       {/* CTA Section */}
       <section className={`py-20 relative overflow-hidden ${darkMode ? 'bg-linear-to-br from-red-950 via-black to-red-950' : 'bg-linear-to-br from-red-100 via-white to-red-100'}`}>
         <div className="absolute inset-0">
@@ -517,10 +530,10 @@ const CosmoPublicationSite = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-              Wanna Write for Periodicals?
+              Have Something to Share?
             </h2>
             <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              We'd love to hear from you
+              We'd love to hear from you!
             </p>
           </div>
 
