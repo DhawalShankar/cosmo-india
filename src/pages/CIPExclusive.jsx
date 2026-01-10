@@ -45,9 +45,9 @@ const CIPExclusive = () => {
       title: 'Premium E-Book Collection',
       description: 'Access our exclusive collection of digital books',
       items: [
-        { name: 'Ratna Rahasya V1', size: '12 MB', link: '#' },
-        { name: 'Hindu Dainik Charya', size: '8 MB', link: '#' },
-        { name: 'Calendar 2026', size: '15 MB', link: '#' }
+        { name: 'Ratna Rahasya V1', size: 'to be released', link: '#' },
+        { name: 'Hindu Dainik Charya', size: 'to be released', link: '#' },
+        { name: 'Calendar 2026', size: '133.4 MB', link: 'https://drive.google.com/file/d/1808RgqjgaALuzaM7v1tHbZVbmxj9jTRb/view?usp=drive_link' }
       ]
     },
     {
@@ -57,9 +57,9 @@ const CIPExclusive = () => {
       title: 'Digital Magazine Archive',
       description: 'Latest issues of educational magazines',
       items: [
-        { name: 'CIP Jan Edition', size: '25 MB', link: '#' },
-        { name: 'Celestial 2025 Edition', size: '18 MB', link: '#' },
-        { name: 'Literacy and Life', size: '22 MB', link: '#' }
+        { name: 'CIP Jan Edition', size: 'to be released', link: '#' },
+        { name: 'Celestial 2025 Edition', size: 'to be released', link: '#' },
+        { name: 'Literacy and Life', size: 'to be released', link: '#' }
       ]
     },
     {
@@ -91,7 +91,7 @@ const CIPExclusive = () => {
             }`}>
               <Lock className={`w-4 h-4 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
               <span className={`text-sm font-semibold ${darkMode ? 'text-red-400' : 'text-red-600'}`}>
-                Login required to access content - Under Development
+                Login required to access content
               </span>
             </div>
           )}
