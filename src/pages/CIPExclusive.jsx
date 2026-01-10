@@ -47,7 +47,7 @@ const CIPExclusive = () => {
       items: [
         { name: 'Ratna Rahasya V1', size: 'to be released', link: '#' },
         { name: 'Hindu Dainik Charya', size: 'to be released', link: '#' },
-        { name: 'Calendar 2026', size: '133.4 MB', link: 'https://drive.google.com/uc?export=download&id=1808RgqjgaALuzaM7v1tHbZVbmxj9jTRb' }
+        { name: 'Calendar 2026', size: '928.10 KB', link: 'https://drive.google.com/uc?export=download&id=1808RgqjgaALuzaM7v1tHbZVbmxj9jTRb' }
       ]
     },
     {
