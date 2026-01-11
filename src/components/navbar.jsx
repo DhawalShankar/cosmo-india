@@ -172,7 +172,21 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
               )}
             </button>
-
+            <button
+              onClick={() => handleNavigation('/releases')}
+              className={`font-medium transition-all duration-300 hover:scale-105 relative ${
+                isActive(null, '/releases')
+                  ? 'text-red-500'
+                  : scrolled 
+                    ? (darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500') 
+                    : (darkMode ? 'text-white hover:text-red-400' : 'text-gray-900 hover:text-red-500')
+              }`}
+            >
+              New Releases
+              {isActive(null, '/releases') && (
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
+              )}
+            </button>
             <button
               onClick={() => handleNavigation('/legacy')}
               className={`font-medium transition-all duration-300 hover:scale-105 relative ${

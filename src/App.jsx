@@ -23,6 +23,7 @@ import { DarkModeContext } from './context/DarkModeContext';
 import Footer from './components/footer';
 import ScrollToTop from './components/ScrolltoTop';
 import BlogPage from './pages/BlogPage';
+import Release from './pages/Release';
 function App() {
   const { darkMode } = useContext(DarkModeContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,6 +44,7 @@ function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/legacy" element={<LegacyAuthors />} />
         <Route path="/publish" element={<PublishingServices />} />
+        <Route path="/releases" element={<Release />} />
         <Route path="/discuss" element={<DiscussYourBook />} />
         <Route path="/marketplace" element={<Marketplace />} /> 
         <Route path="/cart" element={<Cart />} />
