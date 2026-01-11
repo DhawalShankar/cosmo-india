@@ -135,12 +135,12 @@ const Release = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                <span className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                {/* <span className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                   {book.rating}
                 </span>
                 <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   ({book.reviews} reviews)
-                </span>
+                </span> */}
               </div>
             </div>
 
