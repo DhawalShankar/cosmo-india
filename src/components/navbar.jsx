@@ -18,7 +18,16 @@ const Navbar = () => {
   const location = useLocation();
   const { cart } = useCart();
   const cartItemCount = cart.reduce((total, item) => total + item.qty, 0);
-
+    useEffect(() => {
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Yatra+One&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -118,7 +127,7 @@ const Navbar = () => {
             </span>
           </button>
            
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-5">
             {[
                 { name: 'Home', id: 'home' },
                 { name: 'Books', id: 'books' },
