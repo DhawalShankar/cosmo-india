@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { BookOpen, Calendar, Download, Heart, Share2, Star, ShoppingCart, Lock } from 'lucide-react';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { AuthContext } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 const Release = () => {
   const { darkMode } = useContext(DarkModeContext);
@@ -56,12 +57,12 @@ const Release = () => {
     return;
   }
 
-  setMessage('Redirecting to payment gateway...');
+  setMessage('Releasing on Basant Panchami');
   setShowMessage(true);
 
   setTimeout(() => {
     setShowMessage(false);
-    // payment redirect logic here
+    Navigate('/marketplace');
   }, 2000);
 };
 
