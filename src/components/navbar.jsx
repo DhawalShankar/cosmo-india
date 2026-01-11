@@ -127,7 +127,7 @@ const Navbar = () => {
             </span>
           </button>
            
-          <div className="hidden md:flex items-center space-x-5">
+          <div className="hidden md:flex items-center space-x-6">
             {[
                 { name: 'Home', id: 'home' },
                 { name: 'Books', id: 'books' },
