@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { BookOpen, Calendar, Download, Heart, Share2, Star, ShoppingCart, Lock } from 'lucide-react';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { AuthContext } from '../context/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Release = () => {
   const { darkMode } = useContext(DarkModeContext);
@@ -10,7 +10,7 @@ const Release = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
-  
+  const navigate = useNavigate();
   // Load Yatra One font
   useEffect(() => {
     const link = document.createElement('link');
@@ -62,7 +62,7 @@ const Release = () => {
 
   setTimeout(() => {
     setShowMessage(false);
-    Navigate('/marketplace');
+    navigate('/marketplace');
   }, 2000);
 };
 
