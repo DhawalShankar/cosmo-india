@@ -113,7 +113,7 @@ const Navbar = () => {
 
             <span className={`text-2xl font-bold bg-linear-to-r from-red-600 to-red-400 bg-clip-text ${
               scrolled ? 'text-transparent' : (darkMode ? 'text-white hover:text-red-400 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'text-gray-900')
-            }`}>
+            }`} style={{ fontFamily: "'Yatra One', cursive" }}>
               Cosmo India Prakashan
             </span>
           </button>
