@@ -143,59 +143,48 @@ const LegacyAuthors = () => {
           }}></div>
         </div>
 
-        <div className="relative z-10 mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
-          <div className={`${darkMode ? 'bg-white' : 'bg-transparent'} m-2  w-200 flex items-center justify-center justify-self-center rounded-2xl transition-colors duration-300`}>
+        <div className="relative z-10 mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12 sm:py-16 md:py-20">
+          <div className={`${darkMode ? 'bg-white' : 'bg-transparent'} mx-auto w-40 sm:w-48 md:w-60 flex items-center justify-center rounded-xl md:rounded-2xl transition-colors duration-300 mb-6`}>
               <img
                 src="/cosmo-logo.png"
                 alt="Logo"
-                className="w-60 transition-all duration-300"
+                className="w-full transition-all duration-300"
               />
             </div>
           
           
           
-          <div className={`inline-block px-6 py-3 rounded-full mb-8 ${
+          <div className={`inline-block px-4 py-2 rounded-full mb-6 ${
             darkMode ? 'bg-red-950/50 border border-red-800' : 'bg-red-100 border border-red-300'
           }`}>
-            <span className={`text-xl font-semibold ${darkMode ? 'text-red-400' : 'text-red-700'}`}>
+            <span className={`text-sm sm:text-base md:text-lg font-semibold ${darkMode ? 'text-red-400' : 'text-red-700'}`}>
               Since 1982 • Four Decades of Purpose-Driven Publishing
             </span>
           </div>
 
         
 
-          <div className={`max-w-5xl mx-auto p-8 rounded-2xl ${
+          <div className={`max-w-5xl mx-auto p-4 sm:p-6 md:p-8 rounded-xl md:rounded-2xl ${
             darkMode ? 'bg-red-950/30 border border-red-900/50' : 'bg-white border border-red-200 shadow-xl'
           }`}>
-            <Quote className="w-12 h-12 text-red-600 mx-auto mb-6" />
-            <p className={`text-xl md:text-xl italic leading-relaxed ${
+            <Quote className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-red-600 mx-auto mb-4" />
+            <p className={`text-base sm:text-lg md:text-xl italic leading-relaxed ${
               darkMode ? 'text-gray-300' : 'text-gray-700'
             }`}>
               "Writing is not merely information, but a medium of understanding — of the self, society, and the world. Publishing is not a transaction, but a responsibility."
             </p>
           </div>
         </div>
-
-        {/* Scroll Indicator */}
-        {/* <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className={`w-6 h-10 rounded-full border-2 ${
-            darkMode ? 'border-red-600' : 'border-red-500'
-          } flex items-start justify-center p-2`}>
-            <div className={`w-1 h-3 rounded-full ${
-              darkMode ? 'bg-red-600' : 'bg-red-500'
-            } animate-pulse`}></div>
-          </div>
-        </div> */}
       </section>
 
       {/* Stats Section */}
-      <section className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
+      <section className={`py-12 sm:py-16 md:py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className={`text-center p-6 rounded-xl transition-all duration-500 ${
+                className={`text-center p-4 sm:p-5 md:p-6 rounded-lg md:rounded-xl transition-all duration-500 ${
                   visibleStats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 } ${
                   darkMode 
@@ -204,11 +193,11 @@ const LegacyAuthors = () => {
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <stat.icon className="w-10 h-10 text-red-600 mx-auto mb-4" />
-                <div className={`text-4xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-red-600 mx-auto mb-2 sm:mb-3 md:mb-4" />
+                <div className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                   {stat.number}
                 </div>
-                <div className={`text-sm font-semibold ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className={`text-xs sm:text-sm font-semibold ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {stat.label}
                 </div>
               </div>
@@ -218,36 +207,78 @@ const LegacyAuthors = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className={`py-32 ${darkMode ? 'bg-linear-to-b from-black via-red-950/10 to-black' : 'bg-linear-to-b from-gray-50 via-red-50 to-gray-50'}`}>
+      <section className={`py-16 sm:py-20 md:py-32 ${darkMode ? 'bg-linear-to-b from-black via-red-950/10 to-black' : 'bg-linear-to-b from-gray-50 via-red-50 to-gray-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <Clock className="w-16 h-16 text-red-600 mx-auto mb-6" />
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+            <Clock className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 text-red-600 mx-auto mb-4 sm:mb-6" />
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               A Journey Through Time
             </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto`}>
+            <p className={`text-base sm:text-lg md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto px-4`}>
               From humble beginnings to a legacy spanning over four decades
             </p>
           </div>
 
           <div className="relative">
-            {/* Timeline Line */}
-            <div className={`absolute left-1/2 transform -translate-x-1/2 h-full w-1 ${
+            {/* Timeline Line - Hidden on mobile, shown on md+ */}
+            <div className={`hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 ${
+              darkMode ? 'bg-linear-to-b from-red-900 via-red-600 to-red-900' : 'bg-linear-to-b from-red-300 via-red-500 to-red-300'
+            }`}></div>
+
+            {/* Mobile Timeline Line - Left side */}
+            <div className={`md:hidden absolute left-4 top-0 bottom-0 w-0.5 ${
               darkMode ? 'bg-linear-to-b from-red-900 via-red-600 to-red-900' : 'bg-linear-to-b from-red-300 via-red-500 to-red-300'
             }`}></div>
 
             {/* Timeline Events */}
-            <div className="space-y-24">
+            <div className="space-y-8 sm:space-y-12 md:space-y-24">
               {timelineEvents.map((event, index) => (
                 <div
                   key={index}
-                  className={`relative flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                  className={`relative md:flex md:items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                   onMouseEnter={() => setActiveTimeline(index)}
                   onMouseLeave={() => setActiveTimeline(null)}
                 >
-                  {/* Content */}
-                  <div className="w-5/12">
-                    <div className={`p-8 rounded-2xl transition-all duration-500 ${
+                  {/* Mobile Layout */}
+                  <div className="md:hidden pl-12 pr-4">
+                    <div className={`p-4 sm:p-6 rounded-xl transition-all duration-500 ${
+                      activeTimeline === index ? 'scale-105' : 'scale-100'
+                    } ${
+                      event.highlight
+                        ? (darkMode 
+                            ? 'bg-linear-to-br from-red-950/50 to-black border-2 border-red-600/50 shadow-2xl shadow-red-600/20'
+                            : 'bg-linear-to-br from-red-100 to-white border-2 border-red-400 shadow-2xl shadow-red-300/30')
+                        : (darkMode 
+                            ? 'bg-red-950/20 border border-red-900/30'
+                            : 'bg-white border border-red-200')
+                    }`}>
+                      <div className="flex items-center space-x-2 mb-3">
+                        <event.icon className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
+                        <span className={`text-xl sm:text-2xl font-bold ${darkMode ? 'text-red-500' : 'text-red-600'}`}>
+                          {event.year}
+                        </span>
+                      </div>
+                      <h3 className={`text-lg sm:text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {event.title}
+                      </h3>
+                      <p className={`text-sm sm:text-base leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        {event.description}
+                      </p>
+                    </div>
+
+                    {/* Mobile Dot */}
+                    <div className="absolute left-4 top-6 transform -translate-x-1/2">
+                      <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
+                        event.highlight
+                          ? (darkMode ? 'bg-red-600 ring-2 ring-red-600/30' : 'bg-red-500 ring-2 ring-red-200')
+                          : (darkMode ? 'bg-red-800' : 'bg-red-400')
+                      }`}></div>
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout - Content */}
+                  <div className="hidden md:block md:w-5/12">
+                    <div className={`p-6 lg:p-8 rounded-2xl transition-all duration-500 ${
                       activeTimeline === index ? 'scale-105' : 'scale-100'
                     } ${
                       event.highlight
@@ -259,22 +290,22 @@ const LegacyAuthors = () => {
                             : 'bg-white border border-red-200')
                     }`}>
                       <div className="flex items-center space-x-3 mb-4">
-                        <event.icon className="w-6 h-6 text-red-600" />
-                        <span className={`text-3xl font-bold ${darkMode ? 'text-red-500' : 'text-red-600'}`}>
+                        <event.icon className="w-5 h-5 lg:w-6 lg:h-6 text-red-600" />
+                        <span className={`text-2xl lg:text-3xl font-bold ${darkMode ? 'text-red-500' : 'text-red-600'}`}>
                           {event.year}
                         </span>
                       </div>
-                      <h3 className={`text-2xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <h3 className={`text-xl lg:text-2xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                         {event.title}
                       </h3>
-                      <p className={`text-lg leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <p className={`text-base lg:text-lg leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {event.description}
                       </p>
                     </div>
                   </div>
 
-                  {/* Center Dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2">
+                  {/* Desktop Center Dot */}
+                  <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2">
                     <div className={`w-6 h-6 rounded-full transition-all duration-300 ${
                       activeTimeline === index
                         ? (darkMode ? 'bg-red-500 ring-8 ring-red-500/30 scale-150' : 'bg-red-600 ring-8 ring-red-300 scale-150')
@@ -284,8 +315,8 @@ const LegacyAuthors = () => {
                     }`}></div>
                   </div>
 
-                  {/* Spacer */}
-                  <div className="w-5/12"></div>
+                  {/* Desktop Spacer */}
+                  <div className="hidden md:block md:w-5/12"></div>
                 </div>
               ))}
             </div>
@@ -294,35 +325,35 @@ const LegacyAuthors = () => {
       </section>
 
       {/* Focus Areas Section */}
-      <section className={`py-32 ${darkMode ? 'bg-black' : 'bg-white'}`}>
+      <section className={`py-16 sm:py-20 md:py-32 ${darkMode ? 'bg-black' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <Sparkles className="w-16 h-16 text-red-600 mx-auto mb-6" />
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+            <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 text-red-600 mx-auto mb-4 sm:mb-6" />
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               Our Focus Areas
             </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto`}>
+            <p className={`text-base sm:text-lg md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto px-4`}>
               Creating space for writing that lasts beyond the moment
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {focusAreas.map((area, index) => (
               <div
                 key={index}
-                className={`group p-8 rounded-2xl transition-all duration-500 hover:-translate-y-2 ${
+                className={`group p-6 sm:p-8 rounded-xl md:rounded-2xl transition-all duration-500 hover:-translate-y-2 ${
                   darkMode 
                     ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/30 hover:border-red-600/50 hover:shadow-2xl hover:shadow-red-600/20'
                     : 'bg-linear-to-br from-white to-red-50 border border-red-200 hover:border-red-400 hover:shadow-2xl'
                 }`}
               >
-                <div className={`w-16 h-16 rounded-xl bg-linear-to-br ${area.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <area.icon className="w-8 h-8 text-white" />
+                <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl bg-linear-to-br ${area.color} flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <area.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                   {area.title}
                 </h3>
-                <p className={`text-lg leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <p className={`text-base sm:text-lg leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   {area.description}
                 </p>
               </div>
@@ -332,27 +363,27 @@ const LegacyAuthors = () => {
       </section>
 
       {/* Legacy Authors Section */}
-      <section className={`py-32 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
+      <section className={`py-16 sm:py-20 md:py-32 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 sm:mb-16">
             <div className="inline-flex items-center space-x-2 mb-4">
-              <Heart className="w-8 h-8 text-red-600 animate-pulse" />
-              <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 animate-pulse" />
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Legacy Authors
               </h2>
-              <Heart className="w-8 h-8 text-red-600 animate-pulse" />
+              <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 animate-pulse" />
             </div>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto`}>
+            <p className={`text-base sm:text-lg md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-3xl mx-auto px-4`}>
               Honoring the literary giants who shaped our publishing house and enriched countless lives through their words
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
             {legacyAuthors.map((author) => (
               <div
                 key={author.id}
                 onClick={() => setSelectedAuthor(selectedAuthor?.id === author.id ? null : author)}
-                className={`group cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
+                className={`group cursor-pointer rounded-xl md:rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
                   selectedAuthor?.id === author.id 
                     ? (darkMode ? 'ring-2 ring-red-600 shadow-2xl shadow-red-600/30' : 'ring-2 ring-red-500 shadow-2xl shadow-red-300/50')
                     : ''
@@ -362,7 +393,7 @@ const LegacyAuthors = () => {
                     : 'bg-linear-to-br from-white to-red-50 border border-red-200 hover:border-red-400'
                 }`}
               >
-                <div className="relative h-80 overflow-hidden">
+                <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
                   <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent z-10"></div>
                   <img
                     src={author.image}
@@ -370,7 +401,7 @@ const LegacyAuthors = () => {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                   />
                   <div className="absolute top-4 right-4 z-20">
-                    <span className={`px-4 py-2 rounded-full text-xs font-semibold ${
+                    <span className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-semibold ${
                       author.status === 'departed' 
                         ? 'bg-gray-900/80 text-gray-300'
                         : 'bg-amber-900/80 text-amber-300'
@@ -379,7 +410,7 @@ const LegacyAuthors = () => {
                     </span>
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 z-20">
-                    <h3 className="text-2xl font-bold text-white mb-1">{author.name}</h3>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">{author.name}</h3>
                     <div className="flex items-center space-x-2 text-gray-300">
                       <Calendar className="w-4 h-4" />
                       <span className="text-sm">{author.yearsActive}</span>
@@ -387,18 +418,18 @@ const LegacyAuthors = () => {
                   </div>
                 </div>
 
-                <div className="p-6">
-                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-4 line-clamp-2`}>
+                <div className="p-4 sm:p-6">
+                  <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-4 line-clamp-2`}>
                     {author.bio}
                   </p>
                   <div className={`flex items-center justify-between pt-4 border-t ${darkMode ? 'border-red-900/30' : 'border-red-200'}`}>
                     <div className="flex items-center space-x-2">
-                      <BookOpen className="w-5 h-5 text-red-600" />
-                      <span className={`text-sm font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
+                      <span className={`text-xs sm:text-sm font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {author.notableWorks.length} Notable Works
                       </span>
                     </div>
-                    <button className={`text-sm font-semibold transition-colors ${
+                    <button className={`text-xs sm:text-sm font-semibold transition-colors ${
                       darkMode ? 'text-red-500 hover:text-red-400' : 'text-red-600 hover:text-red-700'
                     }`}>
                       {selectedAuthor?.id === author.id ? 'Show Less' : 'Read More'}
@@ -410,34 +441,34 @@ const LegacyAuthors = () => {
           </div>
 
           {selectedAuthor && (
-            <div className={`rounded-3xl overflow-hidden transition-all duration-500 ${
+            <div className={`rounded-2xl md:rounded-3xl overflow-hidden transition-all duration-500 ${
               darkMode 
                 ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/30'
                 : 'bg-linear-to-br from-red-50 to-white border border-red-200'
             }`}>
-              <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 p-6 sm:p-8 md:p-12">
                 <div>
-                  <div className="mb-6">
-                    <h3 className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
+                  <div className="mb-4 sm:mb-6">
+                    <h3 className={`text-2xl sm:text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
                       {selectedAuthor.name}
                     </h3>
-                    <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className={`text-base sm:text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       {selectedAuthor.yearsActive}
                     </p>
                   </div>
-                  <p className={`text-lg leading-relaxed mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <p className={`text-base sm:text-lg leading-relaxed mb-4 sm:mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                     {selectedAuthor.bio}
                   </p>
-                  <div className={`p-6 rounded-xl ${
+                  <div className={`p-4 sm:p-6 rounded-xl ${
                     darkMode ? 'bg-red-950/30 border border-red-900/30' : 'bg-red-100 border border-red-200'
                   }`}>
                     <div className="flex items-start space-x-3">
-                      <Star className="w-6 h-6 text-red-600 shrink-0 mt-1" />
+                      <Star className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 shrink-0 mt-1" />
                       <div>
-                        <h4 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <h4 className={`text-base sm:text-lg font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                           Literary Legacy
                         </h4>
-                        <p className={darkMode ? 'text-gray-400' : 'text-gray-700'}>
+                        <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-400' : 'text-gray-700'}`}>
                           {selectedAuthor.legacy}
                         </p>
                       </div>
@@ -446,14 +477,14 @@ const LegacyAuthors = () => {
                 </div>
 
                 <div>
-                  <h4 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
+                  <h4 className={`text-xl sm:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4 sm:mb-6`}>
                     Notable Works
                   </h4>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {selectedAuthor.notableWorks.map((work, index) => (
                       <div
                         key={index}
-                        className={`p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
+                        className={`p-3 sm:p-4 rounded-lg md:rounded-xl transition-all duration-300 hover:scale-105 ${
                           darkMode 
                             ? 'bg-black/30 border border-red-900/20 hover:border-red-600/50'
                             : 'bg-white border border-red-200 hover:border-red-400 hover:shadow-lg'
@@ -461,14 +492,14 @@ const LegacyAuthors = () => {
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h5 className={`font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                            <h5 className={`text-base sm:text-lg font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                               {work.title}
                             </h5>
-                            <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                            <p className={`text-xs sm:text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                               Published {work.year}
                             </p>
                           </div>
-                          <BookOpen className="w-5 h-5 text-red-600 shrink-0 ml-4" />
+                          <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 shrink-0 ml-4" />
                         </div>
                       </div>
                     ))}
@@ -478,16 +509,16 @@ const LegacyAuthors = () => {
             </div>
           )}
 
-          <div className={`mt-16 text-center p-8 rounded-2xl ${
+          <div className={`mt-12 sm:mt-16 text-center p-6 sm:p-8 rounded-xl md:rounded-2xl ${
             darkMode 
               ? 'bg-linear-to-r from-red-950/20 via-black to-red-950/20 border border-red-900/30'
               : 'bg-linear-to-r from-red-50 via-white to-red-50 border border-red-200'
           }`}>
-            <Heart className="w-12 h-12 text-red-600 mx-auto mb-4" />
-            <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+            <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-red-600 mx-auto mb-4" />
+            <h3 className={`text-xl sm:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-3 sm:mb-4`}>
               Their Words Live On
             </h3>
-            <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-2xl mx-auto`}>
+            <p className={`text-base sm:text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-2xl mx-auto px-4`}>
               Though they may have left us or retired from active writing, their contributions continue to inspire and enlighten readers around the world. Their legacy remains eternal in the pages they've gifted to humanity.
             </p>
           </div>
@@ -495,24 +526,24 @@ const LegacyAuthors = () => {
       </section>
 
       {/* Final Statement Section */}
-      <section className={`py-32 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
+      <section className={`py-16 sm:py-20 md:py-32 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`p-12 rounded-3xl text-center ${
+          <div className={`p-6 sm:p-8 md:p-12 rounded-2xl md:rounded-3xl text-center ${
             darkMode 
               ? 'bg-linear-to-br from-red-950/30 via-black to-red-950/30 border-2 border-red-600/50'
               : 'bg-linear-to-br from-white to-red-50 border-2 border-red-400 shadow-2xl'
           }`}>
-            <Award className="w-20 h-20 text-red-600 mx-auto mb-8" />
-            <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            <Award className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 text-red-600 mx-auto mb-6 sm:mb-8" />
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               MSME Registered Under Udyam
             </h2>
-            <p className={`text-xl leading-relaxed mb-8 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <p className={`text-base sm:text-lg md:text-xl leading-relaxed mb-6 sm:mb-8 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               Guided by editors and authors with over 40 years of experience, Cosmo India Prakashan has engaged with subjects ranging from astrology and philosophy to literature, essays, and reflective writing — always emphasizing depth, clarity, and sincerity over trend-driven content.
             </p>
-            <div className={`inline-block px-8 py-4 rounded-full ${
+            <div className={`inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full ${
               darkMode ? 'bg-red-950/50 border-2 border-red-600' : 'bg-red-100 border-2 border-red-500'
             }`}>
-              <p className={`text-lg font-bold ${darkMode ? 'text-red-400' : 'text-red-700'}`}>
+              <p className={`text-base sm:text-lg font-bold ${darkMode ? 'text-red-400' : 'text-red-700'}`}>
                 Where thoughtful writing finds the patience it deserves
               </p>
             </div>
