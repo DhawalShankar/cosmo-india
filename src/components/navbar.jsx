@@ -418,6 +418,16 @@ const Navbar = () => {
               Marketplace
             </button>
             <button
+              onClick={() => handleNavigation('/releases')}
+              className={`block w-full text-left py-2 ${
+                isActive(null, '/releases')
+                  ? 'text-red-500 font-semibold'
+                  : darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-500'
+              } transition-colors`}
+            >
+              New Releases
+            </button>
+            <button
               onClick={() => handleNavigation('/exclusive')}
               className={`block italic w-full text-left py-2 ${
                 isActive(null, '/exclusive')
