@@ -1,22 +1,44 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DM5B019TE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-4DM5B019TE');
-</script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <title>Cosmo India Prakashan (Est. 1982) | Publishing House</title>
+
+    <meta name="description"
+      content="Cosmo India Prakashan, established in 1982, is an Indian publishing house for books, literature, and journalism." />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cosmo-india</title>
+
+    <!-- Favicon (replace vite.svg with your logo) -->
+    <link rel="icon" type="image/png" href="/cosmo-logo.png" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DM5B019TE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4DM5B019TE');
+    </script>
+
+    <!-- Razorpay -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- Organization Schema (for logo & title in Google) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Publisher",
+      "name": "Cosmo India Prakashan",
+      "foundingDate": "1982",
+      "url": "https://yourdomain.com",
+      "logo": "https://yourdomain.com/logo.png"
+    }
+    </script>
   </head>
-  
+
   <body>
-    
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

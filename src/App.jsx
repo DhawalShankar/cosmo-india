@@ -34,6 +34,7 @@ function App() {
   };
 
   return (
+    
     <div className={`min-h-screen transition-colors duration-300 ${
       darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
     }`}>
