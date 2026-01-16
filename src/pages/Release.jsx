@@ -42,7 +42,7 @@ const Release = () => {
       'Bridges ancient principles with contemporary homes and lifestyles'
     ],
     authorBio: 'Dhawal Shukla is an author, engineer, and seeker of ancient wisdom. With a deep passion for Sanatan philosophy and its practical application in modern life, he brings a fresh voice that bridges traditional Eastern understanding with today’s lived experience. In Sacred Dwelling, Dhawal explores how our living spaces — their orientation, harmony, and subtle energies — influence our peace, prosperity, and well-being. Drawing on classical Vāstu and astrological insights, he presents age-tested principles in clear, accessible language, making timeless knowledge relevant for contemporary readers. Dhawal lives in India and is dedicated to helping individuals create homes that are not merely structures, but sacred spaces that support happy and purposeful lives.',
-    downloadLink: 'https://drive.google.com/uc?export=download&id=XXXXX'
+    downloadLink: 'https://www.amazon.in/dp/B0GH18HND3/ref=sr_1_2?crid=296GKENKNAHMW&dib=eyJ2IjoiMSJ9.z52D0UYCAq9XRRrvzjAV80eS4ZKedTCORKFRyihAbdsfUzuBZzWN4XcHDLL816AxxRntOdwvTdfssOCPDxuQopnn0MgNMqLAk8q2FhfYQsx2HZh-jSYH3HhR4yqzDj65gOEjVGnJ1BttaDL4X8QmFSa5smPUO5Rcs2CXRzxM5ZRpUalFJ3x8l6WgdRQztTsr5JHXFnKQIuGDUy_QAilFpizG4MKh844bgqOm7hwDf7w.baP4_c-y8ShYCsRmFkEi0E93mwNdUT1oZC_VfBf9gkM&dib_tag=se&keywords=sacred+dwelling&qid=1768556616&sprefix=sacred+dwelli%2Caps%2C606&sr=8-2'
   };
 
  const handlePurchase = () => {
@@ -68,12 +68,8 @@ const Release = () => {
 
 
 
-  const handleDownload = () => {
-    if (!user) {
-      alert('Please login to download');
-      window.location.href = '/login';
-      return;
-    }
+  const handleEbook = () => {
+   
     window.location.href = book.downloadLink;
   };
 
@@ -170,22 +166,16 @@ const Release = () => {
   </button>
 )}
 
-              {/* <button
-                onClick={handleDownload}
-                className={`px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all duration-300 ${
-                  user
-                    ? darkMode
-                      ? 'bg-white/10 text-white border-2 border-white/20 hover:bg-white/20 hover:scale-105'
-                      : 'bg-gray-100 text-gray-900 border-2 border-gray-300 hover:bg-gray-200 hover:scale-105'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
+              <button
+                onClick={handleEbook}
+                className="px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all duration-300 bg-red-700 text-gray-100 border-2  hover:bg-red-600 hover:scale-105"
               >
                 <div className="flex items-center space-x-2">
-                  {!user && <Lock className="w-5 h-5" />}
                   <Download className="w-5 h-5" />
-                  <span>Download</span>
+                  <span>Buy Ebook</span>
                 </div>
-              </button> */}
+              </button>
+
 
               <button
                 onClick={() => setIsLiked(!isLiked)}

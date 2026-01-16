@@ -181,7 +181,7 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
               )}
             </button>
-            {/* <button
+            <button
               onClick={() => handleNavigation('/releases')}
               className={`font-medium transition-all duration-300 hover:scale-105 relative ${
                 isActive(null, '/releases')
@@ -195,7 +195,7 @@ const Navbar = () => {
               {isActive(null, '/releases') && (
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-red-500 rounded-full"></span>
               )}
-            </button> */}
+            </button>
             <button
               onClick={() => handleNavigation('/legacy')}
               className={`font-medium transition-all duration-300 hover:scale-105 relative ${
@@ -417,7 +417,7 @@ const Navbar = () => {
             >
               Marketplace
             </button>
-            {/* <button
+            <button
               onClick={() => handleNavigation('/releases')}
               className={`block w-full text-left py-2 ${
                 isActive(null, '/releases')
@@ -426,7 +426,7 @@ const Navbar = () => {
               } transition-colors`}
             >
               New Releases
-            </button> */}
+            </button>
             <button
               onClick={() => handleNavigation('/exclusive')}
               className={`block italic w-full text-left py-2 ${

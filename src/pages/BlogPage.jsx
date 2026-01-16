@@ -199,7 +199,23 @@ const BlogPage = () => {
           </div>
         </div>
       </section>
-
+            {/* Blog Posts Section */}
+      <section id="blog-posts" className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+              Latest from Our Blog
+            </h2>
+            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Insights, stories, and knowledge from our community of writers
+            </p>
+          </div>
+          
+          <div className="mt-8">
+            <Posts darkMode={darkMode} />
+          </div>
+        </div>
+      </section>
       {/* Topics We're Looking For */}
       <section className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -347,23 +363,7 @@ const BlogPage = () => {
         </div>
       </section>
 
-      {/* Blog Posts Section */}
-      <section id="blog-posts" className={`py-20 ${darkMode ? 'bg-linear-to-b from-black to-red-950/20' : 'bg-linear-to-b from-white to-red-50'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-              Latest from Our Blog
-            </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Insights, stories, and knowledge from our community of writers
-            </p>
-          </div>
-          
-          <div className="mt-8">
-            <Posts darkMode={darkMode} />
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 };
