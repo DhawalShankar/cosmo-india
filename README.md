@@ -184,6 +184,16 @@ Typical contributions include:
 * Multi-language support for regional content
 
 ---
+## 📚 Content & Data Notice
+
+The MIT License applies only to the source code in this repository.
+
+All books, publications, product data, text content, images, logos, and branding
+associated with Cosmo India Prakashan are proprietary and protected by copyright.
+
+They may not be reused, redistributed, or republished without explicit permission,
+even if referenced or temporarily stored in the codebase.
+---
 
 ## 👨‍💻 Contact
 
