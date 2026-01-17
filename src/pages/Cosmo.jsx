@@ -227,86 +227,73 @@ const CosmoPublicationSite = () => {
 </section>
       {/* Featured Books */}
       <section id="books" className={`py-20 ${darkMode ? 'bg-black' : 'bg-white'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className={`text-3xl md:text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {/* Section Header */}
+    <div className="text-center mb-12">
+      <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
         Featured Publications
       </h2>
-            <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-2xl mx-auto`}>
-              Curated collection of our most celebrated works
-            </p>
-          </div>
+      <p className={`text-lg max-w-2xl mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+        A curated catalogue of our published works
+      </p>
+    </div>
 
-         
-          {/* Books Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBooks.map((book) => (
-              <div
-                key={book.id}
-                onMouseEnter={() => setHoveredBook(book.id)}
-                onMouseLeave={() => setHoveredBook(null)}
-                className={`group relative rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
-                  darkMode 
-                    ? 'bg-linear-to-br from-red-950/20 to-black shadow-red-900/10 border border-red-900/20 hover:border-red-600/50 hover:shadow-2xl hover:shadow-red-600/20'
-                    : 'bg-white shadow-gray-200 border border-gray-200 hover:border-red-400 hover:shadow-2xl hover:shadow-red-300/30'
-                }`}
-              >
-                <div className="relative overflow-hidden h-80">
-                  <img
-                    src={book.image}
-                    alt={book.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <span className="px-4 py-2 bg-linear-to-r from-red-600 to-red-700 text-white text-sm font-bold rounded-full shadow-lg">
-                      {book.badge}
-                    </span>
-                  </div>
-                  <div className={`absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent transition-opacity duration-300 ${hoveredBook === book.id ? 'opacity-100' : 'opacity-0'}`}>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center space-x-1 mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${i < Math.floor(book.rating) ? 'text-red-500 fill-red-500' : (darkMode ? 'text-gray-600' : 'text-gray-300')}`}
-                      />
-                    ))}
-                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} ml-2`}>{book.rating}</span>
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2 group-hover:text-red-500 transition-colors ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {book.title}
-                  </h3>
-                  <p className={darkMode ? 'text-gray-400 mb-3' : 'text-gray-600 mb-3'}> {book.author}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-red-500">{book.price}</span>
-                    <button onClick={() => navigate("/marketplace")}
-                     className={`p-2 rounded-full transition-all duration-300 ${
-                      darkMode 
-                        ? 'bg-red-950/30 text-red-500 hover:bg-red-600 hover:text-white'
-                        : 'bg-red-100 text-red-600 hover:bg-red-600 hover:text-white'
-                    }`}>
-                      <ArrowRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-           <div className="lg:col-start-2 lg:col-span-1 sm:col-span-2 col-span-1 flex justify-center">
-  <button
-    onClick={() => navigate("/marketplace")}
-    className="px-8 py-4 bg-linear-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30"
-  >
-    Explore Our Marketplace
-  </button>
-</div>
+    {/* Capsules Grid */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {filteredBooks.map((book) => (
+        <div
+  key={book.id}
+  className={`rounded-xl border px-5 py-4 transition-all duration-300 flex flex-col ${
+    darkMode
+      ? 'border-red-900/40 bg-black hover:border-red-600/60'
+      : 'border-gray-200 bg-white hover:border-red-400'
+  }`}
+>
+  {/* Top content */}
+  <div>
+    <h3 className={`text-md font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+      {book.title}
+    </h3>
 
-          </div>
-         
+    <p className={`text-sm mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+      {book.author}
+    </p>
+  </div>
+
+  {/* Spacer pushes bottom row down */}
+  <div className="grow" />
+
+  {/* Bottom row (fixed position) */}
+  <div className="flex items-center justify-between text-sm mt-2">
+    <span className="font-medium text-red-500">{book.price}</span>
+
+    <button
+      onClick={() => navigate("/marketplace")}
+      className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+        darkMode
+          ? 'border border-red-900/50 text-red-400 hover:bg-red-600 hover:text-white'
+          : 'border border-red-300 text-red-600 hover:bg-red-600 hover:text-white'
+      }`}
+    >
+      View
+    </button>
+  </div>
+        </div>
+      ))}
+    </div>
+
+    {/* CTA */}
+    <div className="flex justify-center mt-12">
+      <button
+        onClick={() => navigate("/marketplace")}
+        className="px-8 py-4 rounded-full font-semibold bg-linear-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 transition-all duration-300"
+      >
+        Explore Our Marketplace
+      </button>
+    </div>
+
+   
         </div>
          {/* Section End Marker */}
 <div className="mt-20 flex justify-center">
