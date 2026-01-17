@@ -1,6 +1,7 @@
-# 📚 Cosmo India Prakashan - A Publishing House and Media Platform
+# 📚 Cosmo India Prakashan – A Publishing House and Media Platform
 
-> A full-stack e-commerce platform for book publishing and digital content distribution. Built with React, Node.js serverless functions, and MongoDB.
+> A full-stack e-commerce platform for book publishing and digital content distribution.
+> Built with React, Node.js serverless functions, and MongoDB.
 
 [![Live Site](https://img.shields.io/badge/live-cosmoindiaprakashan.in-blue)](https://cosmoindiaprakashan.in)
 
@@ -8,49 +9,72 @@
 
 ## 🎯 About
 
-Cosmo India Prakashan is a digital publishing platform designed to make Indian literature and cultural content accessible globally. The platform handles book sales, user accounts, payment processing, and digital content distribution.
+**Cosmo India Prakashan** is a digital publishing platform focused on making Indian literature and cultural content accessible globally. The platform supports book discovery, secure purchasing, user accounts, and digital content delivery.
 
-**Vision:** Build scalable publishing infrastructure to revive and promote Indian literature and culture on a global scale.
+**Vision**
+Build scalable publishing infrastructure to revive and promote Indian literature and culture on a global scale.
 
-**Built by:** Dhawal Shukla <br>
-**Live:** [cosmoindiaprakashan.in](https://cosmoindiaprakashan.in)
+**Built by:** Dhawal Shukla
+**Live:** [https://cosmoindiaprakashan.in](https://cosmoindiaprakashan.in)
 
 ---
 
-## ✨ Features
+## ✨ Features (Currently Working)
 
-- Browse and purchase books across multiple categories
-- User authentication with JWT and secure password hashing
-- Shopping cart with persistent storage (MongoDB for logged-in users)
-- Multiple delivery addresses management
-- Razorpay payment gateway integration with signature verification
-- Order history and tracking
-- Members-only section for exclusive e-books and magazines
-- Automated email notifications for orders
-- Dark/light theme toggle
+* Browse and purchase books
+* User authentication using JWT (HTTP-only cookies)
+* Secure password hashing with bcrypt
+* Shopping cart with persistence
+
+  * Guests: `localStorage`
+  * Logged-in users: MongoDB
+* Multiple delivery address management
+* Razorpay payment gateway integration
+* Cryptographic payment signature verification
+* Automated order confirmation emails
+* Members-only section for digital content
+* Dark / light theme toggle
+
+---
+
+## ❌ Known Gaps (Not Implemented Yet)
+
+The following are **intentional gaps** and are tracked via GitHub issues:
+
+* Products are **hardcoded** (not database-driven)
+* Orders are **not persistently stored** in the database
+* No user-facing **order history or tracking**
+* No admin dashboard
+* No inventory or stock management
+* No reviews or ratings
+
+If something appears missing, check the **Issues** section first.
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Frontend**
-- React 18 with Vite
-- TailwindCSS
-- React Router v6
-- Context API for state management
-- Lucide React icons
+### Frontend
 
-**Backend**
-- Node.js serverless functions (Vercel)
-- MongoDB Atlas with Mongoose
-- JWT authentication
-- bcrypt password hashing
-- HTTP-only cookies
+* React 18 (Vite)
+* TailwindCSS
+* React Router v6
+* Context API
+* Lucide React icons
 
-**Integrations**
-- Razorpay Payment Gateway
-- Nodemailer (Gmail SMTP)
-- Vercel serverless deployment
+### Backend
+
+* Node.js serverless functions (Vercel)
+* MongoDB Atlas with Mongoose
+* JWT authentication
+* bcrypt password hashing
+* HTTP-only cookies
+
+### Integrations
+
+* Razorpay Payment Gateway
+* Nodemailer (Gmail SMTP)
+* Vercel serverless deployment
 
 ---
 
@@ -78,103 +102,111 @@ cosmo-india/
 
 ## 🔌 API Endpoints
 
-**Authentication**
-- `POST /api/user?action=register` - Register new user
-- `POST /api/user?action=login` - Login user
-- `GET /api/user?action=me` - Get current user
-- `POST /api/user?action=logout` - Logout user
-
-**User Management**
-- `PUT /api/user?action=update` - Update profile
-- `PUT /api/user?action=change-password` - Change password
-- `GET /api/user/addresses` - Get all addresses
-- `POST /api/user/addresses` - Add new address
-
-**Cart**
-- `GET /api/cart` - Get user's cart
-- `POST /api/cart` - Update cart
-
-**Payment**
-- `POST /api/payment/create-order` - Create Razorpay order
-- `POST /api/payment/verify` - Verify payment & send confirmation
-
----
-
-## 🔐 Key Technical Implementations
-
 ### Authentication
-- JWT tokens stored in HTTP-only cookies (7-day expiration)
-- bcrypt password hashing with 10 salt rounds
-- Email uniqueness validation
-- Secure cookie attributes: `SameSite=None; Secure`
 
-### Payment Security
-- HMAC-SHA256 signature verification for all payments
-- Server-side validation before order creation
-- Automated email notifications post-purchase
+* `POST /api/user?action=register`
+* `POST /api/user?action=login`
+* `GET /api/user?action=me`
+* `POST /api/user?action=logout`
 
-### Serverless Optimization
-- Global MongoDB connection caching to prevent pool exhaustion
-- Connection reuse across function invocations
-- Optimized pool size and timeout configurations
+### User Management
 
-### Database Design
-- User schema with embedded cart and addresses
-- Order history tracking with payment details
-- Indexed queries for performance
+* `PUT /api/user?action=update`
+* `PUT /api/user?action=change-password`
+* `GET /api/user/addresses`
+* `POST /api/user/addresses`
 
----
+### Cart
 
-## 🎯 Technical Challenges Solved
+* `GET /api/cart`
+* `POST /api/cart`
 
-1. **Serverless Cold Starts** - Implemented global connection caching for MongoDB
-2. **Payment Security** - HMAC signature verification to prevent tampering
-3. **Cart Persistence** - localStorage for guests, MongoDB for logged-in users
-4. **Cross-Origin Auth** - Proper CORS headers and cookie configuration
-5. **Guest Cart Migration** - Seamless cart merging when users log in
+### Payment
+
+* `POST /api/payment/create-order`
+* `POST /api/payment/verify`
 
 ---
 
-## 📚 What I Learned
+## 🔐 Key Technical Decisions
 
-- Serverless architecture and connection pooling
-- JWT authentication with HTTP-only cookies
-- Payment gateway integration and cryptographic verification
-- MongoDB schema design with embedded documents
-- React Context API for global state
-- Email automation with Nodemailer
-- Full-stack deployment on Vercel
+* JWT stored in **HTTP-only cookies** for security
+* Razorpay **signature verification is mandatory**
+* MongoDB connection caching to reduce serverless cold starts
+* Business secrets are never exposed to contributors
+* Serverless constraint: **maximum 12 API files** (currently 8 in use)
 
 ---
 
-## 🔮 Future Improvements
+## 🤝 Contributions
 
-- Admin dashboard for inventory management
-- Advanced search and filtering
-- Product recommendations
-- Order tracking system
-- Review and rating system
-- Multi-language support for regional content
+This is a **business-backed, production platform**, not a learning or tutorial project.
+
+* Contributions are welcome from developers comfortable working independently
+* No setup hand-holding is provided
+* Read **CONTRIBUTING.md** before opening a PR
+* Business stability and security take priority over experimentation
+
+### Environment & Secrets
+
+* No `.env` or `.env.example` is provided
+* Contributors must infer required variables from the codebase
+* Use your own test credentials
+* Requests for production secrets will not be entertained
+
+---
+
+## 🧠 Good Areas to Contribute
+
+Issues labeled:
+
+* `good first issue` (limited scope, not reduced standards)
+* `backend`
+* `database`
+* `payments`
+
+Typical contributions include:
+
+* Moving products to a database
+* Implementing persistent order storage
+* Adding user order history APIs
+* Improving performance and security
+
+---
+
+## 🔮 What’s Next (Roadmap)
+
+* Database-backed products (remove hardcoding)
+* Persistent order storage after payment verification
+* User-facing order history and tracking
+* Admin dashboard for inventory
+* Advanced search and filtering
+* Multi-language support for regional content
 
 ---
 
 ## 👨‍💻 Contact
 
-**Dhawal Shukla**  
+**Dhawal Shukla**
 
-This is a personal project built to learn full-stack development while creating something meaningful. I'm continuously improving and expanding the platform.
-
-- **GitHub:** [@dhawalshankar](https://github.com/dhawalshankar)
-- **LinkedIn:** [dhawalshukl](https://linkedin.com/in/dhawalshukl)
-- **Email:** dhawalmannu@gmail.com
-- **Portfolio:** [dhawalshukl.vercel.app](https://dhawalshukl.vercel.app)
+* **GitHub:** [https://github.com/dhawalshankar](https://github.com/dhawalshankar)
+* **LinkedIn:** [https://linkedin.com/in/dhawalshukl](https://linkedin.com/in/dhawalshukl)
+* **Email:** [dhawalmannu@gmail.com](mailto:dhawalmannu@gmail.com)
+* **Portfolio:** [https://dhawalshukl.vercel.app](https://dhawalshukl.vercel.app)
 
 ---
 
 ## 📝 Note
 
-This repository is for portfolio and recruitment purposes. The project represents my skills in full-stack development, payment integration, authentication systems, and serverless architecture. Feedback and suggestions are welcome.
+**Cosmo India Prakashan is an active, ongoing business platform.**
+
+This repository contains the real production codebase powering the live site and is under continuous development.
+It also serves as a reference for recruitment and portfolio evaluation.
+
+Business requirements always take precedence over experimental or educational changes.
 
 ---
 
 *Built with the goal of reviving Indian literature and culture through modern digital infrastructure.*
+
+---
