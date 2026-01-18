@@ -118,6 +118,14 @@ const Footer = () => {
                   
                 </>
               )}
+              <li>  <a
+    href="https://careers.cosmoindiaprakashan.in/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`${darkMode ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}
+  >
+    Work with Us
+  </a></li>
             </ul>
           </div>
 
