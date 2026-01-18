@@ -1,5 +1,7 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import Order from "../models/Order";
+import connectDB from "../lib/db.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -30,6 +32,47 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: "Invalid signature" });
     }
 
+    /* ================= EXTRACT & SANITIZE ================= */
+    const {
+      orderType,
+      userId,
+      items = [],
+      shippingAddress = {},
+      totalPrice = 0,
+      paymentMethod = "Razorpay",
+      name,
+      email,
+      phone
+    } = notes || {};
+
+    const sanitizedItems = items.map(item => ({
+      ...item,
+      product: item.product === "UNLINKED" ? undefined : item.product
+    }));
+
+    if (!sanitizedItems.length) {
+      return res.status(400).json({ error: "No order items found" });
+    }
+    await connectDB();
+    /* ================= CREATE ORDER ================= */
+    const createdOrder = await Order.create({
+      user: orderType === "guest" || !userId ? null : userId,
+      orderItems: sanitizedItems,
+      shippingAddress,
+      paymentMethod,
+      paymentResult: {
+        gateway: "Razorpay",
+        transactionId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+        signature: razorpay_signature,
+        status: "paid"
+      },
+      totalPrice,
+      isPaid: true,
+      paidAt: new Date(),
+      status: "Processing"
+    });
+
     /* ================= SEND EMAIL ================= */
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -39,33 +82,32 @@ export default async function handler(req, res) {
       },
     });
 
-    const mailHtml = `
-      <h2>📦 New Order Received – Cosmo India Prakashan</h2>
-      <p><strong>Order Type:</strong> ${notes?.orderType || "guest"}</p>
-      <p><strong>Product:</strong> ${notes?.product}</p>
-      <p><strong>Name:</strong> ${notes?.name}</p>
-      <p><strong>Email:</strong> ${notes?.email}</p>
-      <p><strong>Phone:</strong> ${notes?.phone}</p>
-      <p><strong>Address:</strong> ${notes?.address}</p>
-
-      <hr />
-      <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
-      <p><strong>Order ID:</strong> ${razorpay_order_id}</p>
-
-      <p>✅ Payment verified successfully.</p>
-    `;
-
     await transporter.sendMail({
       from: `"Cosmo India Orders" <${process.env.BUSINESS_EMAIL}>`,
       to: process.env.BUSINESS_EMAIL,
       subject: "📦 New Order Received – Cosmo India",
-      html: mailHtml,
+      html: `
+        <h2>📦 New Order Received – Cosmo India Prakashan</h2>
+        <p><strong>Internal Order ID:</strong> ${createdOrder._id}</p>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+
+        <h4>Items:</h4>
+        <ul>
+          ${sanitizedItems.map(i => `<li>${i.name} × ${i.qty}</li>`).join("")}
+        </ul>
+
+        <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+        <p>✅ Payment verified successfully.</p>
+      `,
     });
 
     /* ================= SUCCESS ================= */
     return res.status(200).json({
       success: true,
-      message: "Payment verified & order email sent",
+      message: "Payment verified & order created",
+      orderId: createdOrder._id
     });
 
   } catch (err) {

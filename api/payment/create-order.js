@@ -36,6 +36,27 @@ export default async function handler(req, res) {
         address: address || "N/A",
         product: product || "Cosmo India Order",
         orderType: orderType || "guest",
+        userId: req.user && req.user._id ? String(req.user._id) : null,
+
+        items: [
+          {
+            name: product || "Cosmo India Order",
+            qty: 1,
+            image: "",
+            price: amount,
+            product: "UNLINKED" // placeholder, resolved during order creation
+          }
+        ],
+
+        shippingAddress: {
+          address: address || "N/A",
+          city: "N/A",
+          postalCode: "N/A",
+          country: "India"
+        },
+
+        totalPrice: amount,
+        paymentMethod: "Razorpay"
       },
     });
 
