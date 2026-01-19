@@ -53,7 +53,9 @@ export default async function handler(req, res) {
     if (!sanitizedItems.length) {
       return res.status(400).json({ error: "No order items found" });
     }
+
     await connectDB();
+    
     /* ================= CREATE ORDER ================= */
     const createdOrder = await Order.create({
       user: orderType === "guest" || !userId ? null : userId,
