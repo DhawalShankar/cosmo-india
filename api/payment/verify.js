@@ -1,12 +1,14 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import Order from "../models/Order";
+import Order from "../models/Order.js";
 import connectDB from "../lib/db.js";
+import { getOptionalUser } from "../lib/optionalAuth.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
+ const user = await getOptionalUser(req);
 
   try {
     const {
@@ -34,8 +36,6 @@ export default async function handler(req, res) {
 
     /* ================= EXTRACT & SANITIZE ================= */
     const {
-      orderType,
-      userId,
       items = [],
       shippingAddress = {},
       totalPrice = 0,
@@ -55,10 +55,17 @@ export default async function handler(req, res) {
     }
 
     await connectDB();
+
+    if (!shippingAddress.address || !shippingAddress.city || !shippingAddress.postalCode || !shippingAddress.country ){
+      return res.status(400).json({
+        error: "Incomplete shipping address"
+      });
+    }
+
     
     /* ================= CREATE ORDER ================= */
     const createdOrder = await Order.create({
-      user: orderType === "guest" || !userId ? null : userId,
+      user: user ? user._id : null,
       orderItems: sanitizedItems,
       shippingAddress,
       paymentMethod,

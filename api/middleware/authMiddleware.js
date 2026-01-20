@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import { verifyToken } from "../lib/jwt.js";
+import connectDB from "../lib/db.js";
 
 // Cookie parser (same as user.js)
 function parseCookies(cookieHeader) {
@@ -25,7 +26,7 @@ export async function protect(req, res, next) {
         message: "Not authenticated"
       });
     }
-
+    await connectDB();
     const decoded = verifyToken(token);
     const user = await User.findById(decoded.userId);
 

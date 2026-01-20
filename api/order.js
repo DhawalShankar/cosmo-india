@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // Only support: GET /api/orders?action=my
+  // Only support: GET /api/order?action=my
   if (req.method !== "GET" || req.query.action !== "my") {
     return res.status(405).json({
       success: false,

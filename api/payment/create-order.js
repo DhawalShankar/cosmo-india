@@ -34,9 +34,6 @@ export default async function handler(req, res) {
         email,
         phone: phone || "N/A",
         address: address || "N/A",
-        product: product || "Cosmo India Order",
-        orderType: orderType || "guest",
-        userId: req.user && req.user._id ? String(req.user._id) : null,
 
         items: [
           {

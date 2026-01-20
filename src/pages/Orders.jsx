@@ -5,17 +5,31 @@ const Orders = () => {
   const [darkMode] = useState(false); 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-  
-    fetch("/api/order?action=my", { credentials: "include" })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setOrders(data.orders);
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch("/api/order?action=my", {
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Failed to load orders");
+        }
+
+        setOrders(data.orders);
+      } catch (err) {
+        setError(err.message);
+      } finally {
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      }
+    };
+    fetchOrders();
   }, []);
+
 
   const statusStyle = status => {
     if (darkMode) {
@@ -50,7 +64,7 @@ const Orders = () => {
         : "bg-gradient-to-b from-gray-50 to-white text-gray-900"
     }`}>
       <div className="max-w-6xl mx-auto px-4 pb-20">
-
+        
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold tracking-tight">
@@ -69,6 +83,12 @@ const Orders = () => {
             Loading your orders…
           </div>
         )}
+        {error && (
+         <div className="rounded-xl border border-red-300 bg-red-50 p-4 text-red-700">
+          {error}
+         </div>
+        )}
+
 
         {/* Empty State */}
         {!loading && orders.length === 0 && (
@@ -176,8 +196,10 @@ const Orders = () => {
                     <strong className={darkMode ? "text-zinc-200" : ""}>
                       Address:
                     </strong>{" "}
-                    {order.shippingAddress?.address},{" "}
-                    {order.shippingAddress?.city}
+                    {order.shippingAddress?.address && order.shippingAddress.address !== "N/A"
+                      ? `${order.shippingAddress.address}, ${order.shippingAddress.city}`
+                      : "Address not available"}
+
                   </p>
                 </div>
 

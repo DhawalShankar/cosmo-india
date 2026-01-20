@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Menu, X, ShoppingBag, User as UserIcon, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingBag, User as UserIcon, LogOut, Package } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useCart } from "../context/CartContext";
@@ -265,7 +265,20 @@ const Navbar = () => {
                     <UserIcon className="w-4 h-4" />
                     <span>Profile</span>
                   </button>
-
+                  <button
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      handleNavigation('/orders');
+                    }}
+                    className={`w-full flex items-center space-x-2 px-4 py-3 transition-colors ${
+                      darkMode
+                        ? 'text-gray-300 hover:bg-red-900/20 hover:text-red-400'
+                        : 'text-gray-700 hover:bg-red-50 hover:text-red-500'
+                    }`}
+                  >
+                    <Package className="w-4 h-4" />
+                    <span>My Orders</span>
+                  </button>
                   {/* Divider */}
                   <div className={`h-px ${darkMode ? 'bg-red-900/30' : 'bg-gray-200'}`} />
 
@@ -449,6 +462,21 @@ const Navbar = () => {
                     {user.name}
                   </span>
                 </div>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleNavigation('/orders');
+                  }}
+                  className={`flex items-center space-x-2 w-full text-left py-2 ${
+                    darkMode
+                    ? 'text-gray-300 hover:text-red-500'
+                    : 'text-gray-700 hover:text-red-500'
+                  } transition-colors`}
+                >
+                  <Package className="w-4 h-4" />
+                  <span>My Orders</span>
+                </button>
+
                 <button
                   onClick={handleLogout}
                   className={`flex items-center space-x-2 w-full text-left py-2 ${
