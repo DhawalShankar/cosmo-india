@@ -2,18 +2,7 @@ import connectDB from './lib/db.js';
 import User from './models/user.js';
 import { hashPassword, comparePassword } from './lib/hash.js';
 import { signToken, verifyToken } from './lib/jwt.js';
-
-// Cookie parser utility
-function parseCookies(cookieHeader) {
-  const cookies = {};
-  if (cookieHeader) {
-    cookieHeader.split(';').forEach(cookie => {
-      const [name, ...rest] = cookie.split('=');
-      cookies[name.trim()] = rest.join('=').trim();
-    });
-  }
-  return cookies;
-}
+import { parseCookies } from "./lib/cookies.js";
 
 // Middleware to verify user from token
 async function verifyUser(req) {

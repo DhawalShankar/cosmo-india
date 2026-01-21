@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Package, Truck, CheckCircle } from "lucide-react";
 
 const Orders = () => {
-  const [darkMode] = useState(false); 
+  const [darkMode] = useState(false);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,7 +22,13 @@ const Orders = () => {
 
         setOrders(data.orders);
       } catch (err) {
-        setError(err.message);
+        if (err.message.includes("401")) {
+          setError("Please log in to view your orders.");
+        } else if (err.message.includes("Failed to fetch")) {
+          setError("Network error. Please check your connection.");
+        } else {
+          setError("Something went wrong while loading your orders.");
+        }
       } finally {
         setLoading(false);
       }
@@ -84,10 +90,12 @@ const Orders = () => {
           </div>
         )}
         {error && (
-         <div className="rounded-xl border border-red-300 bg-red-50 p-4 text-red-700">
-          {error}
-         </div>
+          <div className="rounded-xl border border-red-300 bg-red-50 p-4 text-red-700">
+            <p className="font-semibold mb-1">Unable to load orders</p>
+            <p className="text-sm">{error}</p>
+          </div>
         )}
+
 
 
         {/* Empty State */}

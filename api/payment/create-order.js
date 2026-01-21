@@ -21,9 +21,10 @@ export default async function handler(req, res) {
       orderType, // "logged-in" | "guest"
     } = req.body;
 
-    if (!amount || !email) {
-      return res.status(400).json({ error: "Missing required fields" });
+    if (typeof amount !== "number" || amount <= 0 || !email) {
+      return res.status(400).json({ error: "Invalid amount or email" });
     }
+
 
     const order = await razorpay.orders.create({
       amount: amount * 100, // INR → paise

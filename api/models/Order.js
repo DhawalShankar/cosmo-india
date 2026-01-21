@@ -39,7 +39,6 @@ const orderSchema = new mongoose.Schema(
       gateway: String,
       transactionId: String,
       orderId: String,
-      signature: String,
       status: String
     },
 
