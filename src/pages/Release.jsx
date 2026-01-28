@@ -143,27 +143,10 @@ const Release = () => {
 
             {/* Action Buttons */}
             <div className="flex items-center justify-center space-x-4 mb-8">
-             {showMessage ? (
+             {showMessage && (
   <div className="px-8 py-4 rounded-xl text-lg font-semibold text-red-600 text-center">
     {message}
   </div>
-) : (
-  <button
-    onClick={handlePurchase}
-    className={`group relative px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all duration-300 ${
-      user
-        ? 'bg-linear-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 hover:scale-105'
-        : 'bg-gray-400 text-white cursor-not-allowed'
-    }`}
-  >
-    {!user && (
-      <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2" />
-    )}
-    <div className="flex items-center space-x-2">
-      <ShoppingCart className="w-5 h-5" />
-      <span>Buy Now - {book.price}</span>
-    </div>
-  </button>
 )}
 
               <button
