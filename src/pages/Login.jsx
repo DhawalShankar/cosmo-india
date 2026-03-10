@@ -1,19 +1,13 @@
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useState, useContext } from 'react';
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
-
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -21,133 +15,80 @@ const Login = () => {
   const { darkMode } = useContext(DarkModeContext);
   const { checkAuth } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const benefits = [
     'Exclusive access to premium books',
     'Personalized recommendations',
     'Order tracking & history',
     'Special member discounts',
-    'Early access to new releases'
+    'Early access to new releases',
   ];
+
+  /* ── Colour tokens (mirrors homepage) ── */
+  const accent  = '#c0392b';
+  const saffron = '#d4450c';
+  const ink     = darkMode ? '#f0e8dc'              : '#1a1209';
+  const paper   = darkMode ? '#141210'              : '#fdf6ee';
+  const ruleLine= darkMode ? 'rgba(192,57,43,0.28)' : 'rgba(160,40,20,0.18)';
+  const mutedText=darkMode ? 'rgba(240,232,220,0.72)': 'rgba(26,18,9,0.62)';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const validate = () => {
     const newErrors = {};
-    
-    if (!isLogin && !formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-    
+    if (!isLogin && !formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+    if (!formData.password) newErrors.password = 'Password is required';
+    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
     if (!validate()) return;
-    
     setLoading(true);
     setDebugInfo(null);
-    
     try {
-
-      const endpoint = isLogin
-  ? '/api/user?action=login'
-  : '/api/user?action=register';
-
-const payload = isLogin
-  ? { email: formData.email, password: formData.password }
-  : formData;
-
-setDebugInfo({ status: 'sending', payload });
-
-const response = await fetch(endpoint, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
-  credentials: 'include',
-  body: JSON.stringify(payload)
-});
-
-      
-      console.log('📡 Response status:', response.status);
-      console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
-      
+      const endpoint = isLogin ? '/api/user?action=login' : '/api/user?action=register';
+      const payload  = isLogin ? { email: formData.email, password: formData.password } : formData;
+      setDebugInfo({ status: 'sending', payload });
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
       let data;
       const contentType = response.headers.get('content-type');
-      
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
-        console.log('✅ Response data:', data);
       } else {
         const text = await response.text();
-        console.log('⚠️ Non-JSON response:', text);
         throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}`);
       }
-      
       setDebugInfo({ status: 'received', data, responseStatus: response.status });
-      
-    if (!response.ok) {
-        setErrors({ submit: data.error || `Server error: ${response.status}` });
-        setLoading(false);
-        return;
-      }
-
+      if (!response.ok) { setErrors({ submit: data.error || `Server error: ${response.status}` }); setLoading(false); return; }
       await checkAuth();
       setSuccess(true);
       setLoading(false);
-
-   
       setTimeout(() => navigate('/marketplace'), 1200);
-      
     } catch (error) {
-      console.error('❌ Network error:', error);
-      console.error('Error details:', {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      });
-      
       setDebugInfo({ status: 'error', error: error.message });
-      
       let errorMessage = 'Network error. ';
-      if (error.message.includes('Failed to fetch')) {
-        errorMessage += 'Cannot connect to server. Is it running?';
-      } else if (error.message.includes('non-JSON')) {
-        errorMessage += 'Server returned invalid response. Check API logs.';
-      } else {
-        errorMessage += error.message;
-      }
-      
+      if (error.message.includes('Failed to fetch')) errorMessage += 'Cannot connect to server.';
+      else if (error.message.includes('non-JSON')) errorMessage += 'Server returned invalid response.';
+      else errorMessage += error.message;
       setErrors({ submit: errorMessage });
       setLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-    }
-  };
+  const handleKeyPress = (e) => { if (e.key === 'Enter') handleSubmit(); };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
@@ -158,293 +99,436 @@ const response = await fetch(endpoint, {
   };
 
   return (
-    <div className={`min-h-screen pt-32 pb-16 transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
-      
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className={` ${darkMode ? 'bg-linear-to-br from-black via-red-950 to-black' : 'bg-linear-to-br from-gray-100 via-red-100 to-gray-100'}`}>
-          <div className={` ${darkMode ? 'bg-black/50' : 'bg-white/30'}`}></div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Yatra+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap');
+
+        :root {
+          --lg-ink:     ${ink};
+          --lg-paper:   ${paper};
+          --lg-accent:  ${accent};
+          --lg-saffron: ${saffron};
+          --lg-rule:    ${ruleLine};
+          --lg-muted:   ${mutedText};
+        }
+
+        .lg-wrap * { box-sizing: border-box; }
+        .lg-wrap {
+          background: var(--lg-paper);
+          color: var(--lg-ink);
+          font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+          font-size: 15.5px;
+          min-height: 100vh;
+        }
+        .lg-wrap .yatra { font-family: 'Yatra One', serif; }
+        .lg-wrap .h1f   { font-family: 'Playfair Display', Georgia, serif; }
+        .lg-wrap .hindi { font-family: 'Tiro Devanagari Hindi', 'Mangal', serif; line-height: 2.0; }
+
+        /* Ink lines */
+        @keyframes lg-inkRise {
+          0%   { transform:translateY(110%); opacity:0; }
+          15%  { opacity:.6; }
+          85%  { opacity:.6; }
+          100% { transform:translateY(-110%); opacity:0; }
+        }
+        .lg-wrap .ink-line { animation: lg-inkRise linear infinite; }
+
+        /* Fade up */
+        @keyframes lg-fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+        .lg-wrap .fu  { animation: lg-fadeUp .8s cubic-bezier(.22,1,.36,1) both; }
+        .lg-wrap .d1  { animation-delay:.08s; }
+        .lg-wrap .d2  { animation-delay:.18s; }
+        .lg-wrap .d3  { animation-delay:.30s; }
+        .lg-wrap .d4  { animation-delay:.42s; }
+        .lg-wrap .d5  { animation-delay:.56s; }
+
+        /* Flicker */
+        @keyframes lg-flicker { 0%,100%{opacity:1} 47%{opacity:.9} 50%{opacity:.5} 53%{opacity:.95} }
+        .lg-wrap .flicker { animation: lg-flicker 8s ease-in-out infinite; }
+
+        /* Pulse btn */
+        @keyframes lg-pulse { 0%{box-shadow:0 0 0 0 rgba(192,57,43,.45)} 70%{box-shadow:0 0 0 14px rgba(192,57,43,0)} 100%{box-shadow:0 0 0 0 rgba(192,57,43,0)} }
+        .lg-wrap .pulse-btn:hover { animation: lg-pulse 1s ease-out; }
+
+        /* Ink bar */
+        .lg-wrap .ink-bar {
+          height: 2px;
+          background: linear-gradient(90deg, transparent, ${accent} 30%, ${saffron} 70%, transparent);
+        }
+
+        /* Input */
+        .lg-wrap .cip-input {
+          width: 100%;
+          padding: 11px 14px 11px 42px;
+          border: 1px solid var(--lg-rule);
+          background: ${darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.8)'};
+          color: var(--lg-ink);
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.95rem;
+          outline: none;
+          transition: border-color .22s, box-shadow .22s, background .22s;
+          border-radius: 2px;
+        }
+        .lg-wrap .cip-input::placeholder { color: var(--lg-muted); }
+        .lg-wrap .cip-input:focus {
+          border-color: ${accent};
+          box-shadow: 0 0 0 3px rgba(192,57,43,.12);
+          background: ${darkMode ? 'rgba(255,255,255,0.07)' : '#fff'};
+        }
+        .lg-wrap .cip-input.err { border-color: ${accent}; }
+
+        /* Tab buttons */
+        .lg-wrap .tab-btn {
+          flex: 1;
+          padding: 9px 16px;
+          font-family: 'Playfair Display', serif;
+          font-size: 0.92rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          border: none;
+          cursor: pointer;
+          transition: all .28s ease;
+          background: transparent;
+        }
+        .lg-wrap .tab-btn.active {
+          background: linear-gradient(135deg, ${accent}, ${saffron});
+          color: #fff;
+        }
+        .lg-wrap .tab-btn.inactive {
+          color: var(--lg-muted);
+        }
+        .lg-wrap .tab-btn.inactive:hover {
+          color: var(--lg-ink);
+        }
+
+        /* Benefit row */
+        .lg-wrap .benefit-row {
+          display: flex; align-items: center; gap: 12px;
+          padding: 12px 16px;
+          border: 1px solid var(--lg-rule);
+          transition: border-color .22s, transform .22s;
+        }
+        .lg-wrap .benefit-row:hover {
+          border-color: ${accent}60;
+          transform: translateX(4px);
+        }
+
+        /* Card */
+        .lg-wrap .form-card {
+          background: ${darkMode
+            ? 'linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))'
+            : 'linear-gradient(145deg, #ffffff, #fdf6ee)'};
+          border: 1px solid ${darkMode ? 'rgba(192,57,43,0.22)' : 'rgba(192,57,43,0.16)'};
+          box-shadow: ${darkMode ? '0 24px 60px rgba(0,0,0,0.6)' : '0 12px 50px rgba(192,57,43,0.1)'};
+        }
+
+        /* Deva stripe */
+        .lg-wrap .deva-stripe {
+          writing-mode: vertical-rl;
+          font-family: 'Yatra One', serif;
+          font-size: 0.8rem; letter-spacing: 0.12em;
+          color: ${darkMode ? 'rgba(240,200,160,0.7)' : 'rgba(139,32,16,0.55)'};
+          user-select: none;
+        }
+
+        /* Success check bounce */
+        @keyframes lg-checkBounce { 0%{transform:scale(0)} 60%{transform:scale(1.15)} 100%{transform:scale(1)} }
+        .lg-wrap .check-bounce { animation: lg-checkBounce .5s cubic-bezier(.22,1,.36,1) both; }
+      `}</style>
+
+      <div className="lg-wrap">
+        {/* ── Background ── */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: darkMode
+              ? 'radial-gradient(ellipse 90% 70% at 48% 38%, #2e0c07 0%, #141210 55%, #0e0c0a 100%)'
+              : 'radial-gradient(ellipse 110% 85% at 46% 35%, #fdd8a8 0%, #f9c88a 18%, #fde8c8 45%, #fdf6ee 100%)',
+          }} />
+          {/* Ink lines */}
+          {[
+            { left:'8%',  h:'38vh', delay:'0s',  dur:'15s' },
+            { left:'22%', h:'28vh', delay:'4s',  dur:'19s' },
+            { left:'50%', h:'46vh', delay:'8s',  dur:'13s' },
+            { left:'70%', h:'33vh', delay:'2s',  dur:'17s' },
+            { left:'88%', h:'40vh', delay:'6s',  dur:'21s' },
+          ].map((l,i) => (
+            <div key={i} className="ink-line" style={{
+              position:'absolute', bottom:0, left:l.left,
+              width:'1px', height:l.h,
+              background:`linear-gradient(to top,transparent,${accent}70,transparent)`,
+              animationDuration: l.dur, animationDelay: l.delay,
+            }} />
+          ))}
+          {/* Dot grid */}
+          <div style={{
+            position:'absolute', inset:0,
+            backgroundImage:`radial-gradient(circle, ${darkMode ? 'rgba(192,57,43,0.14)' : 'rgba(192,57,43,0.10)'} 1px, transparent 1px)`,
+            backgroundSize:'38px 38px', opacity:0.6,
+          }} />
         </div>
-        
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className={`absolute ${darkMode ? 'bg-red-600/10' : 'bg-red-600/20'} rounded-full animate-pulse`} style={{
-            width: Math.random() * 80 + 40 + 'px',
-            height: Math.random() * 80 + 40 + 'px',
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 5 + 's',
-            animationDuration: Math.random() * 10 + 10 + 's'
-          }}></div>
-        ))}
-      </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          
-          {/* Left Side - Branding & Benefits */}
-          <div className="hidden lg:flex flex-col justify-center space-y-6">
-            <div>
-              <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                Welcome to Your
-                <span className="block bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
-                  Literary Journey 
-                </span>
-              </h2>
-              
-              <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                Join thousands of readers discovering their next favorite book
-              </p>
-            </div>
+        {/* ── Page layout ── */}
+        <div className="relative" style={{ zIndex:1, minHeight:'100vh', display:'flex', flexDirection:'column', justifyContent:'center', padding:'6rem 1.5rem 3rem' }}>
+          <div style={{ maxWidth:'1100px', margin:'0 auto', width:'100%' }}>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'4rem', alignItems:'center' }}
+              className="lg-two-col">
 
-            {/* Benefits List */}
-            <div className="space-y-3">
-              {benefits.map((benefit, index) => (
-                <div 
-                  key={index}
-                  className={`flex items-center space-x-3 p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
-                    darkMode 
-                      ? 'bg-linear-to-r from-red-950/30 to-black/30 border border-red-900/30' 
-                      : 'bg-white/50 border border-red-200'
-                  }`}
-                >
-                  <div className="shrink-0">
-                    <CheckCircle className="w-5 h-5 text-red-500" />
-                  </div>
-                  <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    {benefit}
+              {/* ══════ LEFT — branding ══════ */}
+              <div className="fu" style={{ display:'flex', flexDirection:'column', gap:'2rem' }}>
+
+                {/* Eyebrow */}
+                <div style={{ display:'flex', alignItems:'center', gap:'1rem' }}>
+                  <div style={{ width:'2rem', height:'2px', background:accent, flexShrink:0 }} />
+                  <span className="yatra" style={{ color: darkMode ? '#f0c8a0' : '#8b2010', fontSize:'1rem', letterSpacing:'0.06em' }}>
+                    कॉस्मो इंडिया प्रकाशन
                   </span>
                 </div>
-              ))}
-            </div>
 
-            {/* Debug Info Panel */}
-            {debugInfo && (
-              <div className={`p-4 rounded-xl text-xs font-mono ${darkMode ? 'bg-black/50 border border-red-900/30 text-gray-300' : 'bg-white/50 border border-red-200 text-gray-700'}`}>
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertCircle className="w-4 h-4" />
-                  <span className="font-bold">Debug Info:</span>
+                {/* Headline */}
+                <div>
+                  <h1 className="h1f fu d1" style={{ fontSize:'clamp(2.2rem,4vw,3.6rem)', fontWeight:900, lineHeight:1.06, color:'var(--lg-ink)', margin:0 }}>
+                    {isLogin ? 'Welcome' : 'Join the'}<br />
+                    <em style={{ color:accent }}>{isLogin ? 'Back.' : 'Community.'}</em>
+                  </h1>
                 </div>
-                <pre className="overflow-auto max-h-40">{JSON.stringify(debugInfo, null, 2)}</pre>
-              </div>
-            )}
 
-            {/* Decorative Element */}
-            <div className="relative">
-              <div className={`absolute -inset-1 bg-linear-to-r from-red-600 to-red-400 rounded-2xl blur-xl opacity-20 animate-pulse`}></div>
-              <div className={`relative p-5 rounded-2xl ${darkMode ? 'bg-black/50 border border-red-900/30' : 'bg-white/50 border border-red-200'}`}>
-                <Sparkles className={`w-7 h-7 mb-2 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  "Books are a uniquely portable magic" - Stephen King
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Side - Auth Form */}
-          <div className="flex items-center justify-center">
-            <div className={`w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 ${
-              darkMode 
-                ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20' 
-                : 'bg-white border border-gray-200'
-            }`}>
-              
-              {/* Success State */}
-              {success && (
-                <div className="p-8 text-center">
-                  <div className="mb-6 animate-bounce">
-                    <CheckCircle className="w-20 h-20 text-green-500 mx-auto" />
-                  </div>
-                  <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {isLogin ? 'Welcome Back!' : 'Account Created!'}
-                  </h3>
-                  <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                    Redirecting you to the marketplace...
+                {/* Pull quote */}
+                <div className="fu d2" style={{ paddingLeft:'1.1rem', borderLeft:`3px solid ${accent}`, maxWidth:'380px' }}>
+                  <p className="flicker hindi" style={{ color:'var(--lg-muted)', fontSize:'0.92rem', fontStyle:'italic' }}>
+                    "रोकने से कलम रुकती नहीं है।"
+                  </p>
+                  <p style={{ color:accent, fontSize:'0.68rem', letterSpacing:'0.2em', textTransform:'uppercase', marginTop:'6px' }}>
+                    — Shri Rajkumar Ratnapriya
                   </p>
                 </div>
-              )}
 
-              {/* Form */}
-              {!success && (
-                <div>
-                  {/* Header */}
-                  <div className="p-8 pb-6">
-                    <div className="text-center mb-6">
-                      <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {isLogin ? 'Welcome Back' : 'Create CIP Account'}
-                      </h2>
-                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {isLogin 
-                          ? 'Enter your credentials to continue' 
-                          : 'Start your reading journey today'}
+                {/* Benefits */}
+                <div className="fu d3" style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
+                  <p className="yatra" style={{ color: darkMode ? `${accent}cc` : accent, fontSize:'0.78rem', letterSpacing:'0.12em', marginBottom:'4px' }}>
+                    सदस्यता के लाभ
+                  </p>
+                  {benefits.map((b, i) => (
+                    <div key={i} className="benefit-row">
+                      <div style={{ width:'1.4rem', height:'1.4rem', display:'flex', alignItems:'center', justifyContent:'center',
+                        background:`${accent}15`, border:`1px solid ${accent}35`, flexShrink:0 }}>
+                        <CheckCircle style={{ width:'0.75rem', height:'0.75rem', color:accent }} />
+                      </div>
+                      <span style={{ color:'var(--lg-muted)', fontSize:'0.88rem' }}>{b}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Debug panel */}
+                {debugInfo && (
+                  <div className="fu" style={{
+                    padding:'12px 16px', border:`1px solid ${darkMode ? 'rgba(192,57,43,0.3)' : 'rgba(192,57,43,0.2)'}`,
+                    background: darkMode ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.6)',
+                  }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'6px' }}>
+                      <AlertCircle style={{ width:'0.85rem', height:'0.85rem', color:accent }} />
+                      <span className="h1f" style={{ color:accent, fontSize:'0.75rem', fontWeight:700 }}>Debug Info</span>
+                    </div>
+                    <pre style={{ color:'var(--lg-muted)', fontSize:'0.7rem', overflow:'auto', maxHeight:'120px', margin:0 }}>
+                      {JSON.stringify(debugInfo, null, 2)}
+                    </pre>
+                  </div>
+                )}
+              </div>
+
+              {/* ══════ RIGHT — form card ══════ */}
+              <div className="fu d2">
+                <div className="form-card" style={{ position:'relative', padding:'2.5rem' }}>
+                  {/* Corner brackets */}
+                  <div style={{ position:'absolute', top:0, left:0, width:'1.6rem', height:'1.6rem',
+                    borderTop:`2px solid ${accent}`, borderLeft:`2px solid ${accent}` }} />
+                  <div style={{ position:'absolute', bottom:0, right:0, width:'1.6rem', height:'1.6rem',
+                    borderBottom:`2px solid ${accent}`, borderRight:`2px solid ${accent}` }} />
+                  {/* Top gradient line */}
+                  <div style={{ position:'absolute', top:0, left:0, right:0, height:'2px',
+                    background:`linear-gradient(90deg, ${accent}, ${saffron}, transparent)` }} />
+
+                  {/* ── Success state ── */}
+                  {success && (
+                    <div style={{ textAlign:'center', padding:'2rem 0' }}>
+                      <div className="check-bounce" style={{ marginBottom:'1.2rem' }}>
+                        <div style={{ width:'4rem', height:'4rem', borderRadius:'50%', margin:'0 auto',
+                          background:`${accent}15`, border:`2px solid ${accent}`,
+                          display:'flex', alignItems:'center', justifyContent:'center' }}>
+                          <CheckCircle style={{ width:'1.8rem', height:'1.8rem', color:accent }} />
+                        </div>
+                      </div>
+                      <h3 className="h1f" style={{ color:'var(--lg-ink)', fontSize:'1.6rem', fontWeight:900, marginBottom:'8px' }}>
+                        {isLogin ? 'Welcome Back!' : 'Account Created!'}
+                      </h3>
+                      <div className="ink-bar" style={{ margin:'1rem auto', maxWidth:'120px' }} />
+                      <p style={{ color:'var(--lg-muted)', fontSize:'0.92rem' }}>
+                        Redirecting to the marketplace…
                       </p>
                     </div>
+                  )}
 
-                    {/* Tab Switcher */}
-                    <div className={`flex rounded-xl p-1 mb-6 ${
-                      darkMode ? 'bg-black/50 border border-red-900/30' : 'bg-gray-100'
-                    }`}>
-                      <button
-                        type="button"
-                        onClick={() => !isLogin && toggleMode()}
-                        className={`flex-1 py-2.5 px-4 rounded-lg font-semibold transition-all duration-300 ${
-                          isLogin
-                            ? 'bg-linear-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
-                            : darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                      >
-                        Login
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => isLogin && toggleMode()}
-                        className={`flex-1 py-2.5 px-4 rounded-lg font-semibold transition-all duration-300 ${
-                          !isLogin
-                            ? 'bg-linear-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
-                            : darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                      >
-                        Register
-                      </button>
-                    </div>
+                  {/* ── Form state ── */}
+                  {!success && (
+                    <>
+                      {/* Section label */}
+                      <div style={{ marginBottom:'1.6rem' }}>
+                        <p className="yatra" style={{ color:`${accent}cc`, fontSize:'0.78rem', letterSpacing:'0.12em', marginBottom:'4px' }}>
+                          {isLogin ? 'खाते में प्रवेश करें' : 'नया खाता बनाएं'}
+                        </p>
+                        <h2 className="h1f" style={{ color:'var(--lg-ink)', fontSize:'1.65rem', fontWeight:900, margin:0, lineHeight:1.1 }}>
+                          {isLogin ? 'Sign In' : 'Create Account'}
+                        </h2>
+                      </div>
 
-                    {/* Form Fields */}
-                    <div className="space-y-4">
-                      
-                      {/* Name Field (Register Only) */}
-                      {!isLogin && (
-                        <div className="space-y-1.5">
-                          <label className={`block text-sm font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            Full Name
-                          </label>
-                          <div className="relative">
-                            <User className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                              darkMode ? 'text-gray-500' : 'text-gray-400'
-                            }`} />
-                            <input
-                              type="text"
-                              name="name"
-                              value={formData.name}
-                              onChange={handleChange}
-                              onKeyPress={handleKeyPress}
-                              placeholder="Enter your full name"
-                              className={`w-full pl-11 pr-4 py-2.5 rounded-xl transition-all duration-300 outline-none ${
-                                darkMode 
-                                  ? 'bg-black/50 border border-red-900/30 text-white placeholder-gray-500 focus:border-red-500 focus:bg-black/70' 
-                                  : 'bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-red-500 focus:bg-white'
-                              } ${errors.name ? 'border-red-500' : ''}`}
-                            />
+                      {/* Tab switcher */}
+                      <div style={{
+                        display:'flex', border:`1px solid ${ruleLine}`,
+                        background: darkMode ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.5)',
+                        marginBottom:'1.8rem',
+                      }}>
+                        <button type="button" className={`tab-btn ${isLogin ? 'active' : 'inactive'}`}
+                          onClick={() => !isLogin && toggleMode()}>
+                          Login
+                        </button>
+                        <div style={{ width:'1px', background:ruleLine, flexShrink:0 }} />
+                        <button type="button" className={`tab-btn ${!isLogin ? 'active' : 'inactive'}`}
+                          onClick={() => isLogin && toggleMode()}>
+                          Register
+                        </button>
+                      </div>
+
+                      {/* Fields */}
+                      <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
+
+                        {/* Name */}
+                        {!isLogin && (
+                          <div>
+                            <label className="h1f" style={{ display:'block', color:'var(--lg-ink)', fontSize:'0.82rem', fontWeight:700, letterSpacing:'0.05em', marginBottom:'6px' }}>
+                              Full Name
+                            </label>
+                            <div style={{ position:'relative' }}>
+                              <User style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', width:'1rem', height:'1rem', color:'var(--lg-muted)' }} />
+                              <input type="text" name="name" value={formData.name} onChange={handleChange}
+                                onKeyPress={handleKeyPress} placeholder="Enter your full name"
+                                className={`cip-input${errors.name ? ' err' : ''}`} />
+                            </div>
+                            {errors.name && <p style={{ color:accent, fontSize:'0.75rem', marginTop:'4px' }}>{errors.name}</p>}
                           </div>
-                          {errors.name && (
-                            <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Email Field */}
-                      <div className="space-y-1.5">
-                        <label className={`block text-sm font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                          Email Address
-                        </label>
-                        <div className="relative">
-                          <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                            darkMode ? 'text-gray-500' : 'text-gray-400'
-                          }`} />
-                          <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Enter your email"
-                            className={`w-full pl-11 pr-4 py-2.5 rounded-xl transition-all duration-300 outline-none ${
-                              darkMode 
-                                ? 'bg-black/50 border border-red-900/30 text-white placeholder-gray-500 focus:border-red-500 focus:bg-black/70' 
-                                : 'bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-red-500 focus:bg-white'
-                            } ${errors.email ? 'border-red-500' : ''}`}
-                          />
-                        </div>
-                        {errors.email && (
-                          <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                         )}
-                      </div>
 
-                      {/* Password Field */}
-                      <div className="space-y-1.5">
-                        <label className={`block text-sm font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                          Password
-                        </label>
-                        <div className="relative">
-                          <Lock className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                            darkMode ? 'text-gray-500' : 'text-gray-400'
-                          }`} />
-                          <input
-                            type={showPassword ? 'text' : 'password'}
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Enter your password"
-                            className={`w-full pl-11 pr-11 py-2.5 rounded-xl transition-all duration-300 outline-none ${
-                              darkMode 
-                                ? 'bg-black/50 border border-red-900/30 text-white placeholder-gray-500 focus:border-red-500 focus:bg-black/70' 
-                                : 'bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-red-500 focus:bg-white'
-                            } ${errors.password ? 'border-red-500' : ''}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                              darkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'
-                            } transition-colors`}
-                          >
-                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        {/* Email */}
+                        <div>
+                          <label className="h1f" style={{ display:'block', color:'var(--lg-ink)', fontSize:'0.82rem', fontWeight:700, letterSpacing:'0.05em', marginBottom:'6px' }}>
+                            Email Address
+                          </label>
+                          <div style={{ position:'relative' }}>
+                            <Mail style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', width:'1rem', height:'1rem', color:'var(--lg-muted)' }} />
+                            <input type="email" name="email" value={formData.email} onChange={handleChange}
+                              onKeyPress={handleKeyPress} placeholder="Enter your email"
+                              className={`cip-input${errors.email ? ' err' : ''}`} />
+                          </div>
+                          {errors.email && <p style={{ color:accent, fontSize:'0.75rem', marginTop:'4px' }}>{errors.email}</p>}
+                        </div>
+
+                        {/* Password */}
+                        <div>
+                          <label className="h1f" style={{ display:'block', color:'var(--lg-ink)', fontSize:'0.82rem', fontWeight:700, letterSpacing:'0.05em', marginBottom:'6px' }}>
+                            Password
+                          </label>
+                          <div style={{ position:'relative' }}>
+                            <Lock style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', width:'1rem', height:'1rem', color:'var(--lg-muted)' }} />
+                            <input type={showPassword ? 'text' : 'password'} name="password" value={formData.password}
+                              onChange={handleChange} onKeyPress={handleKeyPress} placeholder="Enter your password"
+                              className={`cip-input${errors.password ? ' err' : ''}`}
+                              style={{ paddingRight:'42px' }} />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)}
+                              style={{ position:'absolute', right:'12px', top:'50%', transform:'translateY(-50%)',
+                                background:'none', border:'none', cursor:'pointer', color:'var(--lg-muted)', padding:0,
+                                display:'flex', alignItems:'center' }}>
+                              {showPassword
+                                ? <EyeOff style={{ width:'1rem', height:'1rem' }} />
+                                : <Eye    style={{ width:'1rem', height:'1rem' }} />}
+                            </button>
+                          </div>
+                          {errors.password && <p style={{ color:accent, fontSize:'0.75rem', marginTop:'4px' }}>{errors.password}</p>}
+                        </div>
+
+                        {/* Forgot */}
+                        {isLogin && (
+                          <div style={{ textAlign:'right', marginTop:'-4px' }}>
+                            <a href="#" style={{ color:accent, fontSize:'0.78rem', textDecoration:'none', letterSpacing:'0.03em' }}
+                              onMouseEnter={e => e.target.style.opacity='.75'}
+                              onMouseLeave={e => e.target.style.opacity='1'}>
+                              Forgot Password?
+                            </a>
+                          </div>
+                        )}
+
+                        {/* Submit error */}
+                        {errors.submit && (
+                          <div style={{ padding:'10px 14px', border:`1px solid ${accent}50`,
+                            background: darkMode ? 'rgba(192,57,43,0.1)' : 'rgba(192,57,43,0.06)' }}>
+                            <p style={{ color:accent, fontSize:'0.8rem', margin:0 }}>{String(errors.submit)}</p>
+                          </div>
+                        )}
+
+                        {/* Divider */}
+                        <div className="ink-bar" style={{ margin:'4px 0' }} />
+
+                        {/* CTA Button */}
+                        <button type="button" onClick={handleSubmit} disabled={loading}
+                          className="pulse-btn"
+                          style={{
+                            width:'100%', padding:'13px 24px',
+                            background: loading ? (darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(26,18,9,0.1)') : `linear-gradient(135deg,${accent},${saffron})`,
+                            border:'none', cursor: loading ? 'not-allowed' : 'pointer',
+                            color: loading ? 'var(--lg-muted)' : '#fff',
+                            fontFamily:'Playfair Display, Georgia, serif',
+                            fontWeight:700, fontSize:'0.95rem', letterSpacing:'0.05em',
+                            display:'flex', alignItems:'center', justifyContent:'center', gap:'10px',
+                            transition:'all .3s ease',
+                            boxShadow: loading ? 'none' : `0 8px 28px ${accent}35`,
+                          }}>
+                          {loading
+                            ? <span>Please wait…</span>
+                            : <>
+                                <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+                                <ArrowRight style={{ width:'1rem', height:'1rem' }} />
+                              </>
+                          }
+                        </button>
+
+                        {/* Toggle mode link */}
+                        <p style={{ textAlign:'center', color:'var(--lg-muted)', fontSize:'0.82rem', margin:0 }}>
+                          {isLogin ? "Don't have an account? " : 'Already have an account? '}
+                          <button type="button" onClick={toggleMode}
+                            style={{ background:'none', border:'none', cursor:'pointer', color:accent,
+                              fontFamily:'Playfair Display, serif', fontWeight:700, fontSize:'0.82rem', padding:0 }}>
+                            {isLogin ? 'Register' : 'Sign In'}
                           </button>
-                        </div>
-                        {errors.password && (
-                          <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-                        )}
+                        </p>
+
                       </div>
-
-                      {/* Forgot Password (Login Only) */}
-                      {isLogin && (
-                        <div className="text-right">
-                          <a href="#" className="text-xs text-red-500 hover:text-red-400 transition-colors font-medium">
-                            Forgot Password?
-                          </a>
-                        </div>
-                      )}
-
-                      {/* Submit Error */}
-                      {errors.submit && (
-                        <div className={`p-3 rounded-lg ${darkMode ? 'bg-red-950/30 border border-red-900/50' : 'bg-red-50 border border-red-200'}`}>
-                          <p className="text-red-500 text-xs text-center">{String(errors.submit)}</p>
-                        </div>
-                      )}
-
-                      {/* Submit Button */}
-                      <button
-                        type="button"
-                        onClick={handleSubmit}
-                        disabled={loading}
-                        className={`w-full py-3 rounded-xl font-bold text-base transition-all duration-300 flex items-center justify-center space-x-2 ${
-                          loading
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-linear-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 hover:scale-105 shadow-lg shadow-red-600/30 hover:shadow-xl hover:shadow-red-600/40'
-                        }`}
-                      >
-                        <span>{loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}</span>
-                        {!loading && <ArrowRight className="w-5 h-5" />}
-                      </button>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* ── Responsive: stack on mobile ── */}
+        <style>{`
+          @media (max-width: 768px) {
+            .lg-two-col {
+              grid-template-columns: 1fr !important;
+              gap: 2.5rem !important;
+            }
+          }
+        `}</style>
       </div>
-    </div>
+    </>
   );
 };
 

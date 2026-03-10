@@ -1,275 +1,382 @@
 import { useState, useEffect, useContext } from 'react';
-import { Menu, X, ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Package, Truck, ShieldCheck } from 'lucide-react';
-import { useNavigate, useLocation } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Package, Truck, ShieldCheck, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import { DarkModeContext } from '../context/DarkModeContext';
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from '../context/AuthContext';
 
 const Cart = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { darkMode } = useContext(DarkModeContext);
-  
-  
   const { cart, increaseQty, decreaseQty, removeItem } = useCart();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user, loading } = useContext(AuthContext);
-  const query = new URLSearchParams(location.search);
-  const policy = query.get("policy");
+  const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const accent  = '#c0392b';
+  const saffron = '#d4450c';
+  const ink     = darkMode ? '#f0e8dc' : '#1a1209';
+  const muted   = darkMode ? 'rgba(240,232,220,0.72)' : 'rgba(26,18,9,0.65)';
+  const rule    = darkMode ? 'rgba(192,57,43,0.28)' : 'rgba(160,40,20,0.18)';
+  const cardBg  = darkMode
+    ? 'linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))'
+    : 'linear-gradient(145deg, #ffffff, #fdf6ee)';
+  const cardBorder = darkMode ? 'rgba(192,57,43,0.22)' : 'rgba(192,57,43,0.16)';
 
-  // Calculate totals
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  const savings = cart.reduce((sum, item) => sum + ((item.originalPrice - item.price) * item.qty), 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const savings  = cart.reduce((sum, item) => sum + ((item.originalPrice - item.price) * item.qty), 0);
   const shipping = subtotal > 500 ? 0 : 50;
-  const total = subtotal + shipping;
+  const total    = subtotal + shipping;
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
-    
-      {/* Hero Section */}
-      <section className="relative min-h-[35vh] flex items-center justify-center overflow-hidden pt-32">
-        <div className={`absolute inset-0 ${darkMode ? 'bg-linear-to-br from-black via-red-950 to-black' : 'bg-linear-to-br from-gray-100 via-red-100 to-gray-100'}`}>
-          <div className={`absolute inset-0 ${darkMode ? 'bg-black/50' : 'bg-white/30'}`}></div>
-        </div>
-        
-        <div className="absolute inset-0">
-          {[...Array(10)].map((_, i) => (
-            <div key={i} className={`absolute ${darkMode ? 'bg-red-600/10' : 'bg-red-600/20'} rounded-full animate-pulse`} style={{
-              width: Math.random() * 80 + 40 + 'px',
-              height: Math.random() * 80 + 40 + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              animationDelay: Math.random() * 5 + 's',
-              animationDuration: Math.random() * 10 + 10 + 's'
-            }}></div>
-          ))}
-        </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Yatra+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-4`}>
-            Shopping <span className="bg-linear-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">Cart</span>
-          </h1>
-          <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart
-          </p>
-        </div>
-      </section>
+        .cart-wrap * { box-sizing: border-box; }
+        .cart-wrap {
+          font-family: 'DM Sans', system-ui, sans-serif;
+          --ink:     ${ink};
+          --paper:   ${darkMode ? '#141210' : '#fdf6ee'};
+          --accent:  #c0392b;
+          --saffron: #d4450c;
+          --rule:    ${rule};
+          --muted:   ${muted};
+          background: var(--paper);
+          color: var(--ink);
+        }
+        .cart-wrap .yatra { font-family: 'Yatra One', serif; }
+        .cart-wrap .h1    { font-family: 'Playfair Display', Georgia, serif; }
+        .cart-wrap .ghost-num {
+          font-family: 'Playfair Display', serif;
+          font-size: 3rem; font-weight: 900; color: transparent;
+          -webkit-text-stroke: 1px var(--rule); user-select: none; line-height: 1;
+        }
+        @keyframes cartFadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+        .cart-wrap .fu  { animation: cartFadeUp .7s cubic-bezier(.22,1,.36,1) both; }
+        .cart-wrap .d1  { animation-delay: .08s; }
+        .cart-wrap .d2  { animation-delay: .18s; }
+        .cart-wrap .d3  { animation-delay: .28s; }
 
-      {/* Cart Content */}
-      <section className={`py-12 ${darkMode ? 'bg-black' : 'bg-white'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <a href="/marketplace" className={`inline-flex items-center space-x-2 mb-8 group ${darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-600'} transition-colors`}>
-            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-            <span className="font-medium">Continue Shopping</span>
-          </a>
+        @keyframes cartPulse {
+          0%{box-shadow:0 0 0 0 rgba(192,57,43,.45)}
+          70%{box-shadow:0 0 0 14px rgba(192,57,43,0)}
+          100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}
+        }
+        .cart-wrap .pulse-btn:hover { animation: cartPulse 1s ease-out; }
 
-          {cart.length === 0 ? (
-            <div className={`text-center py-20 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              <ShoppingCart className={`w-24 h-24 mx-auto mb-6 ${darkMode ? 'text-gray-700' : 'text-gray-300'}`} />
-              <h2 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Your cart is empty</h2>
-              <p className="mb-8">Add some books to get started!</p>
-              <a href="/marketplace" className="inline-block px-8 py-3 bg-linear-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 shadow-lg shadow-red-600/30">
-                Browse Books
-              </a>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Cart Items - LEFT COLUMN */}
-              <div className="lg:col-span-2 space-y-4">
-                {cart.map(item => (
-                  <div key={item.id} className={`rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ${
-                    darkMode 
-                      ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20' 
-                      : 'bg-white border border-gray-200'
-                  }`}>
-                    <div className="p-6 flex flex-col sm:flex-row gap-6">
-                      {/* Product Image */}
-                      <div className="shrink-0">
-                        <img src={item.image} alt={item.title} className="w-full sm:w-32 h-40 object-cover rounded-xl" />
+        .cart-wrap .item-card {
+          transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s;
+        }
+        .cart-wrap .item-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 36px rgba(192,57,43,0.12);
+        }
+
+        .cart-wrap .qty-btn {
+          background: none; border: none; cursor: pointer;
+          padding: 0.4rem; transition: color .2s;
+          color: var(--muted);
+        }
+        .cart-wrap .qty-btn:hover:not(:disabled) { color: var(--accent); }
+        .cart-wrap .qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        .cart-wrap .remove-btn {
+          background: none; border: none; cursor: pointer;
+          padding: 0.4rem; color: var(--muted);
+          transition: color .2s, background .2s;
+        }
+        .cart-wrap .remove-btn:hover { color: var(--accent); }
+
+        .cart-wrap .trust-row { display: flex; align-items: center; gap: 0.6rem; }
+
+        .cart-wrap .back-link {
+          display: inline-flex; align-items: center; gap: 0.5rem;
+          color: var(--muted); text-decoration: none; font-size: 0.88rem;
+          font-weight: 500; transition: color .2s; margin-bottom: 2.5rem;
+          letter-spacing: 0.03em;
+        }
+        .cart-wrap .back-link:hover { color: var(--accent); }
+        .cart-wrap .back-link svg { transition: transform .2s; }
+        .cart-wrap .back-link:hover svg { transform: translateX(-3px); }
+      `}</style>
+
+      <div className="cart-wrap min-h-screen">
+
+        {/* ── Hero mini-header ── */}
+        <section style={{
+          minHeight: '22vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          paddingTop: '5rem',
+          background: darkMode
+            ? 'radial-gradient(ellipse 90% 80% at 50% 40%, #2e0c07 0%, #141210 60%, #0e0c0a 100%)'
+            : 'radial-gradient(ellipse 110% 90% at 50% 40%, #fdd8a8 0%, #fde8c8 40%, #fdf6ee 100%)',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: `radial-gradient(circle, rgba(192,57,43,0.15) 1px, transparent 1px)`,
+            backgroundSize: '36px 36px', opacity: 0.5 }} />
+          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
+            <p className="yatra fu" style={{ fontSize: '0.82rem', letterSpacing: '0.14em', color: accent, marginBottom: '0.4rem' }}>
+              खरीदारी की टोकरी
+            </p>
+            <h1 className="h1 fu d1" style={{ fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, color: ink, lineHeight: 1.1 }}>
+              Shopping <em style={{ color: accent }}>Cart</em>
+            </h1>
+            <p className="fu d2" style={{ color: muted, fontSize: '0.9rem', marginTop: '0.5rem' }}>
+              {cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart
+            </p>
+          </div>
+        </section>
+
+        {/* ── Main content ── */}
+        <section style={{
+          padding: '3rem 0 5rem',
+          background: darkMode
+            ? 'linear-gradient(180deg, #0e0c09 0%, #141210 100%)'
+            : 'linear-gradient(180deg, #fff3e8 0%, #fdf6ee 100%)',
+        }}>
+          <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0 2rem' }}>
+
+            <a href="/marketplace" className="back-link">
+              <ArrowLeft style={{ width: '1rem', height: '1rem' }} />
+              Continue Shopping
+            </a>
+
+            {cart.length === 0 ? (
+              /* ── Empty state ── */
+              <div className="fu" style={{ textAlign: 'center', padding: '5rem 1rem',
+                position: 'relative', overflow: 'hidden',
+                background: cardBg,
+                border: `1px solid ${cardBorder}`,
+                boxShadow: darkMode ? 'none' : '0 4px 30px rgba(192,57,43,0.07)',
+              }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '1.75rem', height: '1.75rem',
+                  borderTop: `2px solid ${accent}`, borderLeft: `2px solid ${accent}` }} />
+                <div style={{ position: 'absolute', bottom: 0, right: 0, width: '1.75rem', height: '1.75rem',
+                  borderBottom: `2px solid ${accent}`, borderRight: `2px solid ${accent}` }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+                  background: `linear-gradient(90deg, ${accent}, ${saffron}, transparent)` }} />
+
+                <div style={{ width: '5rem', height: '5rem', margin: '0 auto 1.75rem',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: `${accent}12`, border: `1px solid ${accent}35` }}>
+                  <ShoppingCart style={{ width: '2.2rem', height: '2.2rem', color: accent }} />
+                </div>
+                <p className="yatra" style={{ fontSize: '0.82rem', letterSpacing: '0.12em', color: accent, marginBottom: '0.4rem' }}>
+                  खाली टोकरी
+                </p>
+                <h2 className="h1" style={{ color: ink, fontSize: '1.6rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+                  Your cart is empty
+                </h2>
+                <p style={{ color: muted, fontSize: '1rem', marginBottom: '2rem' }}>
+                  Add some books to get started!
+                </p>
+                <a href="/marketplace" className="pulse-btn" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                  padding: '0.85rem 2rem',
+                  background: `linear-gradient(135deg, ${accent}, ${saffron})`,
+                  color: '#fff', fontWeight: 600, fontSize: '0.92rem',
+                  letterSpacing: '0.04em', textDecoration: 'none',
+                  boxShadow: `0 6px 24px rgba(192,57,43,0.35)`,
+                }}>
+                  <span className="h1">Browse Books</span>
+                  <ArrowRight style={{ width: '0.9rem', height: '0.9rem' }} />
+                </a>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+                <div style={{ display: 'grid', gap: '2rem' }}
+                  className="cart-cols">
+                  <style>{`
+                    @media(min-width:900px){ .cart-cols{ grid-template-columns: 1fr 340px !important; } }
+                  `}</style>
+
+                  {/* LEFT — items */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {/* section label */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem',
+                      paddingBottom: '1rem', borderBottom: `1px solid ${rule}`, marginBottom: '0.25rem' }}>
+                      <span className="ghost-num">01</span>
+                      <div>
+                        <p className="yatra" style={{ fontSize: '0.75rem', letterSpacing: '0.12em', color: accent }}>आपकी किताबें</p>
+                        <p className="h1" style={{ color: ink, fontSize: '1.1rem', fontWeight: 700 }}>Your Books</p>
                       </div>
+                    </div>
 
-                      {/* Product Details */}
-                      <div className="grow">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <h3 className={`text-xl font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                              {item.title}
-                            </h3>
-                            <p className={`text-sm mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                              by {item.author}
-                            </p>
-                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                              darkMode ? 'bg-red-950/50 text-red-400' : 'bg-red-100 text-red-600'
-                            }`}>
-                              {item.category}
-                            </span>
-                          </div>
-                          
-                          {/* Remove Button */}
-                          <button 
-                            onClick={() => removeItem(item.id)} 
-                            className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 ${
-                              darkMode ? 'text-gray-400 hover:text-red-500 hover:bg-red-950/30' : 'text-gray-500 hover:text-red-600 hover:bg-red-50'
-                            }`}
-                          >
-                            <Trash2 className="w-5 h-5" />
-                          </button>
+                    {cart.map((item, idx) => (
+                      <div key={item.id} className="item-card fu" style={{
+                        animationDelay: `${idx * 0.07}s`,
+                        background: cardBg,
+                        border: `1px solid ${cardBorder}`,
+                        boxShadow: darkMode ? 'none' : '0 4px 20px rgba(192,57,43,0.06)',
+                        position: 'relative', overflow: 'hidden',
+                        padding: '1.5rem',
+                        display: 'flex', gap: '1.25rem', flexWrap: 'wrap',
+                      }}>
+                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+                          background: `linear-gradient(90deg, ${accent}, ${saffron}, transparent)` }} />
+
+                        {/* image */}
+                        <div style={{ flexShrink: 0 }}>
+                          <img src={item.image} alt={item.title}
+                            style={{ width: '6rem', height: '8rem', objectFit: 'cover',
+                              border: `1px solid ${cardBorder}` }} />
                         </div>
 
-                        {/* Price and Quantity Controls */}
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
-                          <div className="flex items-center space-x-3">
-                            <span className="text-2xl font-bold text-red-500">₹{item.price}</span>
-                            {item.originalPrice && (
-                              <span className={`text-lg line-through ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                                ₹{item.originalPrice}
+                        {/* details */}
+                        <div style={{ flex: 1, minWidth: '160px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
+                            <div>
+                              <h3 className="h1" style={{ color: ink, fontSize: '1.1rem', fontWeight: 700,
+                                marginBottom: '0.2rem', lineHeight: 1.3 }}>
+                                {item.title}
+                              </h3>
+                              <p style={{ color: muted, fontSize: '0.82rem', marginBottom: '0.5rem' }}>by {item.author}</p>
+                              <span style={{ display: 'inline-block', padding: '0.2rem 0.6rem',
+                                background: `${accent}15`, border: `1px solid ${accent}30`,
+                                color: accent, fontSize: '0.65rem', letterSpacing: '0.18em',
+                                textTransform: 'uppercase', fontWeight: 600 }}>
+                                {item.category}
                               </span>
-                            )}
-                          </div>
-
-                          {/* Quantity Controls */}
-                          <div className={`flex items-center space-x-3 rounded-lg px-2 ${
-                            darkMode ? 'bg-black/50 border border-red-900/30' : 'bg-gray-50 border border-gray-200'
-                          }`}>
-                            <button 
-                              onClick={() => decreaseQty(item.id)} 
-                              className={`p-2 transition-colors ${
-                                darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-600'
-                              } ${item.qty === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              disabled={item.qty === 1}
-                            >
-                              <Minus className="w-4 h-4" />
-                            </button>
-                            <span className={`w-12 text-center font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                              {item.qty}
-                            </span>
-                            <button 
-                              onClick={() => increaseQty(item.id)} 
-                              className={`p-2 transition-colors ${
-                                darkMode ? 'text-gray-300 hover:text-red-500' : 'text-gray-700 hover:text-red-600'
-                              }`}
-                            >
-                              <Plus className="w-4 h-4" />
+                            </div>
+                            <button className="remove-btn" onClick={() => removeItem(item.id)}
+                              aria-label="Remove item">
+                              <Trash2 style={{ width: '1rem', height: '1rem' }} />
                             </button>
                           </div>
-                        </div>
 
-                        {/* Item Subtotal */}
-                        <div className={`mt-4 pt-4 border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
-                          <div className="flex justify-between items-center">
-                            <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Item Subtotal:</span>
-                            <span className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                          {/* price + qty */}
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            flexWrap: 'wrap', gap: '1rem', marginTop: '1rem',
+                            paddingTop: '1rem', borderTop: `1px solid ${rule}` }}>
+                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                              <span className="h1" style={{ color: accent, fontSize: '1.4rem', fontWeight: 900 }}>
+                                ₹{item.price}
+                              </span>
+                              {item.originalPrice && (
+                                <span style={{ color: muted, fontSize: '1rem', textDecoration: 'line-through' }}>
+                                  ₹{item.originalPrice}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* qty control */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem',
+                              border: `1px solid ${rule}`,
+                              background: darkMode ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.7)',
+                              padding: '0.1rem 0.5rem' }}>
+                              <button className="qty-btn" onClick={() => decreaseQty(item.id)}
+                                disabled={item.qty === 1}>
+                                <Minus style={{ width: '0.9rem', height: '0.9rem' }} />
+                              </button>
+                              <span className="h1" style={{ minWidth: '2rem', textAlign: 'center',
+                                color: ink, fontWeight: 700, fontSize: '1rem' }}>
+                                {item.qty}
+                              </span>
+                              <button className="qty-btn" onClick={() => increaseQty(item.id)}>
+                                <Plus style={{ width: '0.9rem', height: '0.9rem' }} />
+                              </button>
+                            </div>
+
+                            <span className="h1" style={{ color: ink, fontWeight: 700, fontSize: '1rem' }}>
                               ₹{item.price * item.qty}
                             </span>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
 
-              {/* Order Summary - RIGHT COLUMN */}
-              <div className="lg:col-span-1">
-                <div className={`rounded-2xl shadow-lg overflow-hidden sticky top-32 ${
-                  darkMode 
-                    ? 'bg-linear-to-br from-red-950/20 to-black border border-red-900/20' 
-                    : 'bg-white border border-gray-200'
-                }`}>
-                  <div className="p-6">
-                    <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      Order Summary
-                    </h2>
+                  {/* RIGHT — summary */}
+                  <div style={{ position: 'sticky', top: '6rem', height: 'fit-content' }}>
+                    <div style={{
+                      background: cardBg, border: `1px solid ${cardBorder}`,
+                      boxShadow: darkMode ? 'none' : '0 4px 30px rgba(192,57,43,0.07)',
+                      position: 'relative', overflow: 'hidden', padding: '2rem',
+                    }}>
+                      <div style={{ position: 'absolute', top: 0, left: 0, width: '1.75rem', height: '1.75rem',
+                        borderTop: `2px solid ${accent}`, borderLeft: `2px solid ${accent}` }} />
+                      <div style={{ position: 'absolute', bottom: 0, right: 0, width: '1.75rem', height: '1.75rem',
+                        borderBottom: `2px solid ${accent}`, borderRight: `2px solid ${accent}` }} />
+                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+                        background: `linear-gradient(90deg, ${accent}, ${saffron}, transparent)` }} />
 
-                    {/* Summary Details */}
-                    <div className="space-y-4 mb-6">
-                      <div className="flex justify-between">
-                        <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                          Subtotal ({cart.reduce((sum, item) => sum + item.qty, 0)} items)
-                        </span>
-                        <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>₹{subtotal}</span>
-                      </div>
-                      
-                      <div className="flex justify-between">
-                        <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Shipping</span>
-                        <span className={`font-semibold ${shipping === 0 ? 'text-green-500' : (darkMode ? 'text-white' : 'text-gray-900')}`}>
-                          {shipping === 0 ? 'FREE' : `₹${shipping}`}
-                        </span>
-                      </div>
-                      
-                      {savings > 0 && (
-                        <div className="flex justify-between text-green-600">
-                          <span className="font-medium">Total Savings</span>
-                          <span className="font-bold">-₹{savings}</span>
-                        </div>
-                      )}
-                      
-                      <div className={`pt-4 border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
-                        <div className="flex justify-between items-center">
-                          <span className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Total</span>
-                          <span className="text-2xl font-bold text-red-500">₹{total}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem',
+                        marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: `1px solid ${rule}` }}>
+                        <span className="ghost-num" style={{ fontSize: '2rem' }}>02</span>
+                        <div>
+                          <p className="yatra" style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: accent }}>सारांश</p>
+                          <p className="h1" style={{ color: ink, fontWeight: 700, fontSize: '1rem' }}>Order Summary</p>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Free Shipping Banner */}
-                    {shipping > 0 && (
-                      <div className={`mb-6 p-4 rounded-xl ${darkMode ? 'bg-amber-950/30 border border-amber-900/30' : 'bg-amber-50 border border-amber-200'}`}>
-                        <p className={`text-sm ${darkMode ? 'text-amber-400' : 'text-amber-700'}`}>
-                          Add ₹{500 - subtotal} more to get FREE shipping! 🎉
-                        </p>
-                      </div>
-                    )}
-
-                  
-                    <button
-                          disabled={cart.length === 0}
-                          onClick={() => {
-                            if (user) {
-                              navigate("/checkout");          // logged in
-                            } else {
-                              navigate("/checkout?guest=1");  // guest
-                            }
-                          }}
-                          className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 mb-4 ${
-                            cart.length === 0
-                              ? 'bg-gray-400 cursor-not-allowed'
-                              : 'bg-linear-to-r from-red-600 to-red-700 text-white'
-                          }`}
-                        >
-                          Proceed to Checkout
-                        </button>
-
-
-                    {/* Trust Badges */}
-                    <div className={`space-y-3 pt-6 border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
+                      {/* rows */}
                       {[
-                        { icon: ShieldCheck, text: 'Secure Payment' },
-                        { icon: Truck, text: 'Fast Delivery' },
-                        { icon: Package, text: 'Easy Returns' }
-                      ].map(({ icon: Icon, text }) => (
-                        <div key={text} className="flex items-center space-x-3">
-                          <Icon className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                          <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{text}</span>
+                        { label: `Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)`, value: `₹${subtotal}`, color: ink },
+                        { label: 'Shipping', value: shipping === 0 ? 'FREE' : `₹${shipping}`, color: shipping === 0 ? '#1db954' : ink },
+                        ...(savings > 0 ? [{ label: 'Total Savings', value: `-₹${savings}`, color: '#1db954' }] : []),
+                      ].map((row, i) => (
+                        <div key={i} style={{ display: 'flex', justifyContent: 'space-between',
+                          marginBottom: '0.85rem', fontSize: '0.92rem' }}>
+                          <span style={{ color: muted }}>{row.label}</span>
+                          <span className="h1" style={{ color: row.color, fontWeight: 700 }}>{row.value}</span>
                         </div>
                       ))}
+
+                      <div style={{ height: '2px', background: `linear-gradient(90deg, ${accent}70, ${saffron}50, transparent)`,
+                        margin: '1rem 0' }} />
+
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem' }}>
+                        <span className="h1" style={{ color: ink, fontSize: '1.1rem', fontWeight: 700 }}>Total</span>
+                        <span className="h1" style={{ color: accent, fontSize: '1.75rem', fontWeight: 900 }}>₹{total}</span>
+                      </div>
+
+                      {shipping > 0 && (
+                        <div style={{ marginBottom: '1.25rem', padding: '0.75rem 1rem',
+                          background: darkMode ? 'rgba(255,193,7,0.08)' : 'rgba(255,193,7,0.1)',
+                          border: `1px solid ${darkMode ? 'rgba(255,193,7,0.2)' : 'rgba(180,130,0,0.25)'}`,
+                          fontSize: '0.82rem', color: darkMode ? '#fbbf24' : '#92650a' }}>
+                          Add ₹{500 - subtotal} more for FREE shipping 🎉
+                        </div>
+                      )}
+
+                      <button
+                        className="pulse-btn"
+                        disabled={cart.length === 0}
+                        onClick={() => navigate(user ? '/checkout' : '/checkout?guest=1')}
+                        style={{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center',
+                          justifyContent: 'center', gap: '0.6rem',
+                          background: `linear-gradient(135deg, ${accent}, ${saffron})`,
+                          color: '#fff', fontWeight: 600, fontSize: '0.95rem',
+                          letterSpacing: '0.04em', border: 'none', cursor: 'pointer',
+                          boxShadow: `0 6px 24px rgba(192,57,43,0.35)`, transition: 'gap .3s',
+                        }}>
+                        <span className="h1">Proceed to Checkout</span>
+                        <ArrowRight style={{ width: '0.9rem', height: '0.9rem' }} />
+                      </button>
+
+                      {/* trust badges */}
+                      <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: `1px solid ${rule}`,
+                        display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                        {[
+                          { icon: ShieldCheck, text: 'Secure Payment' },
+                          { icon: Truck,       text: 'Fast Delivery' },
+                          { icon: Package,     text: 'Easy Returns' },
+                        ].map(({ icon: Icon, text }) => (
+                          <div key={text} className="trust-row" style={{ color: muted, fontSize: '0.83rem' }}>
+                            <Icon style={{ width: '0.9rem', height: '0.9rem', color: accent, flexShrink: 0 }} />
+                            {text}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
+
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-    </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 

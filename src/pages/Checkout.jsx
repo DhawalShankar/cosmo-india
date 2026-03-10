@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { AuthContext } from '../context/AuthContext';
-import { ShoppingBag, User, Mail, Phone, MapPin, CreditCard, Lock } from 'lucide-react';
+import { ShoppingBag, User, Mail, Phone, MapPin, CreditCard, Lock, ArrowRight } from 'lucide-react';
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
@@ -11,468 +11,385 @@ const Checkout = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const isGuest = params.get("guest") === "1";
+  const isGuest = new URLSearchParams(location.search).get('guest') === '1';
 
-  // Guest user details
-  const [guestDetails, setGuestDetails] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: ''
-  });
+  const [guestDetails, setGuestDetails] = useState({ name: '', email: '', phone: '', address: '' });
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Calculate total
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = subtotal > 500 ? 0 : 50;
-  const total = subtotal + shipping;
+  const total    = subtotal + shipping;
 
-  // Redirect if cart empty
-  useEffect(() => {
-    if (cart.length === 0) {
-      navigate('/marketplace');
-    }
-  }, [cart, navigate]);
+  useEffect(() => { if (cart.length === 0) navigate('/marketplace'); }, [cart, navigate]);
 
-  // Validation
+  const accent  = '#c0392b';
+  const saffron = '#d4450c';
+  const ink     = darkMode ? '#f0e8dc' : '#1a1209';
+  const muted   = darkMode ? 'rgba(240,232,220,0.72)' : 'rgba(26,18,9,0.65)';
+  const rule    = darkMode ? 'rgba(192,57,43,0.28)' : 'rgba(160,40,20,0.18)';
+  // Neutral border for form inputs — distinct from the decorative rule color
+  const inputBorder = darkMode ? 'rgba(240,232,220,0.15)' : 'rgba(26,18,9,0.2)';
+  const cardBg  = darkMode
+    ? 'linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))'
+    : 'linear-gradient(145deg, #ffffff, #fdf6ee)';
+  const cardBorder = darkMode ? 'rgba(192,57,43,0.22)' : 'rgba(192,57,43,0.16)';
+
   const validateForm = () => {
-    const newErrors = {};
-    
-    if (!guestDetails.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
-    if (!guestDetails.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(guestDetails.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!guestDetails.phone.trim()) {
-      newErrors.phone = 'Phone is required';
-    } else if (!/^\d{10}$/.test(guestDetails.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Phone must be 10 digits';
-    }
-    
-    if (!guestDetails.address.trim()) {
-      newErrors.address = 'Address is required';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const e = {};
+    if (!guestDetails.name.trim())    e.name    = 'Name is required';
+    if (!guestDetails.email.trim())   e.email   = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestDetails.email.trim()))
+                                       e.email   = 'Please enter a valid email address';
+    if (!guestDetails.phone.trim())   e.phone   = 'Phone is required';
+    else if (!/^\+?[\d\s\-().]{7,15}$/.test(guestDetails.phone.trim()))
+                                       e.phone   = 'Please enter a valid phone number';
+    if (!guestDetails.address.trim()) e.address = 'Address is required';
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setGuestDetails(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
+    setGuestDetails(p => ({ ...p, [name]: value }));
+    if (errors[name]) setErrors(p => ({ ...p, [name]: '' }));
   };
 
   const handlePayment = async () => {
-    // For logged-in users, check if phone and address are provided
-    if (!isGuest && user) {
-      if (!user.phone || !user.address) {
-        alert('Please update your phone number and address in Profile Settings before checkout.');
-        navigate('/profile');
-        return;
-      }
-    }
-
-    // Validate form for guest users
-    if (isGuest && !validateForm()) {
+    if (!isGuest && user && (!user.phone || !user.address)) {
+      alert('Please update your phone and address in Profile Settings before checkout.');
+      navigate('/profile');
       return;
     }
+    if (isGuest && !validateForm()) return;
 
     setIsProcessing(true);
-
     try {
-      // Prepare order data
       const orderData = {
         amount: total,
         email: isGuest ? guestDetails.email : user?.email,
-        name: isGuest ? guestDetails.name : user?.name,
+        name:  isGuest ? guestDetails.name  : user?.name,
         phone: isGuest ? guestDetails.phone : user?.phone,
         address: isGuest ? guestDetails.address : user?.address,
-        product: cart.map(item => `${item.title} (x${item.qty})`).join(', '),
-        orderType: isGuest ? 'guest' : 'logged-in'
+        product: cart.map(i => `${i.title} (x${i.qty})`).join(', '),
+        orderType: isGuest ? 'guest' : 'logged-in',
       };
 
-      // Create Razorpay order
       const res = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
       });
-
       const { order } = await res.json();
 
-      // Razorpay options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY,
-        amount: order.amount,
-        currency: 'INR',
-        name: 'Cosmo India Prakashan',
-        description: 'Book Purchase',
+        amount: order.amount, currency: 'INR',
+        name: 'Cosmo India Prakashan', description: 'Book Purchase',
         order_id: order.id,
-        handler: async function (response) {
-          // Verify payment
+        handler: async (response) => {
           try {
-            const verifyRes = await fetch('/api/payment/verify', {
+            const vRes = await fetch('/api/payment/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                notes: order.notes
-              }),
+              body: JSON.stringify({ ...response, notes: order.notes }),
             });
-
-            const verifyData = await verifyRes.json();
-
-            if (verifyData.success) {
-              clearCart();
-              alert('Payment successful! Order confirmation sent to your email.');
-              navigate('/marketplace');
-            } else {
-              alert('Payment verification failed. Please contact support.');
-            }
-          } catch (err) {
-            console.error('Verification error:', err);
-            alert('Payment verification failed. Please contact support.');
-          }
+            const vData = await vRes.json();
+            if (vData.success) { clearCart(); navigate('/order-success'); }
+            else alert('Payment verification failed. Please contact support.');
+          } catch { alert('Payment verification failed. Please contact support.'); }
         },
-        prefill: {
-          name: orderData.name,
-          email: orderData.email,
-          contact: orderData.phone
-        },
-        theme: {
-          color: '#dc2626',
-        },
+        prefill: { name: orderData.name, email: orderData.email, contact: orderData.phone },
+        theme: { color: accent },
       };
 
       const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (response) {
-        alert('Payment failed: ' + response.error.description);
-        setIsProcessing(false);
-      });
+      rzp.on('payment.failed', (r) => { alert('Payment failed: ' + r.error.description); setIsProcessing(false); });
       rzp.open();
       setIsProcessing(false);
-    } catch (err) {
-      console.error(err);
-      alert('Payment failed. Try again.');
-      setIsProcessing(false);
-    }
+    } catch { alert('Payment failed. Try again.'); setIsProcessing(false); }
   };
 
+  /* ── Shared input style ── */
+  const inputStyle = (field) => ({
+    width: '100%', padding: '0.75rem 1rem',
+    border: `1px solid ${errors[field] ? accent : inputBorder}`,
+    background: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.85)',
+    color: ink, fontFamily: 'DM Sans, sans-serif', fontSize: '1rem',
+    outline: 'none', transition: 'border-color .2s, box-shadow .2s',
+  });
+
   return (
-    <div className={`min-h-screen pt-32 pb-12 ${darkMode ? 'bg-black' : 'bg-gray-50'}`}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className={`text-3xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-          Checkout
-        </h1>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Yatra+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - User/Guest Details */}
-          <div className={`rounded-2xl p-6 h-fit ${
-            darkMode ? 'bg-red-950/20 border border-red-900/30' : 'bg-white border border-gray-200'
-          }`}>
-            <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${
-              darkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              <User className="w-5 h-5 text-red-500" />
-              {isGuest ? 'Your Details' : 'Delivery Information'}
-            </h2>
+        .co-wrap * { box-sizing: border-box; }
+        .co-wrap {
+          font-family: 'DM Sans', system-ui, sans-serif;
+          --ink: ${ink}; --paper: ${darkMode ? '#141210' : '#fdf6ee'};
+          --accent: #c0392b; --saffron: #d4450c;
+          --rule: ${rule}; --muted: ${muted};
+          background: var(--paper); color: var(--ink);
+        }
+        .co-wrap .yatra { font-family: 'Yatra One', serif; }
+        .co-wrap .h1    { font-family: 'Playfair Display', Georgia, serif; }
+        .co-wrap .ghost-num {
+          font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900;
+          color: transparent; -webkit-text-stroke: 1px var(--rule); user-select: none; line-height: 1;
+        }
+        @keyframes coFadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+        .co-wrap .fu  { animation: coFadeUp .7s cubic-bezier(.22,1,.36,1) both; }
+        .co-wrap .d1  { animation-delay: .1s; }
+        .co-wrap .d2  { animation-delay: .22s; }
 
-            {/* For Logged-in Users - Show Details */}
-            {!isGuest && user && (
-              <div className="space-y-4 mb-6">
-                <div className={`p-4 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <User className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                    <div>
-                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Name</p>
-                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {user.name || 'Not provided'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <Mail className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                    <div>
-                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Email</p>
-                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {user.email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <Phone className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                    <div>
-                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Phone</p>
-                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {user.phone || 'Not provided'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className={`w-5 h-5 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                    <div>
-                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Address</p>
-                      <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {user.address || 'Not provided'}
-                      </p>
-                    </div>
+        @keyframes coPulse {
+          0%{box-shadow:0 0 0 0 rgba(192,57,43,.45)}
+          70%{box-shadow:0 0 0 14px rgba(192,57,43,0)}
+          100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}
+        }
+        .co-wrap .pulse-btn:hover { animation: coPulse 1s ease-out; }
+
+        .co-wrap .ci-input:focus {
+          border-color: var(--accent) !important;
+          box-shadow: 0 0 0 3px rgba(192,57,43,.12);
+        }
+        .co-wrap .ci-input::placeholder { color: var(--muted); }
+
+        .co-wrap .info-row { display: flex; align-items: flex-start; gap: 0.75rem; padding: '0.5rem 0'; }
+      `}</style>
+
+      <div className="co-wrap min-h-screen">
+
+        {/* hero strip */}
+        <section style={{
+          minHeight: '18vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          paddingTop: '5rem',
+          background: darkMode
+            ? 'radial-gradient(ellipse 90% 80% at 50% 40%, #2e0c07 0%, #141210 60%, #0e0c0a 100%)'
+            : 'radial-gradient(ellipse 110% 90% at 50% 40%, #fdd8a8 0%, #fde8c8 40%, #fdf6ee 100%)',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: `radial-gradient(circle, rgba(192,57,43,0.15) 1px, transparent 1px)`,
+            backgroundSize: '36px 36px', opacity: 0.5 }} />
+          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
+            <p className="yatra fu" style={{ fontSize: '0.82rem', letterSpacing: '0.14em', color: accent, marginBottom: '0.4rem' }}>
+              भुगतान
+            </p>
+            <h1 className="h1 fu d1" style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 900, color: ink, lineHeight: 1.1 }}>
+              Check<em style={{ color: accent }}>out</em>
+            </h1>
+          </div>
+        </section>
+
+        <section style={{
+          padding: '3rem 0 5rem',
+          background: darkMode
+            ? 'linear-gradient(180deg, #0e0c09 0%, #141210 100%)'
+            : 'linear-gradient(180deg, #fff3e8 0%, #fdf6ee 100%)',
+        }}>
+          <div style={{ maxWidth: '60rem', margin: '0 auto', padding: '0 2rem' }}>
+            <div style={{ display: 'grid', gap: '2rem' }} className="co-grid">
+              <style>{`@media(min-width:860px){ .co-grid{ grid-template-columns: 1fr 320px !important; } }`}</style>
+
+              {/* ── LEFT: delivery info ── */}
+              <div style={{ background: cardBg, border: `1px solid ${cardBorder}`,
+                boxShadow: darkMode ? 'none' : '0 4px 30px rgba(192,57,43,0.07)',
+                position: 'relative', overflow: 'hidden', padding: '2rem' }}>
+
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '1.75rem', height: '1.75rem',
+                  borderTop: `2px solid ${accent}`, borderLeft: `2px solid ${accent}` }} />
+                <div style={{ position: 'absolute', bottom: 0, right: 0, width: '1.75rem', height: '1.75rem',
+                  borderBottom: `2px solid ${accent}`, borderRight: `2px solid ${accent}` }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+                  background: `linear-gradient(90deg, ${accent}, ${saffron}, transparent)` }} />
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem',
+                  marginBottom: '1.75rem', paddingBottom: '1rem', borderBottom: `1px solid ${rule}` }}>
+                  <span className="ghost-num" style={{ fontSize: '2rem' }}>01</span>
+                  <div>
+                    <p className="yatra" style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: accent }}>विवरण</p>
+                    <p className="h1" style={{ color: ink, fontWeight: 700, fontSize: '1.05rem' }}>
+                      {isGuest ? 'Your Details' : 'Delivery Information'}
+                    </p>
                   </div>
                 </div>
 
-                {(!user.phone || !user.address) && (
-                  <div className={`p-4 rounded-xl border-2 border-dashed ${
-                    darkMode ? 'border-amber-900/50 bg-amber-950/20' : 'border-amber-300 bg-amber-50'
-                  }`}>
-                    <p className={`text-sm ${darkMode ? 'text-amber-400' : 'text-amber-700'}`}>
-                      ⚠️ Please update your phone and address in{' '}
-                      <a href="/profile" className="font-bold underline hover:text-red-500">
-                        Profile Settings
-                      </a>{' '}
-                      before checkout.
-                    </p>
+                {/* logged-in user */}
+                {!isGuest && user && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {[
+                      { icon: User,   label: 'Name',    value: user.name    || 'Not provided' },
+                      { icon: Mail,   label: 'Email',   value: user.email },
+                      { icon: Phone,  label: 'Phone',   value: user.phone   || 'Not provided' },
+                      { icon: MapPin, label: 'Address', value: user.address || 'Not provided' },
+                    ].map(({ icon: Icon, label, value }) => (
+                      <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+                        padding: '0.85rem 1rem',
+                        background: darkMode ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
+                        border: `1px solid ${rule}` }}>
+                        <Icon style={{ width: '1rem', height: '1rem', color: accent, flexShrink: 0, marginTop: '0.15rem' }} />
+                        <div>
+                          <p style={{ fontSize: '0.72rem', letterSpacing: '0.06em', textTransform: 'uppercase',
+                            color: muted, marginBottom: '0.2rem' }}>{label}</p>
+                          <p className="h1" style={{ color: ink, fontWeight: 600, fontSize: '0.95rem' }}>{value}</p>
+                        </div>
+                      </div>
+                    ))}
+
+                    {(!user.phone || !user.address) && (
+                      <div style={{ padding: '0.9rem 1rem',
+                        background: darkMode ? 'rgba(251,191,36,0.06)' : 'rgba(251,191,36,0.1)',
+                        border: `1px dashed ${darkMode ? 'rgba(251,191,36,0.3)' : 'rgba(180,130,0,0.35)'}`,
+                        fontSize: '0.85rem', color: darkMode ? '#fbbf24' : '#92650a' }}>
+                        ⚠️ Please update your phone and address in{' '}
+                        <a href="/profile" style={{ fontWeight: 700, color: accent, textDecoration: 'none' }}>
+                          Profile Settings
+                        </a>{' '}
+                        before checkout.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* guest form */}
+                {isGuest && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                    {[
+                      { name: 'name',    type: 'text',  label: 'Full Name',        icon: User,   placeholder: 'Your full name' },
+                      { name: 'email',   type: 'email', label: 'Email Address',    icon: Mail,   placeholder: 'your@email.com' },
+                      { name: 'phone',   type: 'tel',   label: 'Phone Number',     icon: Phone,  placeholder: '+91 98765 43210' },
+                    ].map(({ name, type, label, icon: Icon, placeholder }) => (
+                      <div key={name}>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600,
+                          letterSpacing: '0.06em', textTransform: 'uppercase', color: muted, marginBottom: '0.4rem' }}>
+                          {label} *
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <Icon style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)',
+                            width: '0.9rem', height: '0.9rem', color: muted, pointerEvents: 'none' }} />
+                          <input type={type} name={name} value={guestDetails[name]}
+                            onChange={handleInputChange} placeholder={placeholder}
+                            className="ci-input"
+                            style={{ ...inputStyle(name), paddingLeft: '2.25rem' }} />
+                        </div>
+                        {errors[name] && <p style={{ marginTop: '0.3rem', fontSize: '0.78rem', color: accent }}>{errors[name]}</p>}
+                      </div>
+                    ))}
+
+                    {/* address textarea */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600,
+                        letterSpacing: '0.06em', textTransform: 'uppercase', color: muted, marginBottom: '0.4rem' }}>
+                        Delivery Address *
+                      </label>
+                      <div style={{ position: 'relative' }}>
+                        <MapPin style={{ position: 'absolute', left: '0.75rem', top: '0.85rem',
+                          width: '0.9rem', height: '0.9rem', color: muted, pointerEvents: 'none' }} />
+                        <textarea name="address" value={guestDetails.address}
+                          onChange={handleInputChange} rows="3"
+                          placeholder="Complete delivery address"
+                          className="ci-input"
+                          style={{ ...inputStyle('address'), paddingLeft: '2.25rem', resize: 'none' }} />
+                      </div>
+                      {errors.address && <p style={{ marginTop: '0.3rem', fontSize: '0.78rem', color: accent }}>{errors.address}</p>}
+                    </div>
                   </div>
                 )}
               </div>
-            )}
 
-            {/* For Guest Users - Show Form */}
-            {isGuest && (
-              <div className="space-y-4">
+              {/* ── RIGHT: order summary ── */}
+              <div style={{ position: 'sticky', top: '6rem', height: 'fit-content' }}>
+              <div style={{
+                background: cardBg, border: `1px solid ${cardBorder}`,
+                boxShadow: darkMode ? 'none' : '0 4px 30px rgba(192,57,43,0.07)',
+                position: 'relative', overflow: 'hidden', padding: '2rem' }}>
 
-                {/* Name */}
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Full Name *
-                  </label>
-                  <div className="relative">
-                    <User className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                      darkMode ? 'text-gray-500' : 'text-gray-400'
-                    }`} />
-                    <input
-                      type="text"
-                      name="name"
-                      value={guestDetails.name}
-                      onChange={handleInputChange}
-                      className={`w-full pl-11 pr-4 py-3 rounded-xl border ${
-                        errors.name 
-                          ? 'border-red-500' 
-                          : darkMode 
-                            ? 'border-red-900/30 bg-black/50 text-white' 
-                            : 'border-gray-300 bg-white'
-                      } focus:outline-none focus:ring-2 focus:ring-red-500 transition-all`}
-                      placeholder="Enter your full name"
-                    />
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '1.75rem', height: '1.75rem',
+                  borderTop: `2px solid ${accent}`, borderLeft: `2px solid ${accent}` }} />
+                <div style={{ position: 'absolute', bottom: 0, right: 0, width: '1.75rem', height: '1.75rem',
+                  borderBottom: `2px solid ${accent}`, borderRight: `2px solid ${accent}` }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+                  background: `linear-gradient(90deg, ${accent}, ${saffron}, transparent)` }} />
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem',
+                  marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: `1px solid ${rule}` }}>
+                  <span className="ghost-num" style={{ fontSize: '2rem' }}>02</span>
+                  <div>
+                    <p className="yatra" style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: accent }}>सारांश</p>
+                    <p className="h1" style={{ color: ink, fontWeight: 700, fontSize: '1.05rem' }}>Order Summary</p>
                   </div>
-                  {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                  )}
                 </div>
 
-                {/* Email */}
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Email Address *
-                  </label>
-                  <div className="relative">
-                    <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                      darkMode ? 'text-gray-500' : 'text-gray-400'
-                    }`} />
-                    <input
-                      type="email"
-                      name="email"
-                      value={guestDetails.email}
-                      onChange={handleInputChange}
-                      className={`w-full pl-11 pr-4 py-3 rounded-xl border ${
-                        errors.email 
-                          ? 'border-red-500' 
-                          : darkMode 
-                            ? 'border-red-900/30 bg-black/50 text-white' 
-                            : 'border-gray-300 bg-white'
-                      } focus:outline-none focus:ring-2 focus:ring-red-500 transition-all`}
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                  )}
+                {/* cart items */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.25rem' }}>
+                  {cart.map(item => (
+                    <div key={item.id} style={{ display: 'flex', gap: '0.75rem',
+                      padding: '0.75rem', background: darkMode ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
+                      border: `1px solid ${rule}` }}>
+                      <img src={item.image} alt={item.title}
+                        style={{ width: '3.5rem', height: '4.5rem', objectFit: 'cover', flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p className="h1" style={{ color: ink, fontWeight: 700, fontSize: '0.85rem',
+                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {item.title}
+                        </p>
+                        <p style={{ color: muted, fontSize: '0.75rem' }}>Qty: {item.qty}</p>
+                        <p className="h1" style={{ color: accent, fontWeight: 700, fontSize: '0.9rem' }}>
+                          ₹{item.price * item.qty}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Phone */}
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Phone Number *
-                  </label>
-                  <div className="relative">
-                    <Phone className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                      darkMode ? 'text-gray-500' : 'text-gray-400'
-                    }`} />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={guestDetails.phone}
-                      onChange={handleInputChange}
-                      className={`w-full pl-11 pr-4 py-3 rounded-xl border ${
-                        errors.phone 
-                          ? 'border-red-500' 
-                          : darkMode 
-                            ? 'border-red-900/30 bg-black/50 text-white' 
-                            : 'border-gray-300 bg-white'
-                      } focus:outline-none focus:ring-2 focus:ring-red-500 transition-all`}
-                      placeholder="10-digit phone number"
-                    />
+                {/* price rows */}
+                {[
+                  { label: `Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)`, value: `₹${subtotal}`, color: ink },
+                  { label: 'Shipping', value: shipping === 0 ? 'FREE' : `₹${shipping}`, color: shipping === 0 ? '#1db954' : ink },
+                ].map((row, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between',
+                    marginBottom: '0.65rem', fontSize: '0.88rem' }}>
+                    <span style={{ color: muted }}>{row.label}</span>
+                    <span className="h1" style={{ color: row.color, fontWeight: 700 }}>{row.value}</span>
                   </div>
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-                  )}
+                ))}
+
+                <div style={{ height: '2px', background: `linear-gradient(90deg, ${accent}70, ${saffron}50, transparent)`, margin: '0.85rem 0' }} />
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem' }}>
+                  <span className="h1" style={{ color: ink, fontSize: '1rem', fontWeight: 700 }}>Total</span>
+                  <span className="h1" style={{ color: accent, fontSize: '1.6rem', fontWeight: 900 }}>₹{total}</span>
                 </div>
 
-                {/* Address */}
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Delivery Address *
-                  </label>
-                  <div className="relative">
-                    <MapPin className={`absolute left-3 top-3 w-5 h-5 ${
-                      darkMode ? 'text-gray-500' : 'text-gray-400'
-                    }`} />
-                    <textarea
-                      name="address"
-                      value={guestDetails.address}
-                      onChange={handleInputChange}
-                      rows="3"
-                      className={`w-full pl-11 pr-4 py-3 rounded-xl border ${
-                        errors.address 
-                          ? 'border-red-500' 
-                          : darkMode 
-                            ? 'border-red-900/30 bg-black/50 text-white' 
-                            : 'border-gray-300 bg-white'
-                      } focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none`}
-                      placeholder="Enter your complete delivery address"
-                    />
-                  </div>
-                  {errors.address && (
-                    <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-                  )}
+                <button onClick={handlePayment} disabled={isProcessing} className="pulse-btn"
+                  style={{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', gap: '0.6rem',
+                    background: isProcessing ? 'rgba(100,100,100,0.4)' : 'linear-gradient(135deg,#1db954,#128c7e)',
+                    color: '#fff', fontWeight: 600, fontSize: '0.95rem', letterSpacing: '0.04em',
+                    border: 'none', cursor: isProcessing ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 6px 24px rgba(29,185,84,0.3)', transition: 'gap .3s',
+                  }}>
+                  <Lock style={{ width: '0.9rem', height: '0.9rem' }} />
+                  <span className="h1">{isProcessing ? 'Processing…' : `Pay ₹${total} Securely`}</span>
+                  {!isProcessing && <ArrowRight style={{ width: '0.9rem', height: '0.9rem' }} />}
+                </button>
+
+                <div style={{ marginTop: '1rem', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.6rem',
+                  background: 'rgba(29,185,84,0.08)', border: '1px solid rgba(29,185,84,0.25)', fontSize: '0.78rem',
+                  color: darkMode ? '#86efac' : '#166534' }}>
+                  <CreditCard style={{ width: '0.9rem', height: '0.9rem', flexShrink: 0 }} />
+                  Secure payment powered by Razorpay
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* Right Column - Order Summary */}
-          <div className={`rounded-2xl p-6 h-fit ${
-            darkMode ? 'bg-red-950/20 border border-red-900/30' : 'bg-white border border-gray-200'
-          }`}>
-            <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${
-              darkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              <ShoppingBag className="w-5 h-5 text-red-500" />
-              Order Summary
-            </h2>
-
-            {/* Cart Items */}
-            <div className="space-y-3 mb-6">
-              {cart.map(item => (
-                <div key={item.id} className={`flex gap-3 p-3 rounded-lg ${
-                  darkMode ? 'bg-black/30' : 'bg-gray-50'
-                }`}>
-                  <img src={item.image} alt={item.title} className="w-16 h-20 object-cover rounded" />
-                  <div className="flex-1">
-                    <h4 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      {item.title}
-                    </h4>
-                    <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      Qty: {item.qty}
-                    </p>
-                    <p className="text-red-500 font-bold text-sm">₹{item.price * item.qty}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Price Breakdown */}
-            <div className="space-y-3 mb-6">
-              <div className="flex justify-between">
-                <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                  Subtotal ({cart.reduce((sum, item) => sum + item.qty, 0)} items)
-                </span>
-                <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  ₹{subtotal}
-                </span>
               </div>
-              
-              <div className="flex justify-between">
-                <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Shipping</span>
-                <span className={`font-semibold ${
-                  shipping === 0 ? 'text-green-500' : (darkMode ? 'text-white' : 'text-gray-900')
-                }`}>
-                  {shipping === 0 ? 'FREE' : `₹${shipping}`}
-                </span>
-              </div>
-              
-              <div className={`pt-4 border-t ${darkMode ? 'border-red-900/30' : 'border-gray-200'}`}>
-                <div className="flex justify-between items-center">
-                  <span className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                    Total
-                  </span>
-                  <span className="text-2xl font-bold text-red-500">₹{total}</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Payment Button */}
-            <button
-              onClick={handlePayment}
-              disabled={isProcessing}
-              className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
-                isProcessing
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-linear-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-green-600/30'
-              }`}
-            >
-              <Lock className="w-5 h-5" />
-              {isProcessing ? 'Processing...' : `Pay ₹${total} Securely`}
-            </button>
-
-            {/* Security Badge */}
-            <div className={`mt-4 p-3 rounded-lg flex items-center gap-2 ${
-              darkMode ? 'bg-green-950/30 border border-green-900/30' : 'bg-green-50 border border-green-200'
-            }`}>
-              <CreditCard className={`w-5 h-5 ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
-              <p className={`text-xs ${darkMode ? 'text-green-400' : 'text-green-700'}`}>
-                Secure payment powered by Razorpay
-              </p>
             </div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 };
 
