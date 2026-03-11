@@ -3,75 +3,96 @@ import { AuthContext } from "./AuthContext";
 
 const CartContext = createContext(null);
 
+const GUEST_CART_KEY = "cosmo_cart_guest";
+
 export const CartProvider = ({ children }) => {
-  // ── Hydrate instantly from localStorage so cart never flashes empty ──
-  const [cart, setCart] = useState(() => {
-    try {
-      const saved = localStorage.getItem("cosmo_cart");
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-  const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
   const syncTimeout = useRef(null);
-  const { user } = useContext(AuthContext); // watch login/logout
+  const { user } = useContext(AuthContext);
 
-  // ── Mirror cart to localStorage on every change (guest cache + instant hydration) ──
-  useEffect(() => {
-    localStorage.setItem("cosmo_cart", JSON.stringify(cart));
-  }, [cart]);
-
-  // ── When user logs IN → fetch their server cart and merge with local guest cart ──
-  // ── When user logs OUT → keep local cart in state (or clear, your choice)       ──
+  // ── On auth state change: logged in → server, guest → localStorage ──
   useEffect(() => {
     if (user) {
+      // Logged in: server is the ONLY source of truth
       fetchAndMergeCart();
+    } else if (user === null) {
+      // Guest: load from localStorage
+      try {
+        const saved = localStorage.getItem(GUEST_CART_KEY);
+        setCart(saved ? JSON.parse(saved) : []);
+      } catch {
+        setCart([]);
+      } finally {
+        setLoading(false);
+      }
     }
-    // Uncomment to wipe cart on logout:
-    // else { setCart([]); localStorage.removeItem("cosmo_cart"); }
   }, [user]);
 
-  // Fetch server cart, then merge any guest items that aren't already there
+  // ── Persist to localStorage ONLY for guests ──
+  useEffect(() => {
+    if (user) return; // logged-in users: never touch localStorage
+    localStorage.setItem(GUEST_CART_KEY, JSON.stringify(cart));
+  }, [cart, user]);
+
+  // ── Fetch server cart, merge guest items, clear guest localStorage ──
   const fetchAndMergeCart = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/cart", {
-        credentials: "include", // ← uses httpOnly cookie, no token needed
+        credentials: "include",
       });
       if (!res.ok) return;
       const data = await res.json();
       const serverCart = data.cart || [];
 
-      setCart((localCart) => {
-        // Merge: server cart is authoritative; add any local-only guest items
-        const merged = [...serverCart];
-        localCart.forEach((localItem) => {
-          const exists = merged.find((i) => i.id === localItem.id);
-          if (!exists) merged.push(localItem);
-        });
-        // Persist merged result back to server
-        syncToBackend(merged);
-        return merged;
+      // Merge any guest items that aren't already in server cart
+      const guestCart = (() => {
+        try {
+          const saved = localStorage.getItem(GUEST_CART_KEY);
+          return saved ? JSON.parse(saved) : [];
+        } catch {
+          return [];
+        }
+      })();
+
+      const merged = [...serverCart];
+      guestCart.forEach((guestItem) => {
+        const exists = merged.find((i) => i.id === guestItem.id);
+        if (!exists) merged.push(guestItem);
       });
+
+      // Server is now source of truth — wipe guest localStorage
+      localStorage.removeItem(GUEST_CART_KEY);
+
+      // If there were guest items to merge, sync them to server immediately
+      if (guestCart.length > 0) {
+        await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ cart: merged }),
+        });
+      }
+
+      setCart(merged);
     } catch (err) {
       console.error("Fetch cart error:", err);
-      // Falls back to localStorage-hydrated cart silently
     } finally {
       setLoading(false);
     }
   };
 
-  // Debounced sync to backend — only fires for logged-in users (cookie present)
+  // ── Sync to backend (debounced) — logged-in users only ──
   const syncToBackend = (updatedCart) => {
-    if (!user) return; // guests: localStorage only
+    if (!user) return; // guests: localStorage only (handled by useEffect above)
     clearTimeout(syncTimeout.current);
     syncTimeout.current = setTimeout(async () => {
       try {
         await fetch("/api/cart", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          credentials: "include", // ← cookie-based, no Authorization header
+          credentials: "include",
           body: JSON.stringify({ cart: updatedCart }),
         });
       } catch (err) {
@@ -121,10 +142,23 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const clearCart = () => {
+  // ── Call this after successful purchase ──
+  const clearCart = async () => {
     setCart([]);
-    localStorage.removeItem("cosmo_cart");
-    syncToBackend([]);
+    localStorage.removeItem(GUEST_CART_KEY);
+    if (user) {
+      // No debounce — purchase is critical, sync immediately
+      try {
+        await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ cart: [] }),
+        });
+      } catch (err) {
+        console.error("Clear cart sync error:", err);
+      }
+    }
   };
 
   return (
