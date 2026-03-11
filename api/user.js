@@ -81,7 +81,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Validate password length
       if (password.length < 6) {
         return res.status(400).json({ 
           success: false,
@@ -89,7 +88,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Check if user exists
       const exists = await User.findOne({ email: email.toLowerCase() });
       if (exists) {
         return res.status(409).json({ 
@@ -98,7 +96,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Create new user
       const hashedPassword = await hashPassword(password);
       const user = await User.create({
         name,
@@ -126,7 +123,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Find user
       const user = await User.findOne({ email: email.toLowerCase() });
       if (!user) {
         return res.status(401).json({ 
@@ -135,7 +131,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Verify password
       const isValidPassword = await comparePassword(password, user.password);
       if (!isValidPassword) {
         return res.status(401).json({ 
@@ -144,13 +139,12 @@ export default async function handler(req, res) {
         });
       }
 
-      // Generate JWT token
       const token = signToken({ userId: user._id.toString() });
       
-      // Set HTTP-only cookie
+      // ✅ SameSite=Lax — same domain pe sahi kaam karta hai (mobile + laptop dono)
       res.setHeader(
         'Set-Cookie',
-        `token=${token}; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=604800`
+        `token=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800`
       );
 
       console.log('✅ User logged in:', email);
@@ -175,7 +169,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Verify token
       let decoded;
       try {
         decoded = verifyToken(token);
@@ -188,7 +181,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Find user
       const user = await User.findById(decoded.userId);
       if (!user) {
         return res.status(404).json({ 
@@ -209,7 +201,6 @@ export default async function handler(req, res) {
       const user = await verifyUser(req);
       const { name, phone, address } = req.body || {};
 
-      // Update only provided fields
       if (name !== undefined) user.name = name;
       if (phone !== undefined) user.phone = phone;
       if (address !== undefined) user.address = address;
@@ -237,7 +228,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Verify current password
       const isValid = await comparePassword(currentPassword, user.password);
       if (!isValid) {
         return res.status(401).json({
@@ -246,7 +236,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Validate new password
       if (newPassword.length < 6) {
         return res.status(400).json({
           success: false,
@@ -254,7 +243,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Update password
       user.password = await hashPassword(newPassword);
       await user.save();
 
@@ -268,10 +256,10 @@ export default async function handler(req, res) {
 
     /* ==================== LOGOUT ==================== */
     if (method === 'POST' && action === 'logout') {
-      // Clear cookie
+      // ✅ SameSite=Lax — login ke saath match karna zaroori hai
       res.setHeader(
         'Set-Cookie',
-        'token=; HttpOnly; Path=/; SameSite=None; Secure; Max-Age=0'
+        'token=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0'
       );
       
       return res.status(200).json({ 
@@ -289,7 +277,6 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('❌ Server Error:', err);
     
-    // Handle auth errors
     if (err.message === 'Not authenticated' || err.message === 'User not found') {
       return res.status(401).json({
         success: false,
