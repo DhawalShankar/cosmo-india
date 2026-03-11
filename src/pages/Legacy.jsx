@@ -21,13 +21,21 @@ const LegacyAuthors = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  /* ── Colour tokens (mirror homepage exactly) ── */
+  /* ── Colour tokens ── */
   const accent  = '#c0392b';
   const saffron = '#d4450c';
   const ink       = darkMode ? '#f0e8dc'                       : '#1a1209';
   const paper     = darkMode ? '#141210'                       : '#fdf6ee';
   const ruleLine  = darkMode ? 'rgba(192,57,43,0.28)'          : 'rgba(160,40,20,0.18)';
   const mutedText = darkMode ? 'rgba(240,232,220,0.82)'        : 'rgba(26,18,9,0.72)';
+
+  /* ── Ticker content — 2 identical halves for seamless loop ── */
+  const tickerItems = [...Array(10)].map((_, i) => (
+    <span key={i} className="la-yatra text-white tracking-widest"
+      style={{ fontSize: '0.75rem', paddingRight: '2.5rem', whiteSpace: 'nowrap', flexShrink: 0 }}>
+      ✦ &nbsp; विरासत की कलम &nbsp; ✦ &nbsp; A Living Legacy &nbsp; ✦ &nbsp; Cosmo India Prakashan &nbsp; ✦ &nbsp; Since 1982 &nbsp; ✦ &nbsp; भारतीय विचार &nbsp;
+    </span>
+  ));
 
   /* ── Data ── */
   const legacyAuthors = [
@@ -54,11 +62,11 @@ const LegacyAuthors = () => {
   ];
 
   const timelineEvents = [
-    { year: '1982',   icon: Building2,  highlight: true,  title: 'The Beginning',              description: 'Cosmo India Prakashan was born in an era when publishing was driven by purpose, patience, and intellectual commitment — a small initiative centred around periodicals on astrology and Indian thought.' },
-    { year: '1990s',  icon: Scroll,     highlight: true,  title: 'The Magazine Era',            description: 'Reached over 300 regular subscribers across India with monthly periodicals focusing on Indian cultural, spiritual and astrological wisdom. Publications travelled from Kashmir to Kanyakumari, creating a community of knowledge seekers.' },
-    { year: '2000s',  icon: TrendingUp, highlight: false, title: 'Evolution & Expansion',       description: 'Evolved from periodicals to a broader platform for literature, reflection, and cultural dialogue — engaging with diverse subjects while maintaining roots in India\'s knowledge traditions.' },
-    { year: '2010s',  icon: BookOpen,   highlight: false, title: 'Adhyayan & Silent Preservation', description: 'Active operations were consciously paused. The founder withdrew from outward expansion and devoted himself to continuous study, astrological practice, advising, and preservation of intellectual lineage.' },
-    { year: '2020s',  icon: Award,      highlight: false, title: 'MSME Recognition',             description: 'Officially registered under Udyam as an MSME, marking four decades of commitment to meaningful publishing — now supporting new authors seeking substance over visibility.' },
+    { year: '1982',   icon: Building2,  highlight: true,  title: 'The Beginning',                  description: 'Cosmo India Prakashan was born in an era when publishing was driven by purpose, patience, and intellectual commitment — a small initiative centred around periodicals on astrology and Indian thought.' },
+    { year: '1990s',  icon: Scroll,     highlight: true,  title: 'The Magazine Era',                description: 'Reached over 300 regular subscribers across India with monthly periodicals focusing on Indian cultural, spiritual and astrological wisdom. Publications travelled from Kashmir to Kanyakumari, creating a community of knowledge seekers.' },
+    { year: '2000s',  icon: TrendingUp, highlight: false, title: 'Evolution & Expansion',           description: 'Evolved from periodicals to a broader platform for literature, reflection, and cultural dialogue — engaging with diverse subjects while maintaining roots in India\'s knowledge traditions.' },
+    { year: '2010s',  icon: BookOpen,   highlight: false, title: 'Adhyayan & Silent Preservation',  description: 'Active operations were consciously paused. The founder withdrew from outward expansion and devoted himself to continuous study, astrological practice, advising, and preservation of intellectual lineage.' },
+    { year: '2020s',  icon: Award,      highlight: false, title: 'MSME Recognition',               description: 'Officially registered under Udyam as an MSME, marking four decades of commitment to meaningful publishing — now supporting new authors seeking substance over visibility.' },
     { year: 'Today',  icon: Flame,      highlight: true,  title: 'Punar-Utthāna — A Living Legacy', description: 'Established in 1982 and revived for the present era, the publishing house now carries forward a lineage of study, books, and knowledge stewardship — guided by Dhawal, combining traditional wisdom with modern systems and ethical publishing practices.' },
   ];
 
@@ -70,10 +78,10 @@ const LegacyAuthors = () => {
   ];
 
   const stats = [
-    { number: '1982',     label: 'Founded',                 icon: Calendar },
-    { number: '40+',      label: 'Years of Experience',     icon: Award    },
-    { number: '300+',     label: 'Peak Subscribers (1990s)',icon: Users    },
-    { number: 'All India',label: 'Reach & Distribution',   icon: Globe    },
+    { number: '1982',      label: 'Founded',                  icon: Calendar },
+    { number: '40+',       label: 'Years of Experience',      icon: Award    },
+    { number: '300+',      label: 'Peak Subscribers (1990s)', icon: Users    },
+    { number: 'All India', label: 'Reach & Distribution',    icon: Globe    },
   ];
 
   return (
@@ -97,9 +105,9 @@ const LegacyAuthors = () => {
           font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
           font-size: 15.5px;
         }
-        .la .yatra  { font-family: 'Yatra One', serif; }
-        .la .h1f    { font-family: 'Playfair Display', Georgia, serif; }
-        .la .hindi  { font-family: 'Tiro Devanagari Hindi', 'Mangal', serif; line-height: 2.0; }
+        .la .la-yatra { font-family: 'Yatra One', serif; }
+        .la .h1f      { font-family: 'Playfair Display', Georgia, serif; }
+        .la .hindi    { font-family: 'Tiro Devanagari Hindi', 'Mangal', serif; line-height: 2.0; }
 
         .la .rule-b { border-bottom: 1px solid var(--rule); }
         .la .ink-bar {
@@ -108,13 +116,10 @@ const LegacyAuthors = () => {
         }
         .la .ghost-num {
           font-family: 'Playfair Display', serif;
-          font-size: 3rem;
-          font-weight: 900;
+          font-size: 3rem; font-weight: 900;
           color: transparent;
           -webkit-text-stroke: 1px var(--rule);
-          user-select: none;
-          pointer-events: none;
-          line-height: 1;
+          user-select: none; pointer-events: none; line-height: 1;
         }
 
         /* Noise overlay */
@@ -122,8 +127,7 @@ const LegacyAuthors = () => {
           content: '';
           position: absolute; inset: 0;
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-          pointer-events: none;
-          mix-blend-mode: multiply;
+          pointer-events: none; mix-blend-mode: multiply;
         }
 
         /* Ink lines */
@@ -137,19 +141,25 @@ const LegacyAuthors = () => {
 
         /* Stagger fade */
         @keyframes la-fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
-        .la .fu   { animation: la-fadeUp .85s cubic-bezier(.22,1,.36,1) both; }
-        .la .d1   { animation-delay:.12s; }
-        .la .d2   { animation-delay:.26s; }
-        .la .d3   { animation-delay:.40s; }
-        .la .d4   { animation-delay:.55s; }
+        .la .fu  { animation: la-fadeUp .85s cubic-bezier(.22,1,.36,1) both; }
+        .la .d1  { animation-delay:.12s; }
+        .la .d2  { animation-delay:.26s; }
+        .la .d3  { animation-delay:.40s; }
+        .la .d4  { animation-delay:.55s; }
 
         /* Flicker */
         @keyframes la-flicker { 0%,100%{opacity:1} 47%{opacity:.9} 50%{opacity:.55} 53%{opacity:.95} }
         .la .flicker { animation: la-flicker 7s ease-in-out infinite; }
 
-        /* Marquee */
-        @keyframes la-marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        .la .mq { animation: la-marquee 30s linear infinite; }
+        /* ── Seamless ticker ── */
+        @keyframes la-ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        .la .ticker-track {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: la-ticker 140s linear infinite;
+        }
+        .la .ticker-half { display: flex; flex-shrink: 0; }
 
         /* Lift */
         .la .lift { transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease; }
@@ -157,7 +167,12 @@ const LegacyAuthors = () => {
 
         /* Stripe hover */
         .la .stripe-h { position:relative; overflow:hidden; }
-        .la .stripe-h::after { content:''; position:absolute; bottom:0; left:0; height:2px; width:0; background:linear-gradient(90deg,var(--accent),var(--saffron)); transition:width .42s ease; }
+        .la .stripe-h::after {
+          content:''; position:absolute; bottom:0; left:0;
+          height:2px; width:0;
+          background:linear-gradient(90deg,var(--accent),var(--saffron));
+          transition:width .42s ease;
+        }
         .la .stripe-h:hover::after { width:100%; }
 
         /* CTA pulse */
@@ -185,8 +200,7 @@ const LegacyAuthors = () => {
         .la .deva-stripe {
           writing-mode: vertical-rl;
           font-family: 'Yatra One', serif;
-          font-size: 0.82rem;
-          letter-spacing: 0.12em;
+          font-size: 0.82rem; letter-spacing: 0.12em;
           color: ${darkMode ? 'rgba(240,200,160,0.7)' : 'rgba(139,32,16,0.55)'};
           user-select: none;
         }
@@ -211,7 +225,7 @@ const LegacyAuthors = () => {
               { left:'52%', h:'48vh', delay:'9s',  dur:'14s' },
               { left:'74%', h:'35vh', delay:'3s',  dur:'18s' },
               { left:'91%', h:'42vh', delay:'7s',  dur:'22s' },
-            ].map((l,i) => (
+            ].map((l, i) => (
               <div key={i} className="absolute bottom-0 ink-line"
                 style={{ left:l.left, width:'1px', height:l.h,
                   background:`linear-gradient(to top,transparent,${accent}75,transparent)`,
@@ -231,7 +245,7 @@ const LegacyAuthors = () => {
             {/* Eyebrow */}
             <div className="fu flex items-center justify-center gap-4 mb-8">
               <div style={{ width:'2.2rem', height:'2px', background:accent, flexShrink:0 }} />
-              <span className="yatra font-medium"
+              <span className="la-yatra font-medium"
                 style={{ color: darkMode ? '#f0c8a0' : '#8b2010', fontSize:'1.05rem', letterSpacing:'0.06em',
                   textShadow: darkMode ? '0 0 18px rgba(240,160,80,0.35)' : 'none' }}>
                 कॉस्मो इंडिया प्रकाशन
@@ -270,14 +284,13 @@ const LegacyAuthors = () => {
           </div>
         </section>
 
-        {/* ═══════════ MARQUEE ═══════════ */}
-        <div className="overflow-hidden py-2.5" style={{ background:accent }}>
-          <div className="mq flex whitespace-nowrap gap-12">
-            {[...Array(10)].map((_,i) => (
-              <span key={i} className="yatra text-white tracking-widest" style={{ fontSize:'0.75rem' }}>
-                ✦ &nbsp; विरासत की कलम &nbsp; ✦ &nbsp; A Living Legacy &nbsp; ✦ &nbsp; Cosmo India Prakashan &nbsp; ✦ &nbsp; Since 1982 &nbsp; ✦ &nbsp; भारतीय विचार &nbsp;
-              </span>
-            ))}
+        {/* ════════════════════════════
+            TICKER — seamless
+        ════════════════════════════ */}
+        <div style={{ background: accent, overflow: 'hidden', padding: '10px 0' }}>
+          <div className="ticker-track">
+            <div className="ticker-half">{tickerItems}</div>
+            <div className="ticker-half">{tickerItems}</div>
           </div>
         </div>
 
@@ -287,7 +300,6 @@ const LegacyAuthors = () => {
             ? 'linear-gradient(135deg, #0e0a07 0%, #1a0d08 40%, #120c08 100%)'
             : 'linear-gradient(135deg, #1a0d06 0%, #2a1008 40%, #1a0905 100%)'
         }}>
-          {/* Grid dot pattern */}
           <div className="absolute inset-0 pointer-events-none" style={{
             backgroundImage:`radial-gradient(circle, rgba(192,57,43,0.18) 1px, transparent 1px)`,
             backgroundSize:'36px 36px', opacity:0.5
@@ -304,7 +316,7 @@ const LegacyAuthors = () => {
                 01
               </span>
               <div>
-                <p className="yatra mb-1" style={{ fontSize:'0.85rem', letterSpacing:'0.12em', color:`${accent}dd` }}>हमारी यात्रा</p>
+                <p className="la-yatra mb-1" style={{ fontSize:'0.85rem', letterSpacing:'0.12em', color:`${accent}dd` }}>हमारी यात्रा</p>
                 <h2 className="h1f font-bold" style={{ color:'#f0e8dc', fontSize:'2rem' }}>Four Decades at a Glance</h2>
               </div>
             </div>
@@ -317,7 +329,7 @@ const LegacyAuthors = () => {
                   style={{
                     borderRight:'1px solid rgba(192,57,43,0.25)',
                     background:'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-                    transitionDelay:`${i*120}ms`,
+                    transitionDelay:`${i * 120}ms`,
                   }}>
                   <s.icon style={{ width:'1.2rem', height:'1.2rem', color:accent, marginBottom:'0.75rem' }} />
                   <p className="h1f font-black mb-1" style={{ color:accent, fontSize:'2rem', lineHeight:1 }}>{s.number}</p>
@@ -339,14 +351,13 @@ const LegacyAuthors = () => {
             <div className="flex items-center gap-5 mb-16 rule-b pb-6">
               <span className="ghost-num">02</span>
               <div>
-                <p className="yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>इतिहास</p>
+                <p className="la-yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>इतिहास</p>
                 <h2 className="h1f font-bold" style={{ color:'var(--ink)', fontSize:'2rem' }}>A Journey Through Time</h2>
               </div>
             </div>
 
-            {/* Desktop timeline (center line) */}
+            {/* Desktop timeline */}
             <div className="hidden md:block relative">
-              {/* Centre line */}
               <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
                 style={{ background:`linear-gradient(to bottom, transparent, ${accent}, ${saffron}, transparent)` }} />
 
@@ -357,7 +368,6 @@ const LegacyAuthors = () => {
                     onMouseEnter={() => setActiveTimeline(i)}
                     onMouseLeave={() => setActiveTimeline(null)}>
 
-                    {/* Card */}
                     <div className={`w-5/12 lift stripe-h ${i % 2 === 0 ? 'pr-10' : 'pl-10'}`}>
                       <div className="relative p-7"
                         style={{
@@ -371,7 +381,6 @@ const LegacyAuthors = () => {
                             ? (darkMode ? '0 8px 40px rgba(192,57,43,0.2)' : '0 8px 40px rgba(192,57,43,0.12)')
                             : 'none',
                         }}>
-                        {/* Accent top strip on highlight */}
                         {ev.highlight && (
                           <div className="absolute top-0 left-0 right-0 h-0.5"
                             style={{ background:`linear-gradient(90deg,${accent},${saffron},transparent)` }} />
@@ -381,13 +390,11 @@ const LegacyAuthors = () => {
                             style={{ background:`${accent}15`, border:`1px solid ${accent}35`, color:accent }}>
                             <ev.icon style={{ width:'0.9rem', height:'0.9rem' }} />
                           </div>
-                          <span className="h1f font-black"
-                            style={{ color:accent, fontSize:'1.5rem', lineHeight:1 }}>
+                          <span className="h1f font-black" style={{ color:accent, fontSize:'1.5rem', lineHeight:1 }}>
                             {ev.year}
                           </span>
                         </div>
-                        <h3 className="h1f font-bold mb-2"
-                          style={{ color:'var(--ink)', fontSize:'1.1rem' }}>
+                        <h3 className="h1f font-bold mb-2" style={{ color:'var(--ink)', fontSize:'1.1rem' }}>
                           {ev.title}
                         </h3>
                         <p style={{ color:'var(--muted)', fontSize:'0.93rem', lineHeight:'1.78' }}>
@@ -396,7 +403,6 @@ const LegacyAuthors = () => {
                       </div>
                     </div>
 
-                    {/* Centre dot */}
                     <div className="w-2/12 flex justify-center">
                       <div className={`rounded-full ${activeTimeline === i ? 'tl-dot-active' : ''}`}
                         style={{
@@ -408,24 +414,22 @@ const LegacyAuthors = () => {
                         }} />
                     </div>
 
-                    {/* Spacer */}
                     <div className="w-5/12" />
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Mobile timeline (left line) */}
+            {/* Mobile timeline */}
             <div className="md:hidden relative pl-8">
               <div className="absolute left-3 top-0 bottom-0 w-px"
                 style={{ background:`linear-gradient(to bottom, transparent, ${accent}, ${saffron}, transparent)` }} />
               <div className="space-y-8">
                 {timelineEvents.map((ev, i) => (
                   <div key={i} className="relative">
-                    {/* Dot */}
                     <div className="absolute -left-5 top-5"
                       style={{
-                        width:ev.highlight?'14px':'10px', height:ev.highlight?'14px':'10px',
+                        width:ev.highlight ? '14px' : '10px', height:ev.highlight ? '14px' : '10px',
                         borderRadius:'50%', background:ev.highlight ? accent : `${accent}70`,
                         border:`2px solid ${accent}`, transform:'translateX(-50%)',
                       }} />
@@ -472,7 +476,7 @@ const LegacyAuthors = () => {
                 03
               </span>
               <div>
-                <p className="yatra mb-1" style={{ fontSize:'0.85rem', letterSpacing:'0.12em', color:`${accent}dd` }}>हमारा ध्यान</p>
+                <p className="la-yatra mb-1" style={{ fontSize:'0.85rem', letterSpacing:'0.12em', color:`${accent}dd` }}>हमारा ध्यान</p>
                 <h2 className="h1f font-bold" style={{ color:'#f0e8dc', fontSize:'2rem' }}>Our Focus Areas</h2>
               </div>
             </div>
@@ -487,20 +491,20 @@ const LegacyAuthors = () => {
                     transition:'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.transform='translateY(-6px)';
-                    e.currentTarget.style.boxShadow='0 20px 50px rgba(192,57,43,0.25)';
-                    e.currentTarget.style.borderColor='rgba(192,57,43,0.6)';
+                    e.currentTarget.style.transform = 'translateY(-6px)';
+                    e.currentTarget.style.boxShadow = '0 20px 50px rgba(192,57,43,0.25)';
+                    e.currentTarget.style.borderColor = 'rgba(192,57,43,0.6)';
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.transform='translateY(0)';
-                    e.currentTarget.style.boxShadow='none';
-                    e.currentTarget.style.borderColor='rgba(192,57,43,0.25)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = 'rgba(192,57,43,0.25)';
                   }}>
                   <div className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background:`linear-gradient(90deg,${accent},${saffron},transparent)` }} />
                   <span className="h1f absolute bottom-3 right-4 font-black select-none pointer-events-none"
                     style={{ fontSize:'5rem', color:'transparent', WebkitTextStroke:'1px rgba(192,57,43,0.12)', lineHeight:1 }}>
-                    0{i+1}
+                    0{i + 1}
                   </span>
                   <div className="w-11 h-11 mb-5 flex items-center justify-center"
                     style={{ background:'rgba(192,57,43,0.12)', border:'1px solid rgba(192,57,43,0.3)', color:'#e8a090' }}>
@@ -525,7 +529,7 @@ const LegacyAuthors = () => {
             <div className="flex items-center gap-5 mb-14 rule-b pb-6">
               <span className="ghost-num">04</span>
               <div>
-                <p className="yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>विरासत के लेखक</p>
+                <p className="la-yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>विरासत के लेखक</p>
                 <h2 className="h1f font-bold" style={{ color:'var(--ink)', fontSize:'2rem' }}>Legacy Authors</h2>
               </div>
             </div>
@@ -546,18 +550,15 @@ const LegacyAuthors = () => {
                       ? `0 0 0 2px ${accent}, 0 20px 50px rgba(192,57,43,0.2)`
                       : (darkMode ? 'none' : '0 4px 24px rgba(192,57,43,0.07)'),
                   }}>
-                  {/* Top accent strip */}
                   <div className="absolute top-0 left-0 right-0 h-0.5"
                     style={{ background:`linear-gradient(90deg,${accent},${saffron},transparent)` }} />
 
-                  {/* Image */}
                   <div className="relative overflow-hidden" style={{ height:'280px' }}>
                     <div className="absolute inset-0 z-10"
                       style={{ background:'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)' }} />
                     <img src={author.image} alt={author.name}
                       className="author-img w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700" />
 
-                    {/* Badge */}
                     <div className="absolute top-4 right-4 z-20">
                       <span className="px-3 py-1.5 text-xs font-semibold tracking-wider uppercase"
                         style={{ background:'rgba(0,0,0,0.75)', color:'rgba(240,232,220,0.85)',
@@ -566,7 +567,6 @@ const LegacyAuthors = () => {
                       </span>
                     </div>
 
-                    {/* Name overlay */}
                     <div className="absolute bottom-4 left-6 right-6 z-20">
                       <h3 className="h1f font-bold text-white mb-1" style={{ fontSize:'1.25rem', lineHeight:'1.2' }}>
                         {author.name}
@@ -580,7 +580,6 @@ const LegacyAuthors = () => {
                     </div>
                   </div>
 
-                  {/* Body */}
                   <div className="p-6">
                     <p style={{ color:'var(--muted)', fontSize:'0.93rem', lineHeight:'1.75',
                       display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
@@ -615,13 +614,12 @@ const LegacyAuthors = () => {
                   border:`1px solid ${darkMode ? 'rgba(192,57,43,0.22)' : 'rgba(192,57,43,0.16)'}`,
                   boxShadow: darkMode ? 'none' : '0 4px 30px rgba(192,57,43,0.07)',
                 }}>
-                {/* Corner brackets */}
                 <div className="absolute top-0 left-0 w-7 h-7" style={{ borderTop:`2px solid ${accent}`, borderLeft:`2px solid ${accent}` }} />
                 <div className="absolute bottom-0 right-0 w-7 h-7" style={{ borderBottom:`2px solid ${accent}`, borderRight:`2px solid ${accent}` }} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   <div>
-                    <p className="yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>विरासत</p>
+                    <p className="la-yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>विरासत</p>
                     <h3 className="h1f font-bold mb-4" style={{ color:'var(--ink)', fontSize:'1.75rem', lineHeight:'1.15' }}>
                       {selectedAuthor.name}
                     </h3>
@@ -639,7 +637,7 @@ const LegacyAuthors = () => {
                   </div>
 
                   <div>
-                    <p className="yatra mb-4" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>उल्लेखनीय कार्य</p>
+                    <p className="la-yatra mb-4" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>उल्लेखनीय कार्य</p>
                     <div className="space-y-3">
                       {selectedAuthor.notableWorks.map((work, i) => (
                         <div key={i} className="lift stripe-h p-4"
@@ -690,7 +688,7 @@ const LegacyAuthors = () => {
             style={{ background:`linear-gradient(90deg, transparent, ${accent}, ${saffron}, transparent)` }} />
 
           <div className="relative z-10 max-w-2xl mx-auto px-8 text-center">
-            <p className="yatra mb-4" style={{ color:`${accent}dd`, fontSize:'1.15rem', letterSpacing:'0.1em' }}>— MSME Registered —</p>
+            <p className="la-yatra mb-4" style={{ color:`${accent}dd`, fontSize:'1.15rem', letterSpacing:'0.1em' }}>— MSME Registered —</p>
             <h2 className="h1f font-black leading-tight mb-5"
               style={{ fontSize:'clamp(2rem, 4.5vw, 3.4rem)', color:'#f0e8dc' }}>
               Where Thoughtful Writing<br />
@@ -702,7 +700,7 @@ const LegacyAuthors = () => {
             </p>
             <div className="inline-block px-8 py-4"
               style={{ background:`${accent}22`, border:`1px solid ${accent}66` }}>
-              <p className="yatra" style={{ color:`${accent}dd`, fontSize:'1rem', letterSpacing:'0.08em' }}>
+              <p className="la-yatra" style={{ color:`${accent}dd`, fontSize:'1rem', letterSpacing:'0.08em' }}>
                 Since 1982 &nbsp;•&nbsp; Purpose-Driven Publishing
               </p>
             </div>
