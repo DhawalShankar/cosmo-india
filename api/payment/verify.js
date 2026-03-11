@@ -1,5 +1,6 @@
+// api/payment/verify.js
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+import { transporter } from "../lib/mailer.js"; // ← only change
 import connectDB from "../lib/db.js";
 import User from "../models/user.js";
 
@@ -53,15 +54,7 @@ export default async function handler(req, res) {
       );
     }
 
-    /* ================= SEND EMAIL TO BUSINESS ================= */
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.BUSINESS_EMAIL,
-        pass: process.env.BUSINESS_EMAIL_PASSWORD,
-      },
-    });
-
+    /* ================= SEND EMAILS ================= */
     const businessMail = `
       <h2>📦 New Order Received – Cosmo India Prakashan</h2>
       <p><strong>Order Type:</strong> ${notes?.orderType || "guest"}</p>
@@ -91,7 +84,6 @@ export default async function handler(req, res) {
       <p>– Cosmo India Prakashan Team</p>
     `;
 
-    // Send both emails in parallel
     await Promise.all([
       transporter.sendMail({
         from: `"Cosmo India Orders" <${process.env.BUSINESS_EMAIL}>`,
