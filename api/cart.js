@@ -16,7 +16,7 @@ function parseCookies(cookieHeader) {
 export default async function handler(req, res) {
   await connectDB();
 
-  // Support both cookie and Authorization header
+  // ── Auth: cookie first, Authorization header as fallback ──
   const cookies = parseCookies(req.headers.cookie);
   const token = cookies.token || req.headers.authorization?.split(' ')[1];
 
@@ -29,19 +29,30 @@ export default async function handler(req, res) {
     return res.status(401).json({ message: 'Invalid token' });
   }
 
-  // GET CART
+  // ── GET: return saved cart ──
   if (req.method === 'GET') {
-    const user = await User.findById(userId).select('cart');
-    return res.json({ cart: user.cart || [] });
+    try {
+      const user = await User.findById(userId).select('cart');
+      if (!user) return res.status(404).json({ message: 'User not found' });
+      return res.json({ cart: user.cart || [] });
+    } catch (err) {
+      console.error('GET cart error:', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
   }
 
-  // SAVE CART (replace whole cart)
+  // ── POST: replace whole cart ──
   if (req.method === 'POST') {
     const { cart } = req.body;
     if (!Array.isArray(cart))
       return res.status(400).json({ message: 'Invalid cart' });
-    await User.findByIdAndUpdate(userId, { cart });
-    return res.json({ message: 'Cart saved', cart });
+    try {
+      await User.findByIdAndUpdate(userId, { cart }, { new: true });
+      return res.json({ message: 'Cart saved', cart });
+    } catch (err) {
+      console.error('POST cart error:', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
   }
 
   return res.status(405).json({ message: 'Method not allowed' });

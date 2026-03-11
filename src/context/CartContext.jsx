@@ -1,64 +1,92 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { AuthContext } from "./AuthContext";
 
 const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  // ── Hydrate instantly from localStorage so cart never flashes empty ──
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem("cosmo_cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [loading, setLoading] = useState(false);
   const syncTimeout = useRef(null);
+  const { user } = useContext(AuthContext); // watch login/logout
 
-  const getToken = () => localStorage.getItem('token');
-
-  // On mount — fetch cart if logged in
+  // ── Mirror cart to localStorage on every change (guest cache + instant hydration) ──
   useEffect(() => {
-    if (getToken()) fetchCart();
-  }, []);
+    localStorage.setItem("cosmo_cart", JSON.stringify(cart));
+  }, [cart]);
 
-  // Sync cart to backend (debounced — waits 600ms after last change)
-  const syncToBackend = (updatedCart) => {
-    const token = getToken();
-    if (!token) return;
-    clearTimeout(syncTimeout.current);
-    syncTimeout.current = setTimeout(async () => {
-      try {
-        await fetch('/api/cart', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ cart: updatedCart }),
-        });
-      } catch (err) {
-        console.error('Cart sync error:', err);
-      }
-    }, 600);
-  };
+  // ── When user logs IN → fetch their server cart and merge with local guest cart ──
+  // ── When user logs OUT → keep local cart in state (or clear, your choice)       ──
+  useEffect(() => {
+    if (user) {
+      fetchAndMergeCart();
+    }
+    // Uncomment to wipe cart on logout:
+    // else { setCart([]); localStorage.removeItem("cosmo_cart"); }
+  }, [user]);
 
-  const fetchCart = async () => {
+  // Fetch server cart, then merge any guest items that aren't already there
+  const fetchAndMergeCart = async () => {
     try {
       setLoading(true);
-      const token = getToken();
-      if (!token) return;
-      const res = await fetch('/api/cart', {
-        headers: { 'Authorization': `Bearer ${token}` },
+      const res = await fetch("/api/cart", {
+        credentials: "include", // ← uses httpOnly cookie, no token needed
       });
-      if (res.ok) {
-        const data = await res.json();
-        setCart(data.cart || []);
-      }
+      if (!res.ok) return;
+      const data = await res.json();
+      const serverCart = data.cart || [];
+
+      setCart((localCart) => {
+        // Merge: server cart is authoritative; add any local-only guest items
+        const merged = [...serverCart];
+        localCart.forEach((localItem) => {
+          const exists = merged.find((i) => i.id === localItem.id);
+          if (!exists) merged.push(localItem);
+        });
+        // Persist merged result back to server
+        syncToBackend(merged);
+        return merged;
+      });
     } catch (err) {
-      console.error('Fetch cart error:', err);
+      console.error("Fetch cart error:", err);
+      // Falls back to localStorage-hydrated cart silently
     } finally {
       setLoading(false);
     }
   };
 
+  // Debounced sync to backend — only fires for logged-in users (cookie present)
+  const syncToBackend = (updatedCart) => {
+    if (!user) return; // guests: localStorage only
+    clearTimeout(syncTimeout.current);
+    syncTimeout.current = setTimeout(async () => {
+      try {
+        await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // ← cookie-based, no Authorization header
+          body: JSON.stringify({ cart: updatedCart }),
+        });
+      } catch (err) {
+        console.error("Cart sync error:", err);
+      }
+    }, 600);
+  };
+
   const addToCart = (product) => {
-    setCart(prev => {
-      const existing = prev.find(i => i.id === product.id);
+    setCart((prev) => {
+      const existing = prev.find((i) => i.id === product.id);
       const updated = existing
-        ? prev.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i)
+        ? prev.map((i) =>
+            i.id === product.id ? { ...i, qty: i.qty + 1 } : i
+          )
         : [...prev, { ...product, qty: 1 }];
       syncToBackend(updated);
       return updated;
@@ -66,16 +94,18 @@ export const CartProvider = ({ children }) => {
   };
 
   const increaseQty = (id) => {
-    setCart(prev => {
-      const updated = prev.map(i => i.id === id ? { ...i, qty: i.qty + 1 } : i);
+    setCart((prev) => {
+      const updated = prev.map((i) =>
+        i.id === id ? { ...i, qty: i.qty + 1 } : i
+      );
       syncToBackend(updated);
       return updated;
     });
   };
 
   const decreaseQty = (id) => {
-    setCart(prev => {
-      const updated = prev.map(i =>
+    setCart((prev) => {
+      const updated = prev.map((i) =>
         i.id === id && i.qty > 1 ? { ...i, qty: i.qty - 1 } : i
       );
       syncToBackend(updated);
@@ -84,8 +114,8 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = (id) => {
-    setCart(prev => {
-      const updated = prev.filter(i => i.id !== id);
+    setCart((prev) => {
+      const updated = prev.filter((i) => i.id !== id);
       syncToBackend(updated);
       return updated;
     });
@@ -93,15 +123,23 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem("cosmo_cart");
     syncToBackend([]);
   };
 
   return (
-    <CartContext.Provider value={{
-      cart, loading,
-      addToCart, increaseQty, decreaseQty,
-      removeItem, clearCart, fetchCart,
-    }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        loading,
+        addToCart,
+        increaseQty,
+        decreaseQty,
+        removeItem,
+        clearCart,
+        fetchCart: fetchAndMergeCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
