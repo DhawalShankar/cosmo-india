@@ -103,7 +103,7 @@ const Footer = () => {
         flexShrink: 0,
       }}
     >
-      ✦ &nbsp; कलम की आग &nbsp; ✦ &nbsp; Fearless Pens of Bharat &nbsp; ✦ &nbsp; Cosmo India Prakashan &nbsp; ✦ &nbsp; Since 1980s
+      ✦ &nbsp; कलम की आग &nbsp; ✦ &nbsp; Fearless Stories of Bharat &nbsp; ✦ &nbsp; Cosmo India Prakashan &nbsp; ✦ &nbsp; Since 1980s
     </span>
   ));
 

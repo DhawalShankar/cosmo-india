@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Menu, X, ShoppingBag, User as UserIcon, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingBag, User as UserIcon, LogOut, Package } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useCart } from "../context/CartContext";
@@ -248,8 +248,6 @@ const Navbar = () => {
               onClick={() => scrollToSection('home')}
               className="flex items-center gap-3 shrink-0"
               style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-
-              {/* Logo — bigger */}
               <div style={{
                 background: darkMode ? '#ffffff' : 'transparent',
                 borderRadius: '10px',
@@ -263,7 +261,6 @@ const Navbar = () => {
                   style={{ height: '72px', width: 'auto', display: 'block' }}
                 />
               </div>
-
               <div className="hidden sm:block">
                 <p className="nb-brand font-bold leading-tight"
                   style={{ color: ink, fontSize: '1.45rem' }}>
@@ -281,7 +278,7 @@ const Navbar = () => {
               </div>
             </button>
 
-            {/* ── Desktop nav links — scrollable if needed ── */}
+            {/* ── Desktop nav links ── */}
             <div
               className="hidden lg:flex items-center flex-1 justify-center"
               style={{ gap: '1.4rem', minWidth: 0, overflow: 'hidden' }}>
@@ -324,6 +321,11 @@ const Navbar = () => {
                         <button onClick={() => { setShowUserMenu(false); handleNavigation('/profile'); }}>
                           <UserIcon style={{ width: '0.9rem', height: '0.9rem' }} />
                           Profile
+                        </button>
+                        <div className="nb-user-divider" />
+                        <button onClick={() => { setShowUserMenu(false); handleNavigation('/orders'); }}>
+                          <Package style={{ width: '0.9rem', height: '0.9rem' }} />
+                          My Orders
                         </button>
                         <div className="nb-user-divider" />
                         <button onClick={handleLogout}>
@@ -419,6 +421,9 @@ const Navbar = () => {
                   </div>
                   <button className="nb-mobile-link" onClick={() => handleNavigation('/profile')}>
                     Profile
+                  </button>
+                  <button className="nb-mobile-link" onClick={() => handleNavigation('/orders')}>
+                    My Orders
                   </button>
                   <button className="nb-mobile-link" onClick={handleLogout}
                     style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>

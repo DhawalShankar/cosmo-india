@@ -241,7 +241,7 @@ const Marketplace = () => {
         {[...Array(10)].map((_, i) => (
           <span key={i} className="yatra text-white tracking-widest"
             style={{ fontSize: '0.75rem', paddingRight: '2.5rem', whiteSpace: 'nowrap', flexShrink: 0 }}>
-            ✦ &nbsp; कलम की आग &nbsp; ✦ &nbsp; Fearless Pens of Bharat &nbsp; ✦ &nbsp; Cosmo India Prakashan &nbsp; ✦ &nbsp; भारतीय विचार &nbsp; ✦ &nbsp; Since 1980s
+            ✦ &nbsp; कलम की आग &nbsp; ✦ &nbsp; Fearless Stories of Bharat &nbsp; ✦ &nbsp; Cosmo India Prakashan &nbsp; ✦ &nbsp; भारतीय विचार &nbsp; ✦ &nbsp; Since 1980s
           </span>
         ))}
       </div>

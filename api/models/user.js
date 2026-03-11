@@ -33,7 +33,11 @@ const userSchema = new mongoose.Schema(
     cart: {
       type: Array,
       default: [],
-    }
+    },
+    orders: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true, // ✅ only this

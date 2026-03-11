@@ -16,13 +16,13 @@ const Checkout = () => {
   const [guestDetails, setGuestDetails] = useState({ name: '', email: '', phone: '', address: '' });
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isOrderComplete, setIsOrderComplete] = useState(false); // ← add this
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = subtotal > 500 ? 0 : 50;
   const total    = subtotal + shipping;
 
-  useEffect(() => { if (cart.length === 0) navigate('/marketplace'); }, [cart, navigate]);
-
+  useEffect(() => { if (cart.length === 0 && !isOrderComplete) navigate('/marketplace'); }, [cart, navigate, isOrderComplete]);
   const accent  = '#c0392b';
   const saffron = '#d4450c';
   const ink     = darkMode ? '#f0e8dc' : '#1a1209';
@@ -95,7 +95,7 @@ const Checkout = () => {
               body: JSON.stringify({ ...response, notes: order.notes }),
             });
             const vData = await vRes.json();
-            if (vData.success) { clearCart(); navigate('/order-success'); }
+            if (vData.success) { setIsOrderComplete(true); clearCart(); window.location.href = '/order-success'; }
             else alert('Payment verification failed. Please contact support.');
           } catch { alert('Payment verification failed. Please contact support.'); }
         },
