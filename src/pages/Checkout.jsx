@@ -95,7 +95,7 @@ const Checkout = () => {
               body: JSON.stringify({ ...response, notes: order.notes }),
             });
             const vData = await vRes.json();
-            if (vData.success) { setIsOrderComplete(true); clearCart(); window.location.href = '/order-success'; }
+            if (vData.success) { setIsOrderComplete(true); await clearCart(); window.location.href = '/order-success'; }
             else alert('Payment verification failed. Please contact support.');
           } catch { alert('Payment verification failed. Please contact support.'); }
         },

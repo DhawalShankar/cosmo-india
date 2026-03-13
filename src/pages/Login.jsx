@@ -1,6 +1,6 @@
 import { DarkModeContext } from '../context/DarkModeContext';
 import { useState, useContext } from 'react';
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, CheckCircle, AlertCircle, KeyRound } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, CheckCircle, AlertCircle, KeyRound, ArrowLeft } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +17,12 @@ const Login = () => {
   const [otpStep, setOtpStep]           = useState(false);
   const [otp, setOtp]                   = useState('');
   const [pendingEmail, setPendingEmail] = useState('');
+
+  // Forgot password state
+  const [forgotStep, setForgotStep]         = useState(false);   // show forgot-password panel
+  const [forgotEmail, setForgotEmail]       = useState('');
+  const [forgotLoading, setForgotLoading]   = useState(false);
+  const [forgotSuccess, setForgotSuccess]   = useState(false);
 
   const { darkMode }                              = useContext(DarkModeContext);
   const { checkAuth, sendOtp, verifyOtp }         = useContext(AuthContext);
@@ -54,6 +60,41 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  /* ── Forgot password submit ── */
+  const handleForgotSubmit = async () => {
+    if (!forgotEmail.trim() || !/\S+@\S+\.\S+/.test(forgotEmail)) {
+      setErrors({ forgotEmail: 'Please enter a valid email address' });
+      return;
+    }
+    setForgotLoading(true);
+    setErrors({});
+    try {
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: forgotEmail }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setErrors({ forgotEmail: data.error || 'Something went wrong. Please try again.' });
+        setForgotLoading(false);
+        return;
+      }
+      setForgotSuccess(true);
+    } catch (err) {
+      setErrors({ forgotEmail: 'Network error. Please try again.' });
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const handleForgotBack = () => {
+    setForgotStep(false);
+    setForgotEmail('');
+    setForgotSuccess(false);
+    setErrors({});
+  };
+
   /* ── Submit: login OR send OTP ── */
   const handleSubmit = async () => {
     if (!validate()) return;
@@ -61,7 +102,7 @@ const Login = () => {
     setDebugInfo(null);
     try {
       if (isLogin) {
-        /* LOGIN — completely unchanged */
+        /* LOGIN */
         const endpoint = '/api/user?action=login';
         const payload  = { email: formData.email, password: formData.password };
         setDebugInfo({ status: 'sending', payload });
@@ -91,7 +132,7 @@ const Login = () => {
         setTimeout(() => navigate('/marketplace'), 1200);
 
       } else {
-        /* REGISTER — send OTP instead */
+        /* REGISTER — send OTP */
         const result = await sendOtp(formData.name, formData.email, formData.password);
         if (!result.success) {
           setErrors({ submit: result.error || 'Failed to send OTP. Please try again.' });
@@ -132,7 +173,11 @@ const Login = () => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') otpStep ? handleVerifyOtp() : handleSubmit();
+    if (e.key === 'Enter') {
+      if (forgotStep) handleForgotSubmit();
+      else if (otpStep) handleVerifyOtp();
+      else handleSubmit();
+    }
   };
 
   const toggleMode = () => {
@@ -220,6 +265,12 @@ const Login = () => {
         @keyframes lg-checkBounce { 0%{transform:scale(0)} 60%{transform:scale(1.15)} 100%{transform:scale(1)} }
         .lg-wrap .check-bounce { animation: lg-checkBounce .5s cubic-bezier(.22,1,.36,1) both; }
         .otp-input-style { text-align:center; font-size:2rem !important; letter-spacing:0.5em !important; padding-left:14px !important; }
+        .lg-wrap .back-btn {
+          background:none; border:none; cursor:pointer; color:var(--lg-muted);
+          font-family:'DM Sans',sans-serif; font-size:0.82rem; padding:0;
+          display:flex; align-items:center; gap:6px; transition:color .2s;
+        }
+        .lg-wrap .back-btn:hover { color:var(--lg-ink); }
       `}</style>
 
       <div className="lg-wrap">
@@ -257,7 +308,7 @@ const Login = () => {
           <div style={{ maxWidth:'1100px', margin:'0 auto', width:'100%' }}>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'4rem', alignItems:'center' }} className="lg-two-col">
 
-              {/* ══ LEFT — branding (unchanged) ══ */}
+              {/* ══ LEFT — branding ══ */}
               <div className="fu" style={{ display:'flex', flexDirection:'column', gap:'2rem' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:'1rem' }}>
                   <div style={{ width:'2rem', height:'2px', background:accent, flexShrink:0 }} />
@@ -267,8 +318,8 @@ const Login = () => {
                 </div>
                 <div>
                   <h1 className="h1f fu d1" style={{ fontSize:'clamp(2.2rem,4vw,3.6rem)', fontWeight:900, lineHeight:1.06, color:'var(--lg-ink)', margin:0 }}>
-                    {isLogin ? 'Welcome' : 'Join the'}<br />
-                    <em style={{ color:accent }}>{isLogin ? 'Back.' : 'Community.'}</em>
+                    {forgotStep ? 'Reset Your' : isLogin ? 'Welcome' : 'Join the'}<br />
+                    <em style={{ color:accent }}>{forgotStep ? 'Password.' : isLogin ? 'Back.' : 'Community.'}</em>
                   </h1>
                 </div>
                 <div className="fu d2" style={{ paddingLeft:'1.1rem', borderLeft:`3px solid ${accent}`, maxWidth:'380px' }}>
@@ -279,20 +330,29 @@ const Login = () => {
                     — Shri Rajkumar Ratnapriya
                   </p>
                 </div>
-                <div className="fu d3" style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-                  <p className="yatra" style={{ color: darkMode ? `${accent}cc` : accent, fontSize:'0.78rem', letterSpacing:'0.12em', marginBottom:'4px' }}>
-                    सदस्यता के लाभ
-                  </p>
-                  {benefits.map((b, i) => (
-                    <div key={i} className="benefit-row">
-                      <div style={{ width:'1.4rem', height:'1.4rem', display:'flex', alignItems:'center', justifyContent:'center',
-                        background:`${accent}15`, border:`1px solid ${accent}35`, flexShrink:0 }}>
-                        <CheckCircle style={{ width:'0.75rem', height:'0.75rem', color:accent }} />
+                {!forgotStep && (
+                  <div className="fu d3" style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
+                    <p className="yatra" style={{ color: darkMode ? `${accent}cc` : accent, fontSize:'0.78rem', letterSpacing:'0.12em', marginBottom:'4px' }}>
+                      सदस्यता के लाभ
+                    </p>
+                    {benefits.map((b, i) => (
+                      <div key={i} className="benefit-row">
+                        <div style={{ width:'1.4rem', height:'1.4rem', display:'flex', alignItems:'center', justifyContent:'center',
+                          background:`${accent}15`, border:`1px solid ${accent}35`, flexShrink:0 }}>
+                          <CheckCircle style={{ width:'0.75rem', height:'0.75rem', color:accent }} />
+                        </div>
+                        <span style={{ color:'var(--lg-muted)', fontSize:'0.88rem' }}>{b}</span>
                       </div>
-                      <span style={{ color:'var(--lg-muted)', fontSize:'0.88rem' }}>{b}</span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
+                {forgotStep && (
+                  <div className="fu d3" style={{ paddingLeft:'1.1rem', borderLeft:`3px solid ${accent}40`, maxWidth:'380px' }}>
+                    <p style={{ color:'var(--lg-muted)', fontSize:'0.88rem', lineHeight:1.7, margin:0 }}>
+                      Enter the email associated with your account and we'll send a temporary password to get you back in.
+                    </p>
+                  </div>
+                )}
                 {debugInfo && (
                   <div className="fu" style={{
                     padding:'12px 16px',
@@ -318,7 +378,7 @@ const Login = () => {
                   <div style={{ position:'absolute', bottom:0, right:0, width:'1.6rem', height:'1.6rem', borderBottom:`2px solid ${accent}`, borderRight:`2px solid ${accent}` }} />
                   <div style={{ position:'absolute', top:0, left:0, right:0, height:'2px', background:`linear-gradient(90deg,${accent},${saffron},transparent)` }} />
 
-                  {/* ── Success ── */}
+                  {/* ── Success (login/register) ── */}
                   {success && (
                     <div style={{ textAlign:'center', padding:'2rem 0' }}>
                       <div className="check-bounce" style={{ marginBottom:'1.2rem' }}>
@@ -336,8 +396,119 @@ const Login = () => {
                     </div>
                   )}
 
+                  {/* ── Forgot Password Step ── */}
+                  {!success && forgotStep && (
+                    <div style={{ display:'flex', flexDirection:'column', gap:'1.2rem' }}>
+                      {/* Back button */}
+                      <button type="button" className="back-btn" onClick={handleForgotBack}>
+                        <ArrowLeft style={{ width:'0.85rem', height:'0.85rem' }} />
+                        <span>Back to Sign In</span>
+                      </button>
+
+                      {/* Header */}
+                      <div style={{ marginBottom:'0.4rem' }}>
+                        <p className="yatra" style={{ color:`${accent}cc`, fontSize:'0.78rem', letterSpacing:'0.12em', marginBottom:'4px' }}>
+                          पासवर्ड रीसेट
+                        </p>
+                        <h2 className="h1f" style={{ color:'var(--lg-ink)', fontSize:'1.5rem', fontWeight:900, margin:0, lineHeight:1.1 }}>
+                          Forgot Password
+                        </h2>
+                      </div>
+
+                      {/* Success state */}
+                      {forgotSuccess ? (
+                        <div style={{ display:'flex', flexDirection:'column', gap:'1.2rem', alignItems:'center', textAlign:'center', padding:'1rem 0' }}>
+                          <div className="check-bounce">
+                            <div style={{ width:'3.5rem', height:'3.5rem', borderRadius:'50%', margin:'0 auto',
+                              background:`${accent}15`, border:`2px solid ${accent}`,
+                              display:'flex', alignItems:'center', justifyContent:'center' }}>
+                              <Mail style={{ width:'1.4rem', height:'1.4rem', color:accent }} />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="h1f" style={{ color:'var(--lg-ink)', fontSize:'1.25rem', fontWeight:900, marginBottom:'8px' }}>
+                              Check Your Inbox
+                            </h3>
+                            <p style={{ color:'var(--lg-muted)', fontSize:'0.88rem', lineHeight:1.7, margin:0 }}>
+                              If an account exists for <strong style={{ color:'var(--lg-ink)' }}>{forgotEmail}</strong>, a temporary password has been sent. Please check your email and log in.
+                            </p>
+                          </div>
+                          <div className="ink-bar" style={{ width:'100%' }} />
+                          <button type="button"
+                            onClick={handleForgotBack}
+                            className="pulse-btn"
+                            style={{
+                              width:'100%', padding:'13px 24px',
+                              background:`linear-gradient(135deg,${accent},${saffron})`,
+                              border:'none', cursor:'pointer', color:'#fff',
+                              fontFamily:'Playfair Display,Georgia,serif',
+                              fontWeight:700, fontSize:'0.95rem', letterSpacing:'0.05em',
+                              display:'flex', alignItems:'center', justifyContent:'center', gap:'10px',
+                              boxShadow:`0 8px 28px ${accent}35`,
+                            }}>
+                            <span>Back to Sign In</span>
+                            <ArrowRight style={{ width:'1rem', height:'1rem' }} />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          {/* Info box */}
+                          <div style={{
+                            padding:'12px 16px',
+                            background: darkMode ? 'rgba(192,57,43,0.08)' : 'rgba(192,57,43,0.05)',
+                            border:`1px solid ${accent}30`,
+                          }}>
+                            <p style={{ color:'var(--lg-muted)', fontSize:'0.85rem', margin:0, lineHeight:1.6 }}>
+                              We'll send a temporary password to your registered email address.
+                            </p>
+                          </div>
+
+                          {/* Email input */}
+                          <div>
+                            <label className="h1f" style={{ display:'block', color:'var(--lg-ink)', fontSize:'0.82rem', fontWeight:700, letterSpacing:'0.05em', marginBottom:'6px' }}>
+                              Email Address
+                            </label>
+                            <div style={{ position:'relative' }}>
+                              <Mail style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', width:'1rem', height:'1rem', color:'var(--lg-muted)' }} />
+                              <input
+                                type="email"
+                                value={forgotEmail}
+                                onChange={e => { setForgotEmail(e.target.value); setErrors({}); }}
+                                onKeyPress={handleKeyPress}
+                                placeholder="Enter your registered email"
+                                className={`cip-input${errors.forgotEmail ? ' err' : ''}`}
+                              />
+                            </div>
+                            {errors.forgotEmail && <p style={{ color:accent, fontSize:'0.75rem', marginTop:'4px' }}>{errors.forgotEmail}</p>}
+                          </div>
+
+                          <div className="ink-bar" style={{ margin:'0' }} />
+
+                          {/* Send button */}
+                          <button type="button" onClick={handleForgotSubmit} disabled={forgotLoading}
+                            className="pulse-btn"
+                            style={{
+                              width:'100%', padding:'13px 24px',
+                              background: forgotLoading ? (darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(26,18,9,0.1)') : `linear-gradient(135deg,${accent},${saffron})`,
+                              border:'none', cursor: forgotLoading ? 'not-allowed' : 'pointer',
+                              color: forgotLoading ? 'var(--lg-muted)' : '#fff',
+                              fontFamily:'Playfair Display,Georgia,serif',
+                              fontWeight:700, fontSize:'0.95rem', letterSpacing:'0.05em',
+                              display:'flex', alignItems:'center', justifyContent:'center', gap:'10px',
+                              boxShadow: forgotLoading ? 'none' : `0 8px 28px ${accent}35`,
+                            }}>
+                            {forgotLoading
+                              ? <span>Sending…</span>
+                              : <><span>Send Temporary Password</span><ArrowRight style={{ width:'1rem', height:'1rem' }} /></>
+                            }
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+
                   {/* ── OTP Step ── */}
-                  {!success && otpStep && (
+                  {!success && !forgotStep && otpStep && (
                     <div style={{ display:'flex', flexDirection:'column', gap:'1.2rem' }}>
                       {/* Header */}
                       <div style={{ marginBottom:'0.4rem' }}>
@@ -415,7 +586,7 @@ const Login = () => {
                   )}
 
                   {/* ── Normal form (login / register fields) ── */}
-                  {!success && !otpStep && (
+                  {!success && !forgotStep && !otpStep && (
                     <>
                       <div style={{ marginBottom:'1.6rem' }}>
                         <p className="yatra" style={{ color:`${accent}cc`, fontSize:'0.78rem', letterSpacing:'0.12em', marginBottom:'4px' }}>
@@ -485,14 +656,18 @@ const Login = () => {
                           {errors.password && <p style={{ color:accent, fontSize:'0.75rem', marginTop:'4px' }}>{errors.password}</p>}
                         </div>
 
-                        {/* Forgot */}
+                        {/* Forgot Password link */}
                         {isLogin && (
                           <div style={{ textAlign:'right', marginTop:'-4px' }}>
-                            <a href="#" style={{ color:accent, fontSize:'0.78rem', textDecoration:'none', letterSpacing:'0.03em' }}
+                            <button
+                              type="button"
+                              onClick={() => { setForgotStep(true); setForgotEmail(formData.email); setErrors({}); }}
+                              style={{ background:'none', border:'none', cursor:'pointer', color:accent,
+                                fontSize:'0.78rem', letterSpacing:'0.03em', padding:0, fontFamily:'inherit' }}
                               onMouseEnter={e => e.target.style.opacity='.75'}
                               onMouseLeave={e => e.target.style.opacity='1'}>
                               Forgot Password?
-                            </a>
+                            </button>
                           </div>
                         )}
 
