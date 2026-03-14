@@ -72,6 +72,7 @@ const Checkout = () => {
         phone: isGuest ? guestDetails.phone : user?.phone,
         address: isGuest ? guestDetails.address : user?.address,
         product: cart.map(i => `${i.title} (x${i.qty})`).join(', '),
+        products: JSON.stringify(cart.map(i => ({ id: i.id, title: i.title, qty: i.qty }))),
         orderType: isGuest ? 'guest' : 'logged-in',
       };
 

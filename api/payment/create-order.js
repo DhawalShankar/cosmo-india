@@ -1,7 +1,7 @@
 import Razorpay from "razorpay";
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
+  key_id:     process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
@@ -10,24 +10,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
-    const { amount, name, email, phone, address, product, orderType } = req.body;
+    const { amount, name, email, phone, address, product, products, orderType } = req.body;
 
     if (!amount || !email) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
     const order = await razorpay.orders.create({
-      amount: amount * 100,
+      amount:   amount * 100,
       currency: "INR",
-      receipt: `rcpt_${Date.now()}`,
+      receipt:  `rcpt_${Date.now()}`,
       notes: {
-        name: name || "Guest User",
+        name:      name     || "Guest User",
         email,
-        phone: phone || "N/A",
-        address: address || "N/A",
-        product: product || "Cosmo India Order",
+        phone:     phone    || "N/A",
+        address:   address  || "N/A",
+        product:   product  || "Cosmo India Order",
+        products:  products || "[]",   // JSON string — Razorpay notes sirf strings
         orderType: orderType || "guest",
-        amount: amount, // ← added for saving in orders
+        amount,
       },
     });
 

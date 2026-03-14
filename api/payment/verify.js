@@ -38,6 +38,7 @@ export default async function handler(req, res) {
       const orderRecord = {
         orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
+        products: JSON.parse(notes.products || '[]'), 
         product: notes.product,
         amount: notes.amount,
         name: notes.name,
