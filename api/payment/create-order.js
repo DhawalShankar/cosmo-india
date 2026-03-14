@@ -25,8 +25,7 @@ export default async function handler(req, res) {
         email,
         phone:     phone    || "N/A",
         address:   address  || "N/A",
-        product:   product  || "Cosmo India Order",
-        products:  products || "[]",   // JSON string — Razorpay notes sirf strings
+        product:   product  || "Cosmo India Prakashan Order",
         orderType: orderType || "guest",
         amount,
       },

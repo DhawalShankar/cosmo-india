@@ -93,7 +93,7 @@ const Checkout = () => {
             const vRes = await fetch('/api/payment/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ ...response, notes: order.notes }),
+              body: JSON.stringify({ ...response, notes: order.notes, products: cart.map(i => ({ id: i.id, title: i.title, qty: i.qty })) }),
             });
             const vData = await vRes.json();
             if (vData.success) { setIsOrderComplete(true); await clearCart(); window.location.href = '/order-success'; }
