@@ -28,10 +28,14 @@ export default async function handler(req, res) {
     /* ================= SAVE ORDER TO DB ================= */
     if (notes?.orderType === "logged-in" && notes?.email) {
       await connectDB();
+
+      let products = [];
+      try { products = JSON.parse(notes.products || "[]"); } catch { products = []; }
+
       const orderRecord = {
         orderId:   razorpay_order_id,
         paymentId: razorpay_payment_id,
-        products:  JSON.parse(notes.products || '[]'),
+        products,
         product:   notes.product,
         amount:    notes.amount,
         name:      notes.name,
@@ -41,6 +45,7 @@ export default async function handler(req, res) {
         status:    "paid",
         date:      new Date(),
       };
+
       await User.findOneAndUpdate(
         { email: notes.email },
         { $push: { orders: orderRecord } }
@@ -51,11 +56,14 @@ export default async function handler(req, res) {
     const businessMail = `
       <div style="font-family:Georgia,serif;max-width:520px;margin:auto;padding:32px;
                   background:#fdf6ee;border:1px solid #e8d5b0;">
-        <h2 style="color:#c0392b;margin-bottom:4px;">Cosmo India Prakashan</h2>
+        <img src="https://cosmoindiaprakashan.in/cosmo-logo.png"
+             alt="Cosmo India Prakashan"
+             style="height:60px;margin-bottom:12px;display:block;" />
+        <h2 style="color:#c0392b;margin-bottom:2px;font-size:20px;">Cosmo India Prakashan</h2>
         <p style="color:#888;font-size:12px;margin-top:0;">📦 New Order Received</p>
         <hr style="border:none;border-top:1px solid #e8d5b0;margin:16px 0;" />
         <table style="width:100%;font-size:14px;color:#1a1209;border-collapse:collapse;">
-          <tr><td style="padding:6px 0;color:#888;">Name</td>    <td style="padding:6px 0;font-weight:bold;">${notes?.name}</td></tr>
+          <tr><td style="padding:6px 0;color:#888;width:35%;">Name</td>    <td style="padding:6px 0;font-weight:bold;">${notes?.name}</td></tr>
           <tr><td style="padding:6px 0;color:#888;">Email</td>   <td style="padding:6px 0;">${notes?.email}</td></tr>
           <tr><td style="padding:6px 0;color:#888;">Phone</td>   <td style="padding:6px 0;">${notes?.phone}</td></tr>
           <tr><td style="padding:6px 0;color:#888;">Address</td> <td style="padding:6px 0;">${notes?.address}</td></tr>
@@ -73,12 +81,14 @@ export default async function handler(req, res) {
       <div style="font-family:Georgia,serif;max-width:480px;margin:auto;padding:32px;
                   background:#fdf6ee;border:1px solid #e8d5b0;">
 
-        <!-- Header -->
+        <img src="https://cosmoindiaprakashan.in/cosmo-logo.png"
+             alt="Cosmo India Prakashan"
+             style="height:60px;margin-bottom:12px;display:block;" />
+
         <h2 style="color:#c0392b;margin-bottom:2px;font-size:22px;">Cosmo India Prakashan</h2>
         <p style="color:#888;font-size:12px;margin-top:0;letter-spacing:0.08em;">कॉस्मो इंडिया प्रकाशन</p>
         <hr style="border:none;border-top:2px solid #c0392b;margin:16px 0 24px;" />
 
-        <!-- Greeting -->
         <p style="color:#1a1209;font-size:15px;margin-bottom:6px;">
           Dear <strong>${notes?.name}</strong>,
         </p>
@@ -87,7 +97,6 @@ export default async function handler(req, res) {
           will be dispatched to you soon via <strong>India Post</strong>.
         </p>
 
-        <!-- Amount box -->
         <div style="text-align:center;background:#fff;border:1px solid #e8d5b0;
                     padding:24px;margin-bottom:24px;">
           <p style="color:#888;font-size:12px;letter-spacing:0.1em;
@@ -96,7 +105,6 @@ export default async function handler(req, res) {
                     margin:0;font-family:Georgia,serif;">₹${notes?.amount}</p>
         </div>
 
-        <!-- Order details -->
         <table style="width:100%;font-size:13px;color:#1a1209;border-collapse:collapse;margin-bottom:24px;">
           <tr style="border-bottom:1px solid #e8d5b0;">
             <td style="padding:10px 0;color:#888;width:40%;">Product</td>
@@ -112,7 +120,6 @@ export default async function handler(req, res) {
           </tr>
         </table>
 
-        <!-- Footer note -->
         <div style="background:#fff8f0;border-left:3px solid #c0392b;
                     padding:12px 16px;font-size:13px;color:#555;margin-bottom:24px;">
           For any queries, simply reply to this email. We're happy to help.

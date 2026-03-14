@@ -18,6 +18,9 @@ export const sendOTPEmail = async (email, name, otp) => {
     html: `
       <div style="font-family:Georgia,serif;max-width:480px;margin:auto;padding:32px;
                   background:#fdf6ee;border:1px solid #e8d5b0;">
+                  <img src="https://cosmoindiaprakashan.in/cosmo-logo.png" 
+                    alt="Cosmo India Prakashan"
+                    style="height:60px;margin-bottom:12px;display:block;" />
         <h2 style="color:#c0392b;margin-bottom:4px;">Cosmo India Prakashan</h2>
         <p style="color:#1a1209;font-size:15px;">Hi ${name},</p>
         <p style="color:#555;font-size:14px;">
