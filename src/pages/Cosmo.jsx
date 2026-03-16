@@ -724,7 +724,7 @@ const CosmoPublicationSite = () => {
                 </div>
               </div>
               <div className="fw relative overflow-hidden order-1 md:order-2" style={{ minHeight:'340px' }}>
-                <img src="dhawal.png" alt="Dhawal Shukla" className="fi w-full h-full object-cover object-top" style={{ position:'absolute', inset:0 }}/>
+                <img src="dhawal.jpg" alt="Dhawal Shukla" className="fi w-full h-full object-cover object-top" style={{ position:'absolute', inset:0 }}/>
                 <div className="absolute inset-0" style={{ background:`linear-gradient(to left, transparent 55%, ${darkMode?'#1c1410':'#ffffff'}40)` }}/>
               </div>
             </div>
