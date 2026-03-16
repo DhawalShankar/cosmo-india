@@ -1,222 +1,194 @@
-# 📚 Cosmo India Prakashan – A Publishing House and Media Platform
+# Cosmo India Prakashan
 
-> A full-stack e-commerce platform for book publishing and digital content distribution.
-> Built with React, Node.js serverless functions, and MongoDB.
+> A full-stack book publishing and e-commerce platform built to revive Indian literature and cultural heritage.
 
-[![Live Site](https://img.shields.io/badge/live-cosmoindiaprakashan.in-blue)](https://cosmoindiaprakashan.in)
-
----
-
-## 🎯 About
-
-**Cosmo India Prakashan** is a digital publishing platform focused on making Indian literature and cultural content accessible globally. The platform supports book discovery, secure purchasing, user accounts, and digital content delivery.
-
-**Vision**
-Build scalable publishing infrastructure to revive and promote Indian literature and culture on a global scale.
-
-**Built by:** Dhawal Shukla
-**Live:** [https://cosmoindiaprakashan.in](https://cosmoindiaprakashan.in)
+[![Live Site](https://img.shields.io/badge/live-cosmoindiaprakashan.in-c0392b?style=flat-square)](https://cosmoindiaprakashan.in)
 
 ---
 
-## ✨ Features (Currently Working)
+## About
 
-* Browse and purchase books
-* User authentication using JWT (HTTP-only cookies)
-* Secure password hashing with bcrypt
-* Shopping cart with persistence
+**Cosmo India Prakashan** was founded in 1982 and distributed books and magazines all across India. After going dormant, the platform has been revived as a modern digital publishing and e-commerce system.
 
-  * Guests: `localStorage`
-  * Logged-in users: MongoDB
-* Multiple delivery address management
-* Razorpay payment gateway integration
-* Cryptographic payment signature verification
-* Automated order confirmation emails
-* Members-only section for digital content
-* Dark / light theme toggle
+**Founded by:** Shri Rajkumar Ratnapriya 
+**Revived & built by:** Dhawal Shukla  
+**Live:** [https://cosmoindiaprakashan.in](https://cosmoindiaprakashan.in)  
+**MSME Registered** | **ISBN Published**
 
 ---
 
-## ❌ Known Gaps (Not Implemented Yet)
+## Screenshots
 
-The following are **intentional gaps** and are tracked via GitHub issues:
-
-* Products are **hardcoded** (not database-driven)
-* Orders are **not persistently stored** in the database
-* No user-facing **order history or tracking**
-* No admin dashboard
-* No inventory or stock management
-* No reviews or ratings
-
-If something appears missing, check the **Issues** section first.
+| Page | Preview |
+|------|---------|
+| Marketplace | `screenshots/marketplace.png` |
+| Checkout | `screenshots/checkout.png` |
+| Order Confirmation Email | `screenshots/email-confirmation.png` |
+| Order History | `screenshots/orders.png` |
 
 ---
 
-## 🛠️ Tech Stack
+## Features
 
-### Frontend
-
-* React 18 (Vite)
-* TailwindCSS
-* React Router v6
-* Context API
-* Lucide React icons
-
-### Backend
-
-* Node.js serverless functions (Vercel)
-* MongoDB Atlas with Mongoose
-* JWT authentication
-* bcrypt password hashing
-* HTTP-only cookies
-
-### Integrations
-
-* Razorpay Payment Gateway
-* Nodemailer (Gmail SMTP)
-* Vercel serverless deployment
+- Browse and purchase books from a curated catalog
+- User authentication via JWT (HTTP-only cookies) + OTP email verification
+- Forgot password flow via email
+- Shopping cart — guests use localStorage, logged-in users sync to MongoDB
+- Razorpay payment gateway with cryptographic signature verification
+- Branded order confirmation email with logo sent to customer on purchase
+- Order history for logged-in users
+- Members-only section for digital content
+- Interactive star ratings per product
+- Dark / light theme toggle
+- Responsive design
 
 ---
 
-## 📁 Project Structure
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18 (Vite), TailwindCSS, React Router v6, Context API |
+| Backend | Node.js serverless functions (Vercel) |
+| Database | MongoDB Atlas + Mongoose |
+| Auth | JWT (HTTP-only cookies) + bcrypt |
+| Payments | Razorpay |
+| Email | Nodemailer (Gmail SMTP) |
+| Deployment | Vercel |
+
+---
+
+## Project Structure
 
 ```
 cosmo-india/
 ├── api/                          # Serverless API endpoints
-│   ├── lib/                      # Database, JWT, hashing utilities
-│   ├── models/                   # Mongoose schemas
-│   ├── payment/                  # Razorpay integration
-│   ├── cart.js                   # Cart operations
-│   └── user.js                   # Auth & user management
+│   ├── lib/
+│   │   ├── db.js                 # MongoDB connection
+│   │   ├── jwt.js                # Sign / verify tokens
+│   │   ├── hash.js               # bcrypt helpers
+│   │   └── mailer.js             # Nodemailer + OTP email
+│   ├── models/
+│   │   ├── user.js               # User schema (cart, orders embedded)
+│   │   └── otp.js                # OTP schema
+│   ├── payment/
+│   │   ├── create-order.js       # Razorpay order creation
+│   │   └── verify.js             # Signature verify + save order + send emails
+│   ├── cart.js                   # Cart sync
+│   ├── forgot-password.js        # Password reset flow
+│   ├── orders.js                 # Customer order history
+│   └── user.js                   # Auth, profile, OTP
 │
-├── src/                          # React frontend
-│   ├── components/               # Reusable UI components
-│   ├── context/                  # Auth, Cart, DarkMode contexts
-│   ├── pages/                    # Route pages
-│   └── App.jsx
-│
-└── vercel.json                   # Deployment configuration
+└── src/
+    ├── assets/
+    ├── components/               # Reusable UI components
+    ├── context/
+    │   ├── AuthContext.jsx
+    │   ├── CartContext.jsx
+    │   └── DarkModeContext.jsx
+    ├── pages/
+    │   ├── Marketplace.jsx
+    │   ├── Checkout.jsx
+    │   ├── Orders.jsx
+    │   └── ...
+    ├── policies/                 # Privacy, Terms, Shipping, Refund, Contact
+    ├── App.jsx
+    ├── App.css
+    ├── index.css
+    └── main.jsx
 ```
 
 ---
 
-## 🔌 API Endpoints
+## API Reference
 
-### Authentication
-
-* `POST /api/user?action=register`
-* `POST /api/user?action=login`
-* `GET /api/user?action=me`
-* `POST /api/user?action=logout`
-
-### User Management
-
-* `PUT /api/user?action=update`
-* `PUT /api/user?action=change-password`
-* `GET /api/user/addresses`
-* `POST /api/user/addresses`
-
-### Cart
-
-* `GET /api/cart`
-* `POST /api/cart`
-
-### Payment
-
-* `POST /api/payment/create-order`
-* `POST /api/payment/verify`
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/user?action=send-otp` | Send OTP for signup |
+| POST | `/api/user?action=verify-otp` | Verify OTP + create account |
+| POST | `/api/user?action=login` | Login |
+| GET | `/api/user?action=me` | Current user |
+| POST | `/api/user?action=logout` | Logout |
+| PUT | `/api/user?action=update` | Update profile (name, phone, address) |
+| PUT | `/api/user?action=change-password` | Change password |
+| POST | `/api/forgot-password` | Send password reset email |
+| GET | `/api/orders` | Customer order history |
+| GET | `/api/cart` | Get cart |
+| POST | `/api/cart` | Sync cart |
+| POST | `/api/payment/create-order` | Create Razorpay order |
+| POST | `/api/payment/verify` | Verify payment + save order + send emails |
 
 ---
 
-## 🔐 Key Technical Decisions
+## Order Flow
 
-* JWT stored in **HTTP-only cookies** for security
-* Razorpay **signature verification is mandatory**
-* MongoDB connection caching to reduce serverless cold starts
-* Business secrets are never exposed to contributors
-* Serverless constraint: **maximum 12 API files** (currently 8 in use)
-
----
-
-## 🤝 Contributions
-
-This is a **business-backed, production platform**, not a learning or tutorial project.
-
-* Contributions are welcome from developers comfortable working independently
-* No setup hand-holding is provided
-* Read **CONTRIBUTING.md** before opening a PR
-* Business stability and security take priority over experimentation
-
-### Environment & Secrets
-
-* No `.env` or `.env.example` is provided
-* Contributors must infer required variables from the codebase
-* Use your own test credentials
-* Requests for production secrets will not be entertained
+```
+Customer pays via Razorpay
+        ↓
+verify.js — signature verified
+        ↓
+Order saved to MongoDB (status: "paid")
+        ↓
+Branded confirmation email → customer
+Business notification email → admin
+        ↓
+Customer can view order in Order History
+```
 
 ---
 
-## 🧠 Good Areas to Contribute
+## Environment Variables
 
-Issues labeled:
-
-* `good first issue` (limited scope, not reduced standards)
-* `backend`
-* `database`
-* `payments`
-
-Typical contributions include:
-
-* Moving products to a database
-* Implementing persistent order storage
-* Adding user order history APIs
-* Improving performance and security
+```env
+MONGODB_URI=
+JWT_SECRET=
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+BUSINESS_EMAIL=
+BUSINESS_EMAIL_PASSWORD=
+VITE_BACKEND_URL=
+VITE_RAZORPAY_KEY=
+```
 
 ---
 
-## 🔮 What’s Next (Roadmap)
+## Related Repositories
 
-* Database-backed products (remove hardcoding)
-* Persistent order storage after payment verification
-* User-facing order history and tracking
-* Admin dashboard for inventory
-* Advanced search and filtering
-* Multi-language support for regional content
+| Repo | Description |
+|------|-------------|
+| [cip-admin](https://github.com/dhawalshankar/cip-admin) | Internal admin panel frontend (React + TypeScript) |
+| [cip-admin-backend](https://github.com/dhawalshankar/cip-admin-backend) | Internal admin API (Express + Supabase + MongoDB) |
 
 ---
-## 📚 Content & Data Notice
 
-The MIT License applies only to the source code in this repository.
+## Contributions
 
-All books, publications, product data, text content, images, logos, and branding
-associated with Cosmo India Prakashan are proprietary and protected by copyright.
+This is a **production business platform**, not a tutorial project.
 
-They may not be reused, redistributed, or republished without explicit permission,
-even if referenced or temporarily stored in the codebase.
+- Contributions welcome from developers comfortable working independently
+- Business stability and security take priority over experimentation
+- No production secrets will be shared
+- Read **CONTRIBUTING.md** before opening a PR
+
 ---
 
-## 👨‍💻 Contact
+## Content & Data Notice
+
+The MIT License applies to source code only.
+
+All books, publications, product data, images, logos, and branding associated with Cosmo India Prakashan are proprietary and protected by copyright. They may not be reused or redistributed without explicit written permission.
+
+---
+
+## Contact
 
 **Dhawal Shukla**
 
-* **GitHub:** [https://github.com/dhawalshankar](https://github.com/dhawalshankar)
-* **LinkedIn:** [https://linkedin.com/in/dhawalshukl](https://linkedin.com/in/dhawalshukl)
-* **Email:** [dhawalmannu@gmail.com](mailto:dhawalmannu@gmail.com)
-* **Portfolio:** [https://dhawalshukl.vercel.app](https://dhawalshukl.vercel.app)
-
----
-
-## 📝 Note
-
-**Cosmo India Prakashan is an active, ongoing business platform.**
-
-This repository contains the real production codebase powering the live site and is under continuous development.
-It also serves as a reference for recruitment and portfolio evaluation.
-
-Business requirements always take precedence over experimental or educational changes.
+- GitHub: [github.com/dhawalshankar](https://github.com/dhawalshankar)
+- LinkedIn: [linkedin.com/in/dhawalshukl](https://linkedin.com/in/dhawalshukl)
+- Email: [dhawalmannu@gmail.com](mailto:dhawalmannu@gmail.com)
+- Portfolio: [dhawalshukl.vercel.app](https://dhawalshukl.vercel.app)
 
 ---
 
 *Built with the goal of reviving Indian literature and culture through modern digital infrastructure.*
-
----
