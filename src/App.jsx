@@ -24,6 +24,7 @@ import Footer from './components/footer';
 import ScrollToTop from './components/ScrolltoTop';
 import BlogPage from './pages/BlogPage';
 import Release from './pages/Release';
+import CareersPage from './pages/Careers';
 function App() {
   const { darkMode } = useContext(DarkModeContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -49,6 +50,7 @@ function App() {
         <Route path="/discuss" element={<DiscussYourBook />} />
         <Route path="/marketplace" element={<Marketplace />} /> 
         <Route path="/cart" element={<Cart />} />
+        <Route path="/careers" element={<CareersPage />} />
 
          {/* ✅ Auth & Order Routes - NOW WORKING */}
         <Route path="/login" element={<Login />} />

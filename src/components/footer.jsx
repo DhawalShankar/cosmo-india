@@ -47,14 +47,14 @@ const Footer = () => {
         { label: 'Books',        action: handleBooksClick },
         { label: 'About',        action: () => scrollToSection('about') },
         { label: 'Contact',      action: () => scrollToSection('contact') },
-        { label: 'Work with Us', action: () => window.open('https://careers.cosmoindiaprakashan.in/', '_blank') },
+        { label: 'Work with Us', action: () => navigate('/careers') },
       ]
     : [
         { label: 'Home',         action: () => navigate('/') },
         { label: 'Books',        action: handleBooksClick },
         { label: 'About',        action: () => scrollToSection('about') },
         { label: 'Contact',      action: () => scrollToSection('contact') },
-        { label: 'Work with Us', action: () => window.open('https://careers.cosmoindiaprakashan.in/', '_blank') },
+        { label: 'Work with Us', action: () => navigate('/careers') },
       ];
 
   const moreLinks = [
