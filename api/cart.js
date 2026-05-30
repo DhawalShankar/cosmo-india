@@ -40,7 +40,40 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Server error' });
     }
   }
+  if (req.method === 'POST' && req.query.coupon) {
+    const { code, cartTotal } = req.body;
 
+      const COUPONS = {
+        WELCOME10: { type: 'percent', value: 10, minOrder: 0, description: '10% off' },
+        COSMO20: { type: 'percent', value: 20, minOrder: 500, description: '20% off orders above ₹500' },
+        FLAT50: { type: 'flat', value: 50, minOrder: 300, description: '₹50 off orders above ₹300' },
+        FLAT100: { type: 'flat', value: 100, minOrder: 800, description: '₹100 off orders above ₹800' },
+        BOOKFEST: { type: 'percent', value: 15, minOrder: 0, description: '15% off' },
+      };
+
+      const coupon = COUPONS[code?.trim()?.toUpperCase()];
+
+      if (!coupon)
+        return res.status(200).json({ valid: false, message: 'Invalid coupon code' });
+
+      if (cartTotal < coupon.minOrder)
+        return res.status(200).json({
+          valid: false,
+          message: `Minimum order of ₹${coupon.minOrder} required for this coupon`,
+        });
+
+      const discount =
+        coupon.type === 'percent'
+          ? Math.round((cartTotal * coupon.value) / 100)
+          : coupon.value;
+
+      return res.status(200).json({
+        valid: true,
+        code: code.toUpperCase(),
+        discount,
+        finalTotal: Math.max(0, cartTotal - discount),
+      });
+  }
   // ── POST: replace whole cart ──
   if (req.method === 'POST') {
     const { cart } = req.body;

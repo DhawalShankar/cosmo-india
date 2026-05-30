@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { DarkModeContext } from '../context/DarkModeContext';
 import { AuthContext } from '../context/AuthContext';
-import { ShoppingBag, User, Mail, Phone, MapPin, CreditCard, Lock, ArrowRight } from 'lucide-react';
+import { ShoppingBag, User, Mail, Phone, MapPin, CreditCard, Lock, ArrowRight, Tag, X, CheckCircle } from 'lucide-react';
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
@@ -16,19 +16,26 @@ const Checkout = () => {
   const [guestDetails, setGuestDetails] = useState({ name: '', email: '', phone: '', address: '' });
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isOrderComplete, setIsOrderComplete] = useState(false); // ← add this
+  const [isOrderComplete, setIsOrderComplete] = useState(false);
+
+  // ── Coupon state ──
+  const [couponCode, setCouponCode] = useState('');
+  const [couponApplied, setCouponApplied] = useState(null); // { code, discount, finalTotal }
+  const [couponError, setCouponError] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = subtotal > 500 ? 0 : 50;
-  const total    = subtotal + shipping;
+  const discount = couponApplied ? couponApplied.discount : 0;
+  const total    = subtotal + shipping - discount;
 
   useEffect(() => { if (cart.length === 0 && !isOrderComplete) navigate('/marketplace'); }, [cart, navigate, isOrderComplete]);
+
   const accent  = '#c0392b';
   const saffron = '#d4450c';
   const ink     = darkMode ? '#f0e8dc' : '#1a1209';
   const muted   = darkMode ? 'rgba(240,232,220,0.72)' : 'rgba(26,18,9,0.65)';
   const rule    = darkMode ? 'rgba(192,57,43,0.28)' : 'rgba(160,40,20,0.18)';
-  // Neutral border for form inputs — distinct from the decorative rule color
   const inputBorder = darkMode ? 'rgba(240,232,220,0.15)' : 'rgba(26,18,9,0.2)';
   const cardBg  = darkMode
     ? 'linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))'
@@ -55,6 +62,37 @@ const Checkout = () => {
     if (errors[name]) setErrors(p => ({ ...p, [name]: '' }));
   };
 
+  // ── Apply coupon ──
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponError('');
+    setCouponApplied(null);
+    try {
+      const res = await fetch('/api/cart?coupon=1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode.trim(), cartTotal: subtotal }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setCouponApplied({ code: data.code, discount: data.discount, finalTotal: data.finalTotal });
+      } else {
+        setCouponError(data.message || 'Invalid coupon code');
+      }
+    } catch {
+      setCouponError('Failed to apply coupon. Try again.');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponApplied(null);
+    setCouponCode('');
+    setCouponError('');
+  };
+
   const handlePayment = async () => {
     if (!isGuest && user && (!user.phone || !user.address)) {
       alert('Please update your phone and address in Profile Settings before checkout.');
@@ -74,6 +112,8 @@ const Checkout = () => {
         product: cart.map(i => `${i.title} (x${i.qty})`).join(', '),
         products: JSON.stringify(cart.map(i => ({ id: i.id, title: i.title, qty: i.qty }))),
         orderType: isGuest ? 'guest' : 'logged-in',
+        couponCode: couponApplied?.code || null,
+        discount: couponApplied?.discount || 0,
       };
 
       const res = await fetch('/api/payment/create-order', {
@@ -156,6 +196,18 @@ const Checkout = () => {
           box-shadow: 0 0 0 3px rgba(192,57,43,.12);
         }
         .co-wrap .ci-input::placeholder { color: var(--muted); }
+
+        .co-wrap .coupon-input:focus {
+          border-color: var(--accent) !important;
+          box-shadow: 0 0 0 3px rgba(192,57,43,.12);
+        }
+        .co-wrap .coupon-input::placeholder { color: var(--muted); }
+
+        @keyframes couponSuccess {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: none; }
+        }
+        .co-wrap .coupon-success { animation: couponSuccess .35s cubic-bezier(.22,1,.36,1) both; }
 
         .co-wrap .info-row { display: flex; align-items: flex-start; gap: 0.75rem; padding: '0.5rem 0'; }
       `}</style>
@@ -345,10 +397,100 @@ const Checkout = () => {
                   ))}
                 </div>
 
+                {/* ── COUPON SECTION ── */}
+                <div style={{ marginBottom: '1.25rem' }}>
+                  <div style={{ height: '1px', background: rule, marginBottom: '1rem' }} />
+
+                  {/* Label */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.65rem' }}>
+                    <Tag style={{ width: '0.82rem', height: '0.82rem', color: accent }} />
+                    <p style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.08em',
+                      textTransform: 'uppercase', color: muted }}>Coupon Code</p>
+                  </div>
+
+                  {/* Applied state */}
+                  {couponApplied ? (
+                    <div className="coupon-success" style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '0.7rem 0.9rem',
+                      background: darkMode ? 'rgba(29,185,84,0.08)' : 'rgba(29,185,84,0.07)',
+                      border: `1px solid ${darkMode ? 'rgba(29,185,84,0.3)' : 'rgba(29,185,84,0.35)'}`,
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <CheckCircle style={{ width: '0.9rem', height: '0.9rem', color: '#1db954', flexShrink: 0 }} />
+                        <div>
+                          <p style={{ fontSize: '0.82rem', fontWeight: 700, color: darkMode ? '#86efac' : '#166534',
+                            fontFamily: 'DM Sans, sans-serif', letterSpacing: '0.05em' }}>
+                            {couponApplied.code}
+                          </p>
+                          <p style={{ fontSize: '0.72rem', color: darkMode ? 'rgba(134,239,172,0.75)' : '#15803d' }}>
+                            ₹{couponApplied.discount} off applied!
+                          </p>
+                        </div>
+                      </div>
+                      <button onClick={handleRemoveCoupon}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem',
+                          color: darkMode ? 'rgba(134,239,172,0.7)' : '#16a34a', display: 'flex', alignItems: 'center' }}>
+                        <X style={{ width: '0.9rem', height: '0.9rem' }} />
+                      </button>
+                    </div>
+                  ) : (
+                    /* Input + Apply button */
+                    <div>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <div style={{ position: 'relative', flex: 1 }}>
+                          <Tag style={{ position: 'absolute', left: '0.7rem', top: '50%', transform: 'translateY(-50%)',
+                            width: '0.82rem', height: '0.82rem', color: muted, pointerEvents: 'none' }} />
+                          <input
+                            type="text"
+                            value={couponCode}
+                            onChange={e => { setCouponCode(e.target.value.toUpperCase()); setCouponError(''); }}
+                            onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                            placeholder="ENTER CODE"
+                            className="coupon-input"
+                            style={{
+                              width: '100%',
+                              padding: '0.65rem 0.75rem 0.65rem 2rem',
+                              border: `1px solid ${couponError ? accent : inputBorder}`,
+                              background: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.85)',
+                              color: ink, fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem',
+                              fontWeight: 600, letterSpacing: '0.08em',
+                              outline: 'none', transition: 'border-color .2s, box-shadow .2s',
+                            }}
+                          />
+                        </div>
+                        <button
+                          onClick={handleApplyCoupon}
+                          disabled={couponLoading || !couponCode.trim()}
+                          style={{
+                            padding: '0.65rem 1rem',
+                            background: couponLoading || !couponCode.trim()
+                              ? (darkMode ? 'rgba(255,255,255,0.06)' : 'rgba(26,18,9,0.06)')
+                              : `linear-gradient(135deg, ${accent}, ${saffron})`,
+                            color: couponLoading || !couponCode.trim() ? muted : '#fff',
+                            border: `1px solid ${couponLoading || !couponCode.trim() ? inputBorder : 'transparent'}`,
+                            cursor: couponLoading || !couponCode.trim() ? 'not-allowed' : 'pointer',
+                            fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                            letterSpacing: '0.04em', transition: 'all .2s', whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {couponLoading ? '…' : 'Apply'}
+                        </button>
+                      </div>
+                      {couponError && (
+                        <p style={{ marginTop: '0.35rem', fontSize: '0.75rem', color: accent }}>{couponError}</p>
+                      )}
+                    </div>
+                  )}
+
+                  <div style={{ height: '1px', background: rule, marginTop: '1rem' }} />
+                </div>
+
                 {/* price rows */}
                 {[
                   { label: `Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)`, value: `₹${subtotal}`, color: ink },
                   { label: 'Shipping', value: shipping === 0 ? 'FREE' : `₹${shipping}`, color: shipping === 0 ? '#1db954' : ink },
+                  ...(couponApplied ? [{ label: `Discount (${couponApplied.code})`, value: `-₹${couponApplied.discount}`, color: '#1db954' }] : []),
                 ].map((row, i) => (
                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between',
                     marginBottom: '0.65rem', fontSize: '0.88rem' }}>

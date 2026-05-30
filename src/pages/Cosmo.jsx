@@ -749,7 +749,7 @@ const CosmoPublicationSite = () => {
                   transform:'translate(-10%,15%)' }}>र</div>
               <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background:`linear-gradient(90deg,transparent,${saffron},${accent}70)` }}/>
               <div className="fw relative overflow-hidden" style={{ minHeight:'340px' }}>
-                <img src="nana.jpeg" alt="Shri Rajkumar Ratnapriya" className="fi w-full h-full object-cover object-top" style={{ position:'absolute', inset:0 }}/>
+                <img src="nana.jpg" alt="Shri Rajkumar Ratnapriya" className="fi w-full h-full object-cover object-top" style={{ position:'absolute', inset:0 }}/>
                 <div className="absolute inset-0" style={{ background:`linear-gradient(to right, transparent 55%, ${darkMode?'#141210':'#fdf6ee'}40)` }}/>
               </div>
               <div className="p-8 lg:p-12 flex flex-col justify-center relative z-10">
