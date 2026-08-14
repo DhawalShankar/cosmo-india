@@ -155,6 +155,17 @@ const Navbar = () => {
           background: ${darkMode ? 'rgba(192,57,43,0.14)' : 'rgba(192,57,43,0.08)'};
         }
 
+        /* ── mobile-only hamburger ──
+           Scoped, !important media-query rule so this can never lose a
+           cascade-order race with Tailwind's lg:hidden (which shares the
+           same specificity as .nb-icon-btn's unconditional display:flex —
+           whichever stylesheet happens to load/render last would otherwise
+           win, which is what was making the hamburger show on desktop). */
+        .nb-hamburger { display: flex; }
+        @media (min-width: 1024px) {
+          .nb-hamburger { display: none !important; }
+        }
+
         /* ── cart badge ── */
         .nb-cart-badge {
           position: absolute; top: -4px; right: -4px;
@@ -379,7 +390,7 @@ const Navbar = () => {
 
               {/* Mobile hamburger */}
               <button
-                className="nb-icon-btn lg:hidden"
+                className="nb-icon-btn nb-hamburger lg:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 style={{ color: linkColor(false) }}
                 aria-label="Toggle menu">
