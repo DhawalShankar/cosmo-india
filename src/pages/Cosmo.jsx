@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Mail, MapPin, Phone, Star, ArrowRight, TrendingUp } from 'lucide-react';
+import { Search, Menu, X, ChevronRight, BookOpen, Users, Award, Star, ArrowRight, TrendingUp } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Posts from "./Posts";
 import { DarkModeContext } from '../context/DarkModeContext';
@@ -35,27 +35,6 @@ const CosmoPublicationSite = () => {
   const filteredBooks = activeCategory === 'all'
     ? featuredBooks
     : featuredBooks.filter(book => book.category === activeCategory);
-
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let tempErrors = {};
-    if (!form.name) tempErrors.name = "Name is required";
-    if (!form.email) tempErrors.email = "Email is required";
-    if (!form.message) tempErrors.message = "Message is required";
-    if (Object.keys(tempErrors).length > 0) { setErrors(tempErrors); return; }
-    const text = `Name: ${form.name}\nEmail: ${form.email}\nMessage: ${form.message}`;
-    window.open(`https://wa.me/7388270331?text=${encodeURIComponent(text)}`, "_blank");
-    setForm({ name: "", email: "", message: "" });
-    setErrors({});
-  };
 
   /* ── Colour tokens ── */
   const accent  = '#c0392b';
@@ -161,17 +140,6 @@ const CosmoPublicationSite = () => {
           -webkit-text-stroke: 1px var(--rule);
           user-select: none; pointer-events: none; line-height: 1;
         }
-
-        .ci-input {
-          width: 100%; padding: 12px 16px;
-          border: 1px solid var(--rule); border-radius: 3px;
-          background: ${darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.75)'};
-          color: var(--ink);
-          font-family: 'EB Garamond', serif; font-size: 1rem;
-          outline: none; transition: border-color .22s, box-shadow .22s;
-        }
-        .ci-input::placeholder { color: var(--muted); }
-        .ci-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(192,57,43,.12); }
 
         .deva-stripe {
           writing-mode: vertical-rl;
@@ -798,105 +766,6 @@ const CosmoPublicationSite = () => {
               <span className="h1 text-base">Join Us Today</span>
               <ArrowRight className="w-4 h-4" />
             </button>
-          </div>
-        </section>
-
-        {/* ════════════════════════════
-            CONTACT
-        ════════════════════════════ */}
-        <section id="contact" className="py-24" style={{
-          background: darkMode
-            ? 'linear-gradient(160deg, #1a1108 0%, #141210 100%)'
-            : 'linear-gradient(160deg, #fdf6ee 0%, #fff8f2 100%)'
-        }}>
-          <div className="max-w-6xl mx-auto px-8 lg:px-16">
-            <div className="flex items-center gap-5 mb-14 rule-b pb-6">
-              <span className="ghost-num">04</span>
-              <div>
-                <p className="yatra mb-1" style={{ fontSize:'0.82rem', letterSpacing:'0.12em', color:accent }}>संपर्क करें</p>
-                <h2 className="h1 font-bold" style={{ color:'var(--ink)', fontSize:'2rem' }}>Have Something to Share?</h2>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-14">
-              <div className="space-y-0">
-                {[
-                  {
-                    icon:MapPin, title:'Address',
-                    content:(
-                      <>
-                        <p style={{ color:'var(--muted)', fontSize:'1rem', lineHeight:'1.7', marginBottom:'1rem' }}>
-                          Sector A 24 Gujaini Chanakyapuri<br />UP India
-                        </p>
-                        <div className="overflow-hidden" style={{ border:`1px solid ${darkMode ? 'rgba(192,57,43,0.2)' : 'rgba(192,57,43,0.15)'}`, height:'155px' }}>
-                          <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3572.4657149549403!2d80.28101877520723!3d26.440713076931743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c49d294914d83%3A0xa2640eaeceae550c!2sCosmo%20India%20Prakashan!5e0!3m2!1sen!2sin!4v1767088195065!5m2!1sen!2sin"
-                            className="w-full h-full" style={{ border:0 }} allowFullScreen loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade" title="Cosmo India Prakashan" />
-                        </div>
-                      </>
-                    )
-                  },
-                  { icon:Phone, title:'Phone', content:<p style={{ color:'var(--muted)', fontSize:'1rem' }}>+91 7388270331</p> },
-                  { icon:Mail,  title:'Email', content:<p style={{ color:'var(--muted)', fontSize:'1rem' }}>cosmoindiaprakashan@gmail.com</p> },
-                ].map((item,i) => (
-                  <div key={i} className="lift py-7 group"
-                    style={{ borderTop:i===0?`1px solid ${darkMode?'rgba(192,57,43,0.18)':'rgba(192,57,43,0.12)'}`:' none',
-                      borderBottom:`1px solid ${darkMode?'rgba(192,57,43,0.18)':'rgba(192,57,43,0.12)'}` }}>
-                    <div className="flex items-start gap-5">
-                      <div className="w-10 h-10 flex items-center justify-center shrink-0 mt-0.5"
-                        style={{ background:`${accent}10`, border:`1px solid ${accent}35`, color:accent }}>
-                        <item.icon style={{ width:'1.1rem', height:'1.1rem' }} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="h1 font-bold mb-2" style={{ color:'var(--ink)', fontSize:'1.05rem' }}>{item.title}</h3>
-                        {item.content}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="relative p-9"
-                style={{
-                  background: darkMode
-                    ? 'linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))'
-                    : 'linear-gradient(145deg, #ffffff, #fdf6ee)',
-                  border:`1px solid ${darkMode ? 'rgba(192,57,43,0.22)' : 'rgba(192,57,43,0.16)'}`,
-                  boxShadow: darkMode ? 'none' : '0 4px 30px rgba(192,57,43,0.07)',
-                }}>
-                <div className="absolute top-0 left-0 w-7 h-7" style={{ borderTop:`2px solid ${accent}`, borderLeft:`2px solid ${accent}` }} />
-                <div className="absolute bottom-0 right-0 w-7 h-7" style={{ borderBottom:`2px solid ${accent}`, borderRight:`2px solid ${accent}` }} />
-
-                <p className="yatra mb-7 flex items-center gap-3" style={{ color:accent, fontSize:'0.92rem' }}>
-                  <span style={{ display:'inline-block', width:'1.5rem', height:'2px', background:accent }} />
-                  संदेश भेजें
-                </p>
-
-                <form className="space-y-5" onSubmit={handleSubmit}>
-                  <div>
-                    <input type="text" name="name" placeholder="Your Name" value={form.name} onChange={handleChange} className="ci-input" />
-                    {errors.name && <p className="mt-1" style={{ color:accent, fontSize:'0.8rem' }}>{errors.name}</p>}
-                  </div>
-                  <div>
-                    <input type="email" name="email" placeholder="Your Email" value={form.email} onChange={handleChange} className="ci-input" />
-                    {errors.email && <p className="mt-1" style={{ color:accent, fontSize:'0.8rem' }}>{errors.email}</p>}
-                  </div>
-                  <div>
-                    <textarea rows="5" name="message" placeholder="Your Message" value={form.message} onChange={handleChange}
-                      className="ci-input" style={{ resize:'none' }} />
-                    {errors.message && <p className="mt-1" style={{ color:accent, fontSize:'0.8rem' }}>{errors.message}</p>}
-                  </div>
-                  <button type="submit"
-                    className="pulse-btn w-full py-4 font-semibold text-white flex items-center justify-center gap-2.5 transition-all duration-300 hover:gap-4 group"
-                    style={{ background:'linear-gradient(135deg,#1db954,#128c7e)', letterSpacing:'0.04em', fontSize:'0.95rem',
-                      boxShadow:'0 6px 24px rgba(29,185,84,0.3)' }}>
-                    <span className="h1">Send via WhatsApp</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </button>
-                </form>
-              </div>
-            </div>
           </div>
         </section>
 

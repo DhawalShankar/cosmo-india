@@ -41,7 +41,7 @@ const Navbar = () => {
   useEffect(() => {
     if (location.pathname !== '/') { setActiveSection(''); return; }
     const spy = () => {
-      const sections = ['home', 'books', 'about', 'contact'];
+      const sections = ['home', 'books', 'about'];
       const pos = window.scrollY + 150;
       for (const id of sections) {
         const el = document.getElementById(id);
@@ -91,7 +91,7 @@ const Navbar = () => {
     { label: 'Home',          action: () => scrollToSection('home'),          id: 'home' },
     { label: 'Books',         action: () => scrollToSection('books'),         id: 'books' },
     { label: 'About',         action: () => scrollToSection('about'),         id: 'about' },
-    { label: 'Contact',       action: () => scrollToSection('contact'),       id: 'contact' },
+    { label: 'Contact',       action: () => handleNavigation('/contact-us'),  path: '/contact-us' },
     { label: 'Blog',          action: () => handleNavigation('/blog'),        path: '/blog' },
     { label: 'Marketplace',   action: () => handleNavigation('/marketplace'), path: '/marketplace' },
     { label: 'New Releases',  action: () => handleNavigation('/releases'),    path: '/releases' },

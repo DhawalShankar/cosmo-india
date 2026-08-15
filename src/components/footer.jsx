@@ -46,14 +46,14 @@ const Footer = () => {
         { label: 'Home',         action: () => scrollToSection('home') },
         { label: 'Books',        action: handleBooksClick },
         { label: 'About',        action: () => scrollToSection('about') },
-        { label: 'Contact',      action: () => scrollToSection('contact') },
+        { label: 'Contact',      action: () => navigate('/contact-us') },
         { label: 'Work with Us', action: () => navigate('/careers') },
       ]
     : [
         { label: 'Home',         action: () => navigate('/') },
         { label: 'Books',        action: handleBooksClick },
         { label: 'About',        action: () => scrollToSection('about') },
-        { label: 'Contact',      action: () => scrollToSection('contact') },
+        { label: 'Contact',      action: () => navigate('/contact-us') },
         { label: 'Work with Us', action: () => navigate('/careers') },
       ];
 
@@ -64,6 +64,7 @@ const Footer = () => {
     { label: 'Terms & Conditions',     action: () => navigate('/marketplace?policy=terms') },
     { label: 'Shipping Policy',        action: () => navigate('/marketplace?policy=shipping') },
     { label: 'Cancellation & Refunds', action: () => navigate('/marketplace?policy=refund') },
+    { label: 'Business Contact', action: () => navigate('/marketplace?policy=contact') },
   ];
 
   const socials = [

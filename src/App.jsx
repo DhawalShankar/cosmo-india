@@ -23,6 +23,7 @@ import { DarkModeContext } from './context/DarkModeContext';
 import Footer from './components/footer';
 import ScrollToTop from './components/ScrolltoTop';
 import BlogPage from './pages/BlogPage';
+import ContactUs from './pages/ContactUs';
 import Release from './pages/Release';
 import CareersPage from './pages/Careers';
 import Manthan from './pages/Manthan';
@@ -53,7 +54,7 @@ function App() {
         <Route path="/marketplace" element={<Marketplace />} /> 
         <Route path="/cart" element={<Cart />} />
         <Route path="/careers" element={<CareersPage />} />
-
+        <Route path="/contact-us" element={<ContactUs />} />
          {/* ✅ Auth & Order Routes - NOW WORKING */}
         <Route path="/login" element={<Login />} />
         <Route path="/exclusive" element={<CIPExclusive />} />
