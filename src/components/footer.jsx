@@ -7,22 +7,22 @@ const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accent      = '#c0392b';
-  const saffron     = '#d4450c';
-  const ink         = darkMode ? '#f0e8dc'                    : '#1a1209';
-  const muted       = darkMode ? 'rgba(240,232,220,0.58)'     : 'rgba(26,18,9,0.60)';
-  const rule        = darkMode ? 'rgba(192,57,43,0.25)'       : 'rgba(192,57,43,0.18)';
-  const footerBg    = darkMode ? '#0e0c0a'                    : '#fdf6ee';
-  const brandName   = darkMode ? '#f0e8dc'                    : '#1a1209';
-  const logoBg      = darkMode ? '#ffffff'                    : 'transparent';
-  const socialBorder= darkMode ? 'rgba(192,57,43,0.35)'       : 'rgba(192,57,43,0.30)';
-  const socialBg    = darkMode ? 'rgba(192,57,43,0.07)'       : 'rgba(192,57,43,0.06)';
-  const socialColor = darkMode ? 'rgba(240,232,220,0.55)'     : 'rgba(26,18,9,0.50)';
-  const copyTxt     = darkMode ? 'rgba(240,232,220,0.35)'     : 'rgba(26,18,9,0.40)';
-  const taglineTxt  = darkMode ? `${accent}88`                : `${accent}99`;
-  const gridLine    = darkMode ? 'rgba(192,57,43,0.06)'       : 'rgba(192,57,43,0.05)';
-  const glowColor   = darkMode ? 'rgba(192,57,43,0.12)'       : 'rgba(192,57,43,0.06)';
-  const hindiQuote  = darkMode ? 'rgba(240,232,220,0.75)'     : 'rgba(26,18,9,0.72)';
+  const accent = '#c0392b';
+  const saffron = '#d4450c';
+  const ink = darkMode ? '#f0e8dc' : '#1a1209';
+  const muted = darkMode ? 'rgba(240,232,220,0.58)' : 'rgba(26,18,9,0.60)';
+  const rule = darkMode ? 'rgba(192,57,43,0.25)' : 'rgba(192,57,43,0.18)';
+  const footerBg = darkMode ? '#0e0c0a' : '#fdf6ee';
+  const brandName = darkMode ? '#f0e8dc' : '#1a1209';
+  const logoBg = darkMode ? '#ffffff' : 'transparent';
+  const socialBorder = darkMode ? 'rgba(192,57,43,0.35)' : 'rgba(192,57,43,0.30)';
+  const socialBg = darkMode ? 'rgba(192,57,43,0.07)' : 'rgba(192,57,43,0.06)';
+  const socialColor = darkMode ? 'rgba(240,232,220,0.55)' : 'rgba(26,18,9,0.50)';
+  const copyTxt = darkMode ? 'rgba(240,232,220,0.35)' : 'rgba(26,18,9,0.40)';
+  const taglineTxt = darkMode ? `${accent}88` : `${accent}99`;
+  const gridLine = darkMode ? 'rgba(192,57,43,0.06)' : 'rgba(192,57,43,0.05)';
+  const glowColor = darkMode ? 'rgba(192,57,43,0.12)' : 'rgba(192,57,43,0.06)';
+  const hindiQuote = darkMode ? 'rgba(240,232,220,0.75)' : 'rgba(26,18,9,0.72)';
 
   const scrollToSection = (sectionId) => {
     if (location.pathname !== '/') {
@@ -43,26 +43,28 @@ const Footer = () => {
 
   const quickLinks = location.pathname === '/'
     ? [
-        { label: 'Home',         action: () => scrollToSection('home') },
-        { label: 'Books',        action: handleBooksClick },
-        { label: 'About',        action: () => scrollToSection('about') },
-        { label: 'Contact',      action: () => navigate('/contact-us') },
-        { label: 'Work with Us', action: () => navigate('/careers') },
-      ]
+      { label: 'Home', action: () => scrollToSection('home') },
+      { label: 'Books', action: handleBooksClick },
+      { label: 'Authors', action: () => navigate('/authors') },
+      { label: 'About', action: () => scrollToSection('about') },
+      { label: 'Contact', action: () => navigate('/contact-us') },
+      { label: 'Work with Us', action: () => navigate('/careers') },
+    ]
     : [
-        { label: 'Home',         action: () => navigate('/') },
-        { label: 'Books',        action: handleBooksClick },
-        { label: 'About',        action: () => scrollToSection('about') },
-        { label: 'Contact',      action: () => navigate('/contact-us') },
-        { label: 'Work with Us', action: () => navigate('/careers') },
-      ];
+      { label: 'Home', action: () => navigate('/') },
+      { label: 'Books', action: handleBooksClick },
+      { label: 'Authors', action: () => navigate('/authors') },
+      { label: 'About', action: () => scrollToSection('about') },
+      { label: 'Contact', action: () => navigate('/contact-us') },
+      { label: 'Work with Us', action: () => navigate('/careers') },
+    ];
 
   const moreLinks = [
-    { label: 'Blog',                   action: () => navigate('/blog') },
-    { label: 'Legacy',                 action: () => navigate('/legacy') },
-    { label: 'Privacy Policy',         action: () => navigate('/marketplace?policy=privacy') },
-    { label: 'Terms & Conditions',     action: () => navigate('/marketplace?policy=terms') },
-    { label: 'Shipping Policy',        action: () => navigate('/marketplace?policy=shipping') },
+    { label: 'Blog', action: () => navigate('/blog') },
+    { label: 'Legacy', action: () => navigate('/legacy') },
+    { label: 'Privacy Policy', action: () => navigate('/marketplace?policy=privacy') },
+    { label: 'Terms & Conditions', action: () => navigate('/marketplace?policy=terms') },
+    { label: 'Shipping Policy', action: () => navigate('/marketplace?policy=shipping') },
     { label: 'Cancellation & Refunds', action: () => navigate('/marketplace?policy=refund') },
     { label: 'Business Contact', action: () => navigate('/marketplace?policy=contact') },
   ];
@@ -71,22 +73,22 @@ const Footer = () => {
     {
       name: 'Facebook',
       link: 'https://www.facebook.com/profile.php?id=61562467420068',
-      icon: <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>,
+      icon: <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />,
     },
     {
       name: 'Twitter / X',
       link: 'https://x.com/IndiaCosmo',
-      icon: <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>,
+      icon: <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />,
     },
     {
       name: 'Instagram',
       link: 'https://www.instagram.com/cosmoindiaprakashan/',
-      icon: <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.25-2.25a1 1 0 110 2 1 1 0 010-2z"/>,
+      icon: <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.25-2.25a1 1 0 110 2 1 1 0 010-2z" />,
     },
     {
       name: 'LinkedIn',
       link: 'https://www.linkedin.com/company/cosmoindiaprakashan/',
-      icon: <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>,
+      icon: <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />,
     },
   ];
 
@@ -252,26 +254,26 @@ const Footer = () => {
             <div className="md:col-span-4">
               <button
                 onClick={() => navigate('/')}
-                style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:'14px', marginBottom:'1.5rem' }}>
-                <div style={{ background: logoBg, borderRadius:'10px', padding: darkMode ? '6px' : '0', display:'flex', alignItems:'center', flexShrink:0 }}>
-                  <img src="/cosmo-logo.png" alt="Cosmo India Prakashan" style={{ height:'64px', width:'auto', display:'block' }} />
+                style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '1.5rem' }}>
+                <div style={{ background: logoBg, borderRadius: '10px', padding: darkMode ? '6px' : '0', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                  <img src="/cosmo-logo.png" alt="Cosmo India Prakashan" style={{ height: '64px', width: 'auto', display: 'block' }} />
                 </div>
-                <div style={{ textAlign:'left' }}>
-                  <p style={{ fontFamily:'Yatra One, serif', fontSize:'1.15rem', color: brandName, lineHeight:'1.3' }}>
+                <div style={{ textAlign: 'left' }}>
+                  <p style={{ fontFamily: 'Yatra One, serif', fontSize: '1.15rem', color: brandName, lineHeight: '1.3' }}>
                     Cosmo India Prakashan
                   </p>
-                  <p style={{ fontFamily:'Yatra One, serif', fontSize:'0.78rem', color: accent, letterSpacing:'0.06em', marginTop:'2px' }}>
+                  <p style={{ fontFamily: 'Yatra One, serif', fontSize: '0.78rem', color: accent, letterSpacing: '0.06em', marginTop: '2px' }}>
                     कॉस्मो इंडिया प्रकाशन
                   </p>
                 </div>
               </button>
 
-              <p style={{ fontFamily:"'Tiro Devanagari Hindi', 'Mangal', serif", color: muted, fontSize:'0.97rem', lineHeight:'1.9', marginBottom:'1.4rem' }}>
+              <p style={{ fontFamily: "'Tiro Devanagari Hindi', 'Mangal', serif", color: muted, fontSize: '0.97rem', lineHeight: '1.9', marginBottom: '1.4rem' }}>
                 "रोकने से कलम रुकती नहीं है।<br />
                 <span style={{ color: hindiQuote }}>ये कलम है आग से आगे।"</span>
               </p>
 
-              <div style={{ display:'flex', gap:'10px', flexWrap:'wrap' }}>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {socials.map(({ name, link, icon }) => (
                   <a key={name} href={link} target="_blank" rel="noopener noreferrer"
                     className="ft-social" aria-label={name}>
@@ -300,20 +302,20 @@ const Footer = () => {
             {/* Contact — 3 cols */}
             <div className="md:col-span-3">
               <p className="ft-heading">Get In Touch</p>
-              <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div>
                   <p className="ft-label">Address</p>
-                  <p style={{ color: muted, fontSize:'0.9rem', lineHeight:'1.8' }}>
+                  <p style={{ color: muted, fontSize: '0.9rem', lineHeight: '1.8' }}>
                     Sector A 24 Gujaini Chanakyapuri<br />UP, India
                   </p>
                 </div>
                 <div>
                   <p className="ft-label">Phone</p>
-                  <p style={{ color: muted, fontSize:'0.9rem' }}>+91 7388270331</p>
+                  <p style={{ color: muted, fontSize: '0.9rem' }}>+91 7388270331</p>
                 </div>
                 <div>
                   <p className="ft-label">Email</p>
-                  <p style={{ color: muted, fontSize:'0.9rem', wordBreak:'break-word' }}>
+                  <p style={{ color: muted, fontSize: '0.9rem', wordBreak: 'break-word' }}>
                     cosmoindiaprakashan@gmail.com
                   </p>
                 </div>
@@ -325,11 +327,11 @@ const Footer = () => {
           <div className="ft-ink-bar mb-8" />
 
           {/* ── Bottom row ── */}
-          <div style={{ display:'flex', flexWrap:'wrap', alignItems:'center', justifyContent:'space-between', gap:'12px' }}>
-            <p style={{ color: copyTxt, fontSize:'0.82rem', letterSpacing:'0.04em' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+            <p style={{ color: copyTxt, fontSize: '0.82rem', letterSpacing: '0.04em' }}>
               © 2026 Cosmo India Prakashan. All rights reserved.
             </p>
-            <p style={{ fontFamily:'Yatra One, serif', color: taglineTxt, fontSize:'0.72rem', letterSpacing:'0.1em' }}>
+            <p style={{ fontFamily: 'Yatra One, serif', color: taglineTxt, fontSize: '0.72rem', letterSpacing: '0.1em' }}>
               कलम की आग — Since 1980s
             </p>
           </div>

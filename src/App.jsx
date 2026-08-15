@@ -27,6 +27,7 @@ import ContactUs from './pages/ContactUs';
 import Release from './pages/Release';
 import CareersPage from './pages/Careers';
 import Manthan from './pages/Manthan';
+import Authors from './pages/Authors';
 function App() {
   const { darkMode } = useContext(DarkModeContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -45,6 +46,7 @@ function App() {
        <ScrollToTop />
       <Routes>
         <Route path="/" element={<CosmoPublicationSite />} />
+        <Route path="/authors" element={<Authors />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/legacy" element={<LegacyAuthors />} />
         <Route path="/publish" element={<PublishingServices />} />
