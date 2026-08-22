@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from './components/navbar';
 import CosmoPublicationSite from './pages/Cosmo';
@@ -30,6 +30,12 @@ import Manthan from './pages/Manthan';
 import Authors from './pages/Authors';
 function App() {
   const { darkMode } = useContext(DarkModeContext);
+  useEffect(() => {
+    fetch('https://cip-backend-djaz.onrender.com/health', {
+      method: 'GET',
+      cache: 'no-store',
+    }).catch(() => {});
+  }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   const policy = searchParams.get('policy');
 
