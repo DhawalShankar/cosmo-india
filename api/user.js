@@ -5,6 +5,7 @@ import OtpModel from './models/otp.js';
 import { hashPassword, comparePassword } from './lib/hash.js';
 import { signToken, verifyToken } from './lib/jwt.js';
 import { sendOTPEmail } from "./lib/mailer.js";
+import crypto from 'crypto';
 
 function parseCookies(cookieHeader) {
   const cookies = {};
@@ -66,13 +67,18 @@ export default async function handler(req, res) {
       if (exists) {
         return res.status(409).json({ success: false, error: 'User already exists with this email' });
       }
-
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      const otp = crypto.randomInt(100000, 1000000).toString();
       const hashedPassword = await hashPassword(password);
 
       await OtpModel.findOneAndUpdate(
         { email: email.toLowerCase() },
-        { otp, name, hashedPassword, expiresAt: new Date(Date.now() + 10 * 60 * 1000) },
+        {   otp,
+            name,
+            hashedPassword,
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+            attempts: 0
+        },
         { upsert: true, new: true }
       );
 
@@ -99,9 +105,35 @@ export default async function handler(req, res) {
         await OtpModel.deleteOne({ email: email.toLowerCase() });
         return res.status(400).json({ success: false, error: 'OTP has expired. Please request a new one.' });
       }
-      if (record.otp !== otp.toString().trim()) {
-        return res.status(400).json({ success: false, error: 'Invalid OTP. Please try again.' });
-      }
+      const MAX_OTP_ATTEMPTS = 5;
+
+if (record.attempts >= MAX_OTP_ATTEMPTS) {
+  await OtpModel.deleteOne({ email: email.toLowerCase() });
+
+  return res.status(429).json({
+    success: false,
+    error: 'Too many attempts. Please request a new OTP.'
+  });
+}
+
+if (record.otp !== otp.toString().trim()) {
+    record.attempts += 1;
+    await record.save();
+
+    if (record.attempts >= MAX_OTP_ATTEMPTS) {
+      await OtpModel.deleteOne({ email: email.toLowerCase() });
+
+      return res.status(429).json({
+        success: false,
+        error: 'Too many attempts. Please request a new OTP.'
+      });
+  }
+
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid OTP. Please try again.'
+    });
+}
 
       const user = await User.create({
         name: record.name,
