@@ -478,8 +478,8 @@ const Manthan = () => {
                 {[
                   {
                     icon: Mail, title:'Email Us',
-                    href:'mailto:cosmoindiaprakashan@gmail.com',
-                    content: <p style={{ color:'rgba(240,232,220,0.65)', fontSize:'0.95rem' }}>cosmoindiaprakashan@gmail.com</p>
+                    href:'mailto:support@cosmoindiaprakashan.in',
+                    content: <p style={{ color:'rgba(240,232,220,0.65)', fontSize:'0.95rem' }}>support@cosmoindiaprakashan.in</p>
                   },
                   {
                     icon: Phone, title:'Call Us',
@@ -553,7 +553,7 @@ const Manthan = () => {
                   </p>
                 </div>
 
-                <a href="mailto:cosmoindiaprakashan@gmail.com"
+                <a href="mailto:support@cosmoindiaprakashan.in"
                   className="pulse-btn inline-flex items-center gap-2.5 px-7 py-3.5 font-semibold text-white transition-all duration-300 hover:gap-4"
                   style={{ background:`linear-gradient(135deg,${accent},${saffron})`,
                     letterSpacing:'0.04em', fontSize:'0.92rem',

@@ -21,7 +21,7 @@ const Contact = () => (
 
     <p className="mb-2">
       <strong>Email:</strong><br />
-      cosmoindiaprakashan@gmail.com
+      support@cosmoindiaprakashan.in
     </p>
 
     <p className="mb-4">

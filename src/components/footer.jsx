@@ -316,7 +316,7 @@ const Footer = () => {
                 <div>
                   <p className="ft-label">Email</p>
                   <p style={{ color: muted, fontSize: '0.9rem', wordBreak: 'break-word' }}>
-                    cosmoindiaprakashan@gmail.com
+                    support@cosmoindiaprakashan.in
                   </p>
                 </div>
               </div>

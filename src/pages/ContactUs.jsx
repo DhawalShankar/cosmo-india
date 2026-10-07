@@ -296,7 +296,7 @@ const ContactUs = () => {
                     )
                   },
                   { icon: Phone, title: 'Phone', content: <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>+91 7388270331</p> },
-                  { icon: Mail, title: 'Email', content: <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>cosmoindiaprakashan@gmail.com</p> },
+                  { icon: Mail, title: 'Email', content: <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>support@cosmoindiaprakashan.in</p> },
                 ].map((item, i) => (
                   <div key={i} className="lift py-7 group"
                     style={{

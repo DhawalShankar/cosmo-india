@@ -127,7 +127,7 @@ const CareersPage = () => {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     const subject = encodeURIComponent(`CIP Careers Application — ${form.role}`);
     const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nRole Applied: ${form.role}\n\nCover Note:\n${form.message}`);
-    window.open(`mailto:cosmoindiaprakashan@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    window.open(`mailto:support@cosmoindiaprakashan.in?subject=${subject}&body=${body}`, '_blank');
     setForm({ name: '', email: '', role: '', message: '' });
     setErrors({});
     setSubmitted(true);
@@ -438,7 +438,7 @@ const CareersPage = () => {
 
                 <p className="yatra mb-7 flex items-center gap-3" style={{color:accent,fontSize:'0.92rem'}}>
                   <span style={{display:'inline-block',width:'1.5rem',height:'2px',background:accent}}/>
-                  Send your application to cosmoindiaprakashan@gmail.com
+                  Send your application to support@cosmoindiaprakashan.in
                 </p>
 
                 <form className="space-y-5" onSubmit={handleSubmit}>
