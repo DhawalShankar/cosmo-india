@@ -8,20 +8,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const checkAuth = async () => {
-    try {
-      const res = await fetch("/api/user?action=me", { credentials: "include" });
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data.user);
-      } else {
-        setUser(null);
-      }
-    } catch {
+  try {
+    const res = await fetch("/api/user?action=me", {
+      credentials: "include",
+    });
+
+    if (res.status === 401) {
       setUser(null);
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    if (!res.ok) {
+      console.error("Auth check failed:", res.status);
+      setUser(null);
+      return;
+    }
+
+    const data = await res.json();
+    setUser(data.user ?? null);
+  } catch (error) {
+    console.error("Auth check network error:", error);
+    setUser(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => { checkAuth(); }, []);
 
